@@ -23,7 +23,7 @@ so in later releases it might be a bit tricky to get it running on other operati
     * Fast access to controls in current room
 * REST API
 * Music that follows you through the rooms
-* Video streaming to TVs all over the network <sub><sub>(Steam In-home-streaming anyone?)</sub></sub>
+* Video streaming to TVs all over the network <sup><sub>(Steam In-home-streaming anyone?)</sub></sup>
 * Voice recognition
 * Printer sharing
 
