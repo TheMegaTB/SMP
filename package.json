@@ -26,6 +26,7 @@
     "anymesh": "^0.4.0",
     "async": "*",
     "benchmark": "^1.0.0",
+    "bunyan": "^1.4.0",
     "gpio": "^0.2.7",
     "jjg-ping": "^1.0.1"
   },
