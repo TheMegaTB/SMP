@@ -1,6 +1,8 @@
 # smartHome
 Decentralized smart home network for home automation based on HummingBoard's
-(but it could run on any OS that can run NodeJS at the moment)
+
+Theoretically it could run on any OS that is supported by NodeJS but this project is focused on ArchLinux
+so in later releases it might be a bit tricky to get it running on other operating systems
 
 ### IDE Setup
 * Install nodejs
