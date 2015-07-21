@@ -11,6 +11,7 @@ so in later releases it might be a bit tricky to get it running on other operati
     * Temperature/Pressure/Humidity sensor
     * Button panels
     * Touchpanel
+    * Virtual inputs (apps, website)
 * Outputs
     * KNX USB
     * GPIO relay control
