@@ -9,7 +9,7 @@
       "email": "til@blechschmidt.de"
     }
   ],
-  "main": "smartHome.js",
+  "main": "lib/smartHome.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/TheMegaTB/smartHome"
