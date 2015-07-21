@@ -1,0 +1,2 @@
+# smartHome
+Decentralized smart home
