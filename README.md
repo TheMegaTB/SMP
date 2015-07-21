@@ -18,12 +18,12 @@ so in later releases it might be a bit tricky to get it running on other operati
 * Automatic WiFi roaming
     * Connections between nodes via WiFi
     * Network wide change of security/wifi properties with one click
-* iOS native app <sub><sup>Android as soon as AnyMesh supports it</sup></sub>
+* iOS native app <sub><sup>(Android as soon as AnyMesh supports it)</sup></sub>
     * Indoor localization
     * -> Fast access to controls in current room
 * REST API
 * Music that follows you through the rooms?
-* Video streaming to TVs all over the network <sub>Steam In-home-streaming anyone? :D</sub>
+* Video streaming to TVs all over the network <sub><sub>(Steam In-home-streaming anyone?)</sub></sub>
 * Voice recognition
 * Printer sharing
 
