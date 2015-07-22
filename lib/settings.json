@@ -1,4 +1,5 @@
 {
+  "debugLevel": "debug",
   "singleNode": false,
   "networkName": "smartHome",
   "hostname": "",
