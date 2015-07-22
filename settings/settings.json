@@ -4,6 +4,7 @@
   "networkName": "smartHome",
   "hostname": "",
   "plugins": [
-    "sync"
+    "sync",
+    "rename"
   ]
 }
