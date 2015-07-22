@@ -1,6 +1,6 @@
 {
   "wifi": {
-    "ssid": "smartHome2",
+    "ssid": "smartHome",
     "channel": 6,
     "wpalevel": 2,
     "passphrase": "c3VwZXJzZWNyZXQ=",
