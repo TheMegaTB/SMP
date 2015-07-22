@@ -36,7 +36,8 @@
     "gpio": "^0.2.7",
     "jjg-ping": "^1.0.1",
     "jsonfile": "^2.2.1",
-    "merge": "^1.2.0"
+    "merge": "^1.2.0",
+    "minimist": "^1.1.2"
   },
   "devDependencies": {
     "pre-commit": "*"

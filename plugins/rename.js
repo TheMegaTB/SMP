@@ -1,4 +1,4 @@
-var log = require('lib/log')
+var log = require('lib/log')()
     , helpers = require('lib/helpers');
 
 module.exports = {
