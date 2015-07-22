@@ -1,5 +1,5 @@
 {
-  "debugLevel": "debug",
+  "debugLevel": "info",
   "singleNode": false,
   "networkName": "smartHome",
   "hostname": "",
