@@ -1,4 +1,6 @@
 {
+  "singleNode": false,
+  "networkName": "smartHome",
   "hostname": "raspberry",
   "keywords": [
     "sync"
