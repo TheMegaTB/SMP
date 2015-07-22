@@ -1,6 +1,6 @@
 {
   "wifi": {
-    "ssid": "smartHome2",
+    "ssid": "smartHome",
     "channel": 6,
     "wpalevel": 2,
     "passphrase": "c3VwZXJzZWNyZXQ=",
@@ -12,11 +12,6 @@
       "NP-IPN": "34:A3:95:CB:BC:58"
     },
     "gpio": {
-      "node1": {
-        "22": true,
-        "24": false,
-        "28": true
-      }
     }
   }
 }

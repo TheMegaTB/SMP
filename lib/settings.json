@@ -1,8 +1,8 @@
 {
   "singleNode": false,
   "networkName": "smartHome",
-  "hostname": "node",
-  "keywords": [
+  "hostname": "",
+  "plugins": [
     "sync"
   ]
 }
