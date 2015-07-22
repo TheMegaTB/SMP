@@ -7,6 +7,10 @@
     {
       "name": "Til Blechschmidt",
       "email": "til@blechschmidt.de"
+    },
+    {
+      "name": "Noah Peeters",
+      "email": "noah.peeters99@gmail.com"
     }
   ],
   "main": "lib/smartHome.js",
@@ -28,7 +32,8 @@
     "benchmark": "^1.0.0",
     "bunyan": "^1.4.0",
     "gpio": "^0.2.7",
-    "jjg-ping": "^1.0.1"
+    "jjg-ping": "^1.0.1",
+    "jsonfile": "^2.2.1"
   },
   "devDependencies": {
     "pre-commit": "*"
