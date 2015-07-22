@@ -29,5 +29,5 @@ so in later releases it might be a bit tricky to get it running on other operati
 
 ### IDE Setup
 * Install nodejs
-* Run npm install
+* Run `npm install`
 * Add `"main": "lib/AnyMesh.js",` to *node_modules/anymesh/package.json*
