@@ -5,13 +5,13 @@ var log = require('lib/log')()
     , spawn = require('child_process').spawn
     , meteor = null;
 
-process.on('exit', function () {
+/*process.on('exit', function () {
     meteor.kill();
-});
+ });*/
 
 module.exports = {
     channels: {
-        web: function (message, syncblock, settings) {
+        web: function (message) {
             log.plugin.trace("WEB received message");
         }
     },
