@@ -29,6 +29,7 @@ so in later releases it might be a bit tricky to get it running on other operati
 * Printer sharing
 
 ### IDE Setup
-* Install nodejs
+* Install [nodejs](https://nodejs.org/download/)
 * Run `npm install`
 * Add `"main": "lib/AnyMesh.js",` to *node_modules/anymesh/package.json*
+* When including the *webapp* plugin you need to install [meteor](https://www.meteor.com/install)
