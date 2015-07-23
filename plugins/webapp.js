@@ -1,5 +1,4 @@
-var log = require('lib/log')()
-    , helpers = require('lib/helpers');
+var log = require('lib/log')();
 
 module.exports = {
     channels: {
