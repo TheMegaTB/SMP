@@ -17,6 +17,7 @@ module.exports = {
     },
     load: function (sync, settings, cb) {
         //Check for dependencies
+        cb(true);
         /*hasbin('meteor', function (installed) {
             if (!installed) {
                 if (typeof cb === 'function') cb(false);
