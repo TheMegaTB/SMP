@@ -15,9 +15,9 @@ module.exports = {
             log.plugin.trace("WEB received message");
         }
     },
-    load: function (cb) {
+    load: function (sync, settings, cb) {
         //Check for dependencies
-        hasbin('meteor', function (installed) {
+        /*hasbin('meteor', function (installed) {
             if (!installed) {
                 if (typeof cb === 'function') cb(false);
             } else {
@@ -36,6 +36,6 @@ module.exports = {
                     spawn('meteor', ['--production'], {cwd: path.join(__dirname, 'meteor')});
                 });
             }
-        });
+         });*/
     }
 };
