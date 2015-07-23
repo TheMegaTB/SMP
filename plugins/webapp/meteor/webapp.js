@@ -17,8 +17,8 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
-    var net = Meteor.npmRequire("net");
-    var path = Meteor.npmRequire("path");
+    var path = Npm.require("path");
+    var net = Npm.require("net");
     Meteor.startup(function () {
         // code to run on server at startup
         var client = net.connect({port: 8124},

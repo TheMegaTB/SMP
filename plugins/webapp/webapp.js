@@ -33,7 +33,7 @@ module.exports = {
                 server.listen(8124, function () { //'listening' listener
                     log.plugin.debug('WEB TCP Server online');
                     //ToDo: Add check if meteor binary exists
-                    spawn('meteor', [], {cwd: path.join(__dirname, 'meteor')});
+                    spawn('meteor', ['--production'], {cwd: path.join(__dirname, 'meteor')});
                 });
             }
         });
