@@ -4,7 +4,7 @@ var log = require('lib/log')()
 module.exports = {
     channels: {
         rename: function (message, syncblock, settings) {
-            log.mesh.info("rename received");
+            log.plugin.debug("rename received");
             if (message.data.name) settings.hostname = message.data.name;
             settings.save();
         }
