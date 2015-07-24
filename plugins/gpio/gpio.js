@@ -21,6 +21,21 @@ module.exports = {
     load: function (s, conf, callback) {
         sync = s;
         settings = conf;
+
+        if (sync.gpios == undefined) {
+            sync.gpios = {};
+            //Debug purposes
+            sync.gpios[7] = 1;
+            sync.gpios[8] = 0;
+            sync.gpios[9] = 1;
+            sync.gpios[10] = 1;
+            sync.gpios[11] = 1;
+            sync.gpios[23] = 1;
+            sync.gpios[24] = 0;
+            sync.gpios[25] = 1;
+            //End debug purposes
+        }
+
         try {
             var p = fs.lstatSync('/sys/class/gpio');
         } catch (err) {
@@ -33,12 +48,12 @@ module.exports = {
             if (p.isDirectory() && binaryExists) {
                 var gpios = [7, 8, 9, 10, 11, 23, 24, 25]; //List of pins that are connected
                 async.each(gpios, function (pin, cb) {
-                    gpio[pin] = new GPIO(pin);
+                    gpio[pin] = new GPIO(pin, sync.gpios);
                     cb();
                 }, function (err) {
                     setTimeout(function () {
-                        log.plugin.debug("GPIO 24 = ON");
-                        gpio[24].set(0);
+                        log.plugin.debug("GPIO 8 = OFF");
+                        gpio[8].set(1, sync.gpios);
                     }, 5000);
                     callback(!err);
                 });
