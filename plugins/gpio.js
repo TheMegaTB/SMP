@@ -29,8 +29,11 @@ module.exports = {
             var gpios = [7, 8, 9, 10, 11, 23, 24, 25];
             async.each(gpios, function (g, cb) {
                 log.plugin.trace(g);
-                log.plugin.trace(typeof cb);
                 gpio[g] = gpioLib.export(g, {
+                    direction: "out",
+                    ready: cb
+                });
+                /*gpio[g] = gpioLib.export(g, {
                     direction: "in",
                     ready: function () {
                         gpio[g].set(0, function () {
@@ -38,9 +41,8 @@ module.exports = {
                             cb();
                         });
                     }
-                });
+                 });*/
             }, function (err) {
-                log.plugin.debug("Initialized GPIOs");
                 gpio[24].set(1);
                 callback(true);
             });
@@ -48,5 +50,13 @@ module.exports = {
             log.plugin.debug("ENOENT, no such directory '/sys/class/gpio'");
             callback(false);
         }
+    },
+    unload: function (callback) {
+        async.forEachOf(gpio, function (g, id, cb) {
+            log.plugin.trace("unexported gpio" + id);
+            g.unexport(cb);
+        }, function () {
+            callback();
+        });
     }
 };
