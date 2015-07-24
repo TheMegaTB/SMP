@@ -19,10 +19,12 @@ module.exports = {
         var gpios = [7, 8, 9, 10, 11, 23, 24, 25];
         async.each(gpios, function (g, cb) {
             log.plugin.trace(g);
-            gpio[g] = gpioLib.export(g, "in");
-            gpio[g].set(1);
-            gpio[g].setDirection("out");
-            cb();
+            gpio[g] = gpioLib.export(g, "in", function () {
+                gpio[g].set(1, function () {
+                    gpio[g].setDirection("out");
+                    cb();
+                });
+            });
         }, function (err) {
             log.plugin.debug("Initialized GPIOs");
         });
