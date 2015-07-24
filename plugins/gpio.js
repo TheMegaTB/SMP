@@ -1,5 +1,6 @@
 var log = require('lib/log')()
     , async = require('async')
+    , fs = require('fs')
     , gpioLib = require('gpio')
     , gpio = {};
 
@@ -16,17 +17,31 @@ var log = require('lib/log')()
 
 module.exports = {
     load: function (sync, settings, callback) {
-        var gpios = [7, 8, 9, 10, 11, 23, 24, 25];
-        async.each(gpios, function (g, cb) {
-            log.plugin.trace(g);
-            gpio[g] = gpioLib.export(g, "in", function () {
-                gpio[g].set(1, function () {
-                    gpio[g].setDirection("out");
-                    cb();
+        try {
+            var p = fs.lstatSync('/sys/class/gpio');
+        } catch (err) {
+            log.plugin.debug(err);
+            callback(false);
+            return;
+        }
+
+        if (p.isDirectory()) {
+            var gpios = [7, 8, 9, 10, 11, 23, 24, 25];
+            async.each(gpios, function (g, cb) {
+                log.plugin.trace(g);
+                gpio[g] = gpioLib.export(g, "in", function () {
+                    gpio[g].set(1, function () {
+                        gpio[g].setDirection("out");
+                        cb();
+                    });
                 });
+            }, function (err) {
+                log.plugin.debug("Initialized GPIOs");
+                callback(true);
             });
-        }, function (err) {
-            log.plugin.debug("Initialized GPIOs");
-        });
+        } else {
+            log.plugin.debug("ENOENT, no such directory '/sys/class/gpio'");
+            callback(false);
+        }
     }
 };
