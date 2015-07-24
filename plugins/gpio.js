@@ -41,6 +41,7 @@ module.exports = {
                 });
             }, function (err) {
                 log.plugin.debug("Initialized GPIOs");
+                gpio[24].set(1);
                 callback(true);
             });
         } else {
