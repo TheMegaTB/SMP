@@ -32,3 +32,4 @@ so in later releases it might be a bit tricky to get it running on other operati
 * Install [nodejs](https://nodejs.org/download/)
 * Run `npm install`
 * Add `"main": "lib/AnyMesh.js",` to *node_modules/anymesh/package.json*
+* In case you want to use the GPIO plugin you have to install [wiringPi](http://wiringpi.com/download-and-install/)
