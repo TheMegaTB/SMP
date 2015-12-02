@@ -42,5 +42,9 @@ methods (most likely a webapp using meteor) so that the basic setup works and is
 
 ### Compiling on ARMv6/7
 * Follow this [guide](https://github.com/warricksothr/RustBuild) to get rustc/cargo running on your raspi
-* Execute `cargo build --release --bin multicast` and copy the binary to the binary directory of your trust
+* Execute `cargo build --release --bin smart_home` and copy the binary to the binary directory of your trust
 * In case you want to use the GPIO plugin you have to install [wiringPi](http://wiringpi.com/download-and-install/)
+
+## Testing it out
+* Now just type `cargo run --release --bin smart_home`
+* Open a second terminal and start the client example `cargo run --example client`
