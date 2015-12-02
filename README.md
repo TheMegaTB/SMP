@@ -1,8 +1,8 @@
 # smartHome
 Decentralized smart home network for home automation based on Rust and UDP Multicast
 
-Although this is written in rust with a focus on RaspberryPi's and HummingBoard's running ArchLinux on them
-it should run on any device rust can compile to.
+Although this is written in rust with a focus on RaspberryPi's and HummingBoard's running ArchLinux
+it should work on any device rust can compile to.
 
 ### Current state of development
 Currently this project is nowhere near finished. I decided to switch to rust as it is a compiled language which is
