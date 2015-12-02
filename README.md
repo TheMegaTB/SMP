@@ -4,6 +4,14 @@ Decentralized smart home network for home automation based on Rust and UDP Multi
 Although this is written in rust with a focus on RaspberryPi's and HummingBoard's running ArchLinux on them
 it should run on any device rust can compile to.
 
+### Current state of development
+Currently this project is nowhere near finished. I decided to switch to rust as it is a compiled language which is
+more efficient especially regarding that this should run on low powered devices. At the moment I'm working on the
+networking and created a small UDP protocol implementation. As rustc is now running on my raspberry the next step would
+be to get some implementations up and running (looking at KNX and GPIO). KNX as output should be rather easy to implement
+as the addressing matches the protocol and GPIO should be fairly easy too. After that is done I'll look into some input
+method (most likely a webapp using meteor) so that the basic setup works and is usable.
+
 ### Future plans
 * Distribution of bigger load (e.g. webserver) to most powerful node
 * Inputs
