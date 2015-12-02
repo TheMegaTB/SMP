@@ -7,13 +7,13 @@ it should run on any device rust can compile to.
 ### Future plans
 * Distribution of bigger load (e.g. webserver) to most powerful node
 * Inputs
-    * KNX<sub><sup>1</sup></sub>
+    * KNX<sup>1</sup>
     * Temperature/Pressure/Humidity sensor
     * Button panels
     * Touchpanel
     * Virtual inputs (apps, website)
 * Outputs
-    * KNX<sub><sup>1</sup></sub>
+    * KNX<sup>1</sup>
     * GPIO relay control
 * WebApp for remote access from outside
 * Automatic WiFi roaming
