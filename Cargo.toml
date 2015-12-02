@@ -1,5 +1,5 @@
 [package]
-name = "smartHome"
+name = "smart_home"
 version = "0.1.0"
 authors = ["Til Blechschmidt <til@blechschmidt.de>"]
 
@@ -10,7 +10,4 @@ rand = "0.3"
 [lib]
 name = "networking"
 path = "src/networking.rs"
-
-[[bin]]
-name = "smart_home"
-path = "src/smartHome.rs"
+plugin = true
