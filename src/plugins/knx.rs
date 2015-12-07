@@ -5,7 +5,7 @@ use std::process::Command;
 
 fn write(group: u8, subgroup: u8, id: u8, value: u8) {
     let id = format!("{}/{}/{}", group, subgroup, id);
-    Command::new("/usr/bin/groupswrite").arg("ip:localhost").arg(id).arg(value.to_string()).status().unwrap_or_else(|e| {
+    Command::new("/usr/local/bin/groupswrite").arg("ip:localhost").arg(id).arg(value.to_string()).output().unwrap_or_else(|e| {
         panic!("failed to execute process: {}", e)
     });
 }
