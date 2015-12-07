@@ -17,13 +17,13 @@ impl GPIO {
 }
 
 pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
-    Command::new("/usr/local/bin/gpio").arg("-g").arg("mode").arg("24").arg("out").status().unwrap_or_else(|e| {
-        panic!("failed to execute process: {}", e)
-    });
-
-    Command::new("/usr/local/bin/gpio").arg("-g").arg("write").arg("24").arg("1").status().unwrap_or_else(|e| {
-        panic!("failed to execute process: {}", e)
-    });
+    // Command::new("/usr/local/bin/gpio").arg("-g").arg("mode").arg("24").arg("out").status().unwrap_or_else(|e| {
+    //     panic!("failed to execute process: {}", e)
+    // });
+    //
+    // Command::new("/usr/local/bin/gpio").arg("-g").arg("write").arg("24").arg("1").status().unwrap_or_else(|e| {
+    //     panic!("failed to execute process: {}", e)
+    // });
 
     let (tx, rx) = mpsc::channel();
     thread::Builder::new().name("plugin_gpio".to_string()).spawn(move || {
@@ -31,7 +31,8 @@ pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
         for data in gpio.rx.iter() {
             let id = data.0;
             if id[0] == 0 && id[1] == 0 && id[2] == 0 {
-		let value = (id[3]).to_string();
+                let value = if id[3] == 0 { "1" } else { "0" };
+                println!("{}", value);
                 Command::new("/usr/local/bin/gpio").arg("-g").arg("write").arg("24").arg(value).status().unwrap_or_else(|e| {
                     panic!("failed to execute process: {}", e)
                 });

@@ -5,7 +5,7 @@ use std::thread;
 //use rand::Rng;
 
 fn main() {     // TODO: Convert this to a VALID working implementation test.
-    let sock = Connection::new().port(8001).build();
+    let sock = Connection::new().port(8000).build();
     let rx = sock.recv_thread();
     let tx = sock.send_thread();
 
