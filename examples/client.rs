@@ -5,7 +5,7 @@ use std::io;
 use std::str::FromStr;
 
 fn main() {     // TODO: Convert this to a VALID working implementation test.
-    let sock = Connection::new().port(8001).build();
+    let sock = Connection::new().port(0).build();
     let tx = sock.send_thread();
 
     let mut input = String::new();
