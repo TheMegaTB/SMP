@@ -8,8 +8,8 @@ it should work on any device rust can compile to.
 Currently this project is nowhere near finished. I decided to switch to rust as it is a compiled language which is
 more efficient especially regarding this project running on low powered devices. Current focus is on the
 networking and a UDP protocol implementation using multicast. As rustc is now running on my raspberry the next step would
-be to get some implementations up and running (looking at KNX and GPIO). KNX as output should be rather easy to implement
-as the addressing matches the protocol and so does the GPIO output. After that is done I'll look into some input
+be to get some implementations up and running (looking at KNX and GPIO). I've got a alpha version running but for testing
+purposes all the addresses are hardcoded so its not ready just yet. After that is done I'll look into some input
 methods (most likely a webapp using meteor) so that the basic setup works and is usable.
 
 ### Future plans
