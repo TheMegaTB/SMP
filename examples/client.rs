@@ -2,7 +2,7 @@ extern crate networking;
 extern crate rand;
 use networking::*;
 use std::thread;
-use rand::Rng;
+//use rand::Rng;
 
 fn main() {     // TODO: Convert this to a VALID working implementation test.
     let sock = Connection::new().port(8001).build();
@@ -17,9 +17,10 @@ fn main() {     // TODO: Convert this to a VALID working implementation test.
     });
 
     let target = socket_addr_from_str("233.233.233.233:8000");
-    let r = rand::thread_rng().gen::<[u8; 4]>();
-    println!("SEND {}/{}/{} -> {}   @   233.233.233.233:8000", r[0], r[1], r[2], r[3]);
-    tx.send((r, target)).unwrap();
+    //let data = rand::thread_rng().gen::<[u8; 4]>();
+    let data = [0, 0, 0, 1];
+    println!("SEND {}/{}/{} -> {}   @   233.233.233.233:8000", data[0], data[1], data[2], data[3]);
+    tx.send((data, target)).unwrap();
 
     rx_thread.join().unwrap();
 }

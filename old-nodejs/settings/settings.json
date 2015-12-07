@@ -1,9 +1,0 @@
-{
-  "debugLevel": "info",
-  "singleNode": false,
-  "networkName": "smartHome",
-  "hostname": "",
-  "plugins": [
-    "rename"
-  ]
-}
