@@ -25,6 +25,8 @@ pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
             let d: [u8; 4] = data;
             if d[0] == 0 && d[1] == 0 && d[2] == 0 {
                 write(24, d[3]);
+            } else if d[0] == 0 && d[1] == 1 && d[2] == 0 {
+                write(25, d[3]);
             }
         }
     }).unwrap();
