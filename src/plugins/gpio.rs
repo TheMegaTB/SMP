@@ -17,7 +17,7 @@ impl GPIO {
 }
 
 pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
-    Command::new("gpio -g mode 24 out && gpio -g write 24 1").status().unwrap_or_else(|e| {
+    Command::new("/usr/local/bin/gpio -g mode 24 out && gpio -g write 24 1").status().unwrap_or_else(|e| {
         panic!("failed to execute process: {}", e)
     });
 
@@ -29,7 +29,7 @@ pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
             let id = data.0;
             if id[0] == 0 && id[1] == 0 && id[2] == 0 {
                 println!("ID MATCHES! NOW DOING SMTH");
-                Command::new(format!("gpio -g mode 24 {}", !id[3])).status().unwrap_or_else(|e| {
+                Command::new(format!("/usr/local/bin/gpio -g mode 24 {}", !id[3])).status().unwrap_or_else(|e| {
                     panic!("failed to execute process: {}", e)
                 });
             }

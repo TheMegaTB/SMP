@@ -10,7 +10,7 @@ fn main() {
     let rx = sock.recv_thread();
 
     let mut plugin_tx = Vec::with_capacity(1);
-    plugin_tx.push(plugins::gpio::new_listener());
+    if cfg!(feature = "gpio") { plugin_tx.push(plugins::gpio::new_listener()) }
 
 
     println!("LISN {}", sock.socket.local_addr().unwrap());
