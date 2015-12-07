@@ -12,7 +12,6 @@ fn main() {     // TODO: Convert this to a VALID working implementation test.
 
     for (i, x) in env::args().enumerate() {
         if i > 0 {
-            println!("{} {}", i, x);
             data[i-1] = FromStr::from_str(x.trim()).unwrap_or(0)
         };
     }
