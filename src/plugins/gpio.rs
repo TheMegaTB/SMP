@@ -28,8 +28,10 @@ pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
     thread::Builder::new().name("plugin_gpio".to_string()).spawn(move || {
         for (data, _) in rx.iter() {
             let d: [u8; 4] = data;
-            let (id, value): (&[u8], &[u8]) = d.split_at(2);
+            let (id, value): (&[u8], &[u8]) = d.split_at(3);
             let value = value[0];
+
+	    println!("{:?} - {:?}", id, value);
 
             if id == [0, 0, 0] {
                 write(24, value);
