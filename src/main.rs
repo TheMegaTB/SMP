@@ -20,7 +20,7 @@ fn main() {
 
         for tx in plugin_tx.iter() { tx.send(data).unwrap() }
 
-        sock.send_confirmation(data);
+        sock.send_confirmation(data); //TODO: Dont send the information regardless of a plugin answering or not!!!
 
         // let buf = &mut buf[..4];
         // buf.reverse();
