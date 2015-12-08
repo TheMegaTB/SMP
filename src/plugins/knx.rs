@@ -10,16 +10,18 @@ fn write(group: u8, subgroup: u8, id: u8, value: u8) {
     });
 }
 
-pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
+pub fn new_listener(sock_tx: mpsc::Sender<([u8; 4], SocketAddr)>) -> mpsc::Sender<([u8; 4], SocketAddr)> {
     let (tx, rx) = mpsc::channel();
     thread::Builder::new().name("plugin_knx".to_string()).spawn(move || {
-        for (data, _) in rx.iter() {
-            let d: [u8; 4] = data;
+        for (data, src) in rx.iter() {
+            let mut d: [u8; 4] = data;
             if d[0] == 0 && d[1] == 0 && d[2] == 1 {
                 write(1, 2, 0, d[3]);
             } else if d[0] == 0 && d[1] == 0 && d[2] == 2 {
                 write(0, 4, 0, d[3]);
-            }
+            } else { continue }
+            d.reverse();
+            sock_tx.send((d, src)).unwrap();
         }
     }).unwrap();
     tx

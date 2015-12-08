@@ -10,7 +10,7 @@ fn write(pin: u8, value: u8) {
     });
 }
 
-pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
+pub fn new_listener(sock_tx: mpsc::Sender<([u8; 4], SocketAddr)>) -> mpsc::Sender<([u8; 4], SocketAddr)> {
     Command::new("/usr/local/bin/gpio").arg("-g").arg("mode").arg("24").arg("out").status().unwrap_or_else(|e| {
         panic!("failed to execute process: {}", e)
     });
@@ -21,11 +21,13 @@ pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
 
     let (tx, rx) = mpsc::channel();
     thread::Builder::new().name("plugin_gpio".to_string()).spawn(move || {
-        for (data, _) in rx.iter() {
-            let d: [u8; 4] = data;
+        for (data, src) in rx.iter() {
+            let mut d: [u8; 4] = data;
             if d[0] == 0 && d[1] == 0 && d[2] == 0 {
                 write(24, d[3]);
-            }
+            } else { continue }
+            d.reverse();
+            sock_tx.send((d, src)).unwrap();
         }
     }).unwrap();
     tx
