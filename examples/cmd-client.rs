@@ -22,8 +22,9 @@ fn main() {     // TODO: Convert this to a VALID working implementation test.
 
     for d in rx.iter() { //TODO: Resend messages if the correct echo is not being received
         println!("RECV {}/{}/{} -> {}   @   {}", d.0[0], d.0[1], d.0[2], d.0[3], d.1);
-        d.reverse();
-        if d.0 == data {
+        let mut x = d.0;
+        x.reverse();
+        if x == data {
             println!("RECEIVED REVERSE ECHO!");
             break;
         }
