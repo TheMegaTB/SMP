@@ -20,7 +20,12 @@ fn main() {     // TODO: Convert this to a VALID working implementation test.
     println!("SEND {}/{}/{} -> {}   @   233.233.233.233:8000", data[0], data[1], data[2], data[3]);
     tx.send((data, socket_addr_from_str("233.233.233.233:8000"))).unwrap();
 
-    for data in rx.iter() {
-        println!("RECV {}/{}/{} -> {}   @   {}", data.0[0], data.0[1], data.0[2], data.0[3], data.1)
+    for d in rx.iter() { //TODO: Resend messages if the correct echo is not being received
+        println!("RECV {}/{}/{} -> {}   @   {}", d.0[0], d.0[1], d.0[2], d.0[3], d.1);
+        d.reverse();
+        if d.0 == data {
+            println!("RECEIVED REVERSE ECHO!");
+            break;
+        }
     }
 }

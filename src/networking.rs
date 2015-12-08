@@ -50,8 +50,10 @@ impl SmartHomeSocket {
         rx
     }
 
-    pub fn send_confirmation(&self, data: ([u8; 4], SocketAddr)) {
-        self.send(&data.0, data.1);
+    pub fn send_confirmation(&self, a: ([u8; 4], SocketAddr)) {
+        let mut data = a.0;
+        data.reverse();
+        self.send(&data, a.1);
     }
 
     pub fn clone(&self) -> SmartHomeSocket {
