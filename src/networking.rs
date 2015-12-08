@@ -50,6 +50,10 @@ impl SmartHomeSocket {
         rx
     }
 
+    pub fn send_confirmation(&self, data: ([u8; 4], SocketAddr)) {
+        self.send(&data.0, data.1);
+    }
+
     pub fn clone(&self) -> SmartHomeSocket {
         SmartHomeSocket {
             socket: self.socket.try_clone().ok().expect("Failed to clone socket.")
