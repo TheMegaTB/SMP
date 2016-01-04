@@ -25,7 +25,7 @@ impl SmartHomeSocket {
         let send_sock = self.clone();
         thread::Builder::new().name("send_thread".to_string()).spawn(move || {
             loop {
-                let (data, addr): ([u8; 4], SocketAddr) = rx.recv().ok().expect("Failed to receive data.");
+                let (data, addr): ([u8; 4], SocketAddr) = rx.recv().ok().expect("Failed to receive data from main thread.");
                 send_sock.send(&data, addr);
             }
         }).ok().expect("Failed to spawn send_thread");

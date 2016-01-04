@@ -20,17 +20,18 @@ fn setup_gpio(pin: u8) {
     });
 }
 
-pub fn new_listener() -> mpsc::Sender<([u8; 4], SocketAddr)> {
+pub fn new_listener(cb: mpsc::Sender<([u8; 4], SocketAddr)>) -> mpsc::Sender<([u8; 4], SocketAddr)> {
 
     setup_gpio(24);
 
     let (tx, rx): (mpsc::Sender<([u8; 4], SocketAddr)>, _) = mpsc::channel();
     thread::Builder::new().name("plugin_gpio".to_string()).spawn(move || {
-        for (data, _) in rx.iter() {
-            let (id, value): (&[u8], &[u8]) = data.split_at(3);
+        for data in rx.iter() {
+            let (id, value): (&[u8], &[u8]) = data.0.split_at(3);
 
             if id == [0, 0, 0] {
                 write(24, value[0]);
+                cb.send(data).unwrap();
             } else { continue }
         }
     }).unwrap();
