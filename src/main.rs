@@ -22,16 +22,12 @@ fn main() {
     println!("LISN {}", sock.socket.local_addr().unwrap());
 
     thread::Builder::new().name("callback_listener".to_string()).spawn(move || {
-        for data in cb_rx.iter() {
-            print!("Sending reverse echo...");
-            sock.send_confirmation(data);
-        }
+        for data in cb_rx.iter() { sock.send_confirmation(data) }
     }).unwrap();
 
     let plugin_invocator = thread::Builder::new().name("plugin_invocator".to_string()).spawn(move || {
         for data in rx.iter() {
             println!("RECV {}/{}/{} -> {}   @   {}", data.0[0], data.0[1], data.0[2], data.0[3], data.1);
-
             for tx in plugin_tx.iter() { tx.send(data).unwrap() }
         }
     }).unwrap();
