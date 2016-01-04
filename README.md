@@ -14,6 +14,8 @@ methods (most likely a webapp using meteor) so that the basic setup works and is
 
 ### Future plans
 * Distribution of bigger load (e.g. webserver) to most powerful node
+* Auto discovery of network devices
+* Encryption of datagrams and multiple concurrent networks on the same address
 * Inputs
     * KNX<sup>1</sup>
     * Temperature/Pressure/Humidity sensor
