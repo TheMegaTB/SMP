@@ -1,0 +1,12 @@
+[package]
+name = "knx"
+version = "0.1.0"
+authors = ["Til Blechschmidt <til@blechschmidt.de>"]
+
+[lib]
+name = "knx"
+crate_type = ["dylib"]
+
+[dependencies.shared_objects]
+path = "../../shared_objects"
+version = "*"

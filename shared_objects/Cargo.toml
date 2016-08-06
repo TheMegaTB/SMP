@@ -1,0 +1,6 @@
+[package]
+name = "shared_objects"
+version = "0.1.0"
+authors = ["Til Blechschmidt <til@blechschmidt.de>"]
+
+[dependencies]

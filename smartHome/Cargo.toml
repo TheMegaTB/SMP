@@ -1,0 +1,12 @@
+[package]
+name = "smart_home"
+version = "0.1.0"
+authors = ["Til Blechschmidt <til@blechschmidt.de>"]
+
+[dependencies]
+libloading = "0.3.0"
+glob = "0.2.11"
+
+[dependencies.shared_objects]
+path = "../shared_objects"
+version = "*"
