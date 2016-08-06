@@ -1,0 +1,10 @@
+{
+    "name": "smartHome-knx",
+    "version": "0.0.1",
+    "main": "knx.js",
+    "extensions": {
+        "smartHome:actor": {
+            "knx": "./knx.js"
+        }
+    }
+}

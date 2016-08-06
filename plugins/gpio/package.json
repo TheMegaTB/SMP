@@ -1,0 +1,10 @@
+{
+    "name": "smartHome-gpio",
+    "version": "0.0.1",
+    "main": "gpio.js",
+    "extensions": {
+        "smartHome:actor": {
+            "gpio": "./gpio"
+        }
+    }
+}
