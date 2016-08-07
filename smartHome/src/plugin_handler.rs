@@ -65,4 +65,12 @@ impl PluginHandler {
         }
     }
 
+    pub fn get_symbol_or_fail<T>(&self, name: &str, symbol_name: &str) -> Symbol<T> {
+        match self.get_symbol(name, symbol_name) {
+            Some(symbol) => symbol,
+            None => {
+                panic!("Plugin '{}' does not provide the necessary function '{}'", name, symbol_name);
+            }
+        }
+    }
 }
