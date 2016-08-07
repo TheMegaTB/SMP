@@ -1,0 +1,15 @@
+[package]
+name = "multicast"
+version = "0.1.0"
+authors = ["Til Blechschmidt <til@blechschmidt.de>"]
+
+[lib]
+name = "multicast"
+crate_type = ["dylib"]
+
+[dependencies]
+net2 = "0.2.26"
+
+[dependencies.shared_objects]
+path = "../../shared_objects"
+version = "*"
