@@ -3,7 +3,7 @@ extern crate shared_objects;
 use shared_objects::{ PluginType, DID };
 
 #[no_mangle]
-pub fn init() -> PluginType {
+pub fn get_type() -> PluginType {
     return PluginType::Actor;
 }
 
