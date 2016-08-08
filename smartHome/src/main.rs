@@ -71,16 +71,16 @@ fn main() {
         for (id, rx) in inputs.iter().enumerate() {
             match rx.1.receive() {
                 Ok(action) => {
-                    match actors.get(&action.target) {
-                        Some(plugins) => {
-                            for plugin in plugins.iter().chain(wildcard_actors.iter()) {
-                                if plugin != rx.0 {
-                                    debug!("Calling '{}'", plugin);
-                                    plugin_handler.get_symbol_or_fail::<fn(Action)>(plugin, "execute")(action.clone());
-                                }
-                            }
-                        },
-                        None => {}
+                    let empty_vec = Vec::new();
+                    let plugins = match actors.get(&action.target) {
+                        Some(plugins) => plugins,
+                        None => &empty_vec
+                    };
+                    for plugin in plugins.iter().chain(wildcard_actors.iter()) {
+                        if plugin != rx.0 {
+                            debug!("Calling '{}'", plugin);
+                            plugin_handler.get_symbol_or_fail::<fn(Action)>(plugin, "execute")(action.clone());
+                        }
                     }
                 },
                 Err(e) => {
