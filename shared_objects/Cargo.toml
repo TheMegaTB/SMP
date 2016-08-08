@@ -4,3 +4,6 @@ version = "0.1.0"
 authors = ["Til Blechschmidt <til@blechschmidt.de>"]
 
 [dependencies]
+bincode = "0.6.0"
+serde = "0.8.0"
+serde_macros = "0.8"

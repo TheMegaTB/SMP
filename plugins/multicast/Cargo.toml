@@ -9,6 +9,9 @@ crate_type = ["dylib"]
 
 [dependencies]
 net2 = "0.2.26"
+bincode = "0.6.0"
+serde = "0.8.0"
+serde_macros = "0.8"
 
 [dependencies.shared_objects]
 path = "../../shared_objects"

@@ -1,7 +1,12 @@
+#![feature(custom_derive, plugin)]
+#![plugin(serde_macros)]
 extern crate shared_objects;
 extern crate net2;
+extern crate bincode;
 
-// use net2::UdpSocketExt;
+use bincode::serde::*;
+use bincode::SizeLimit;
+
 use std::net::{ UdpSocket, Ipv4Addr, SocketAddrV4 };
 
 use shared_objects::{ PluginType, Return, Action, DID };
@@ -9,6 +14,8 @@ use shared_objects::{ PluginType, Return, Action, DID };
 const MULTICAST_ADDR: &'static str = "233.233.233.233";
 const MULTICAST_PORT: u16 = 8000;
 const BUFFER_SIZE: usize = 1024;
+
+static mut LOCAL_PORT: u16 = 0;
 
 #[no_mangle]
 pub fn get_type(res: Return<PluginType>) {
@@ -24,17 +31,19 @@ pub fn create_multicast_socket(port: Option<u16>) -> UdpSocket {
 }
 
 #[no_mangle]
-pub fn listen(_res: Return<Action>) {
-    // TODO: Ignore packages from local socket (ip+port) as it would result in a endless loop
+pub fn listen(res: Return<Action>) {
     std::thread::spawn(move || {
-        let _x = _res; // Don't you deallocate it!
+        let sock = create_multicast_socket(Some(MULTICAST_PORT));
+        let mut buf = vec![0; BUFFER_SIZE];
         loop {
-            let sock = create_multicast_socket(Some(MULTICAST_PORT));
-            let mut buf = vec![0; BUFFER_SIZE];
-            let (len, _src) = sock.recv_from(&mut buf).unwrap();
-            buf.truncate(len);
-            for byte in buf.iter() {
-                println!("Value: {:?}", byte);
+            let (len, src) = sock.recv_from(&mut buf).unwrap();
+            if unsafe { src.port() != LOCAL_PORT } { //TODO: Get local ip and ignore packages from it (as it is possible that other devices have the same port)
+                buf.truncate(len);
+                let action: Action = deserialize(&buf).unwrap();
+                println!("{:?} {:?}", src, action);
+                res.send(action);
+            } else {
+                unsafe { LOCAL_PORT = 0 }
             }
         }
     });
@@ -47,8 +56,10 @@ pub fn get_responsibility(_: Return<DID>) {
 
 #[no_mangle]
 pub fn execute(action: Action) {
-    println!("MULTICAST: Executing {:?}", action);
+    // println!("MULTICAST: Executing {:?}", action);
     let sock = create_multicast_socket(None);
+    unsafe { LOCAL_PORT = sock.local_addr().unwrap().port() }
     let multicast_addr: Ipv4Addr = MULTICAST_ADDR.parse().unwrap();
-    sock.send_to(&[0, 1, 2, 3], (multicast_addr, MULTICAST_PORT)).unwrap();
+    let serialized_action = serialize(&action, SizeLimit::Infinite).unwrap();
+    sock.send_to(&serialized_action, (multicast_addr, MULTICAST_PORT)).unwrap();
 }

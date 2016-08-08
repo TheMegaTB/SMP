@@ -27,7 +27,7 @@ smartHome: FORCE
 
 $(LIBS): FORCE
 	@mkdir -p $(LIB_PATH)
-	@cd $@ && find . -type f -name "*.so" -exec rm -f {} \;
-	@cd $@ && $(CARGO) build $(CFLAGS) && find ./target -type f -name "*.so" -exec cp {} $(LIB_PATH) \;
+	@cd $@ && find . -maxdepth 3 -type f -name "*.so" -exec rm -f {} \;
+	@cd $@ && $(CARGO) build $(CFLAGS) && find ./target -maxdepth 2 -type f -name "*.so" -exec cp {} $(LIB_PATH) \;
 
 FORCE:

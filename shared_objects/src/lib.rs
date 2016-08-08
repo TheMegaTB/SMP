@@ -1,5 +1,10 @@
 //#![warn(missing_docs)]
 //! Shared objects for smartHome that are required in both the plugins and the host
+#![feature(custom_derive, plugin)]
+#![plugin(serde_macros)]
+
+extern crate bincode;
+
 use std::sync::mpsc;
 
 /// Type of a plugin
@@ -12,7 +17,7 @@ pub enum PluginType {
 }
 
 /// Type of a specific Device
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub enum DeviceType {
     /// A generic lamp
     Light,
@@ -39,7 +44,7 @@ impl ToString for DeviceType {
 }
 
 /// Unique identifier of a device
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub struct DID {
     /// Room in which the device rests
     pub room: u32,
@@ -61,20 +66,20 @@ impl PartialEq<String> for DID {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum StateValue {
     On,
     Value(u8),
     Off
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum State {
     Automatic(StateValue),
     Manual(StateValue)
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Action {
     pub change: State,
     pub target: DID
