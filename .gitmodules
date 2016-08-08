@@ -1,0 +1,3 @@
+[submodule "cargo-style-logger"]
+	path = cargo-style-logger
+	url = git@github.com:TheMegaTB/cargo-style-logger
