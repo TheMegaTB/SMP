@@ -1,6 +1,12 @@
+#[macro_use]
+extern crate log;
+extern crate cargo_style_logger;
 extern crate libloading;
 extern crate glob;
 extern crate shared_objects;
+
+use cargo_style_logger::Logger;
+use log::LogLevel;
 
 use std::collections::HashMap;
 use std::sync::mpsc;
@@ -12,19 +18,23 @@ use shared_objects::{ PluginType, DID, Return, ReturnValue, Action };
 
 const PLUGIN_PATH: &'static str = "plugins";
 
+const VERSION: &'static str = env!("CARGO_PKG_VERSION");
+
 fn main() {
-    println!("Hello world!");
+    Logger::init(LogLevel::Info);
+    info!("smartHome v{}", VERSION);
 
     let plugin_handler = PluginHandler::new(PLUGIN_PATH);
 
     let mut inputs = Vec::new();
     let mut actors: HashMap<DID, Vec<String>> = HashMap::new();
     let mut wildcard_actors = Vec::new();
+    let mut loaded_plugins = Vec::new();
     for &(ref name, _) in plugin_handler.plugins.iter() {
         let (tx, rx) = ReturnValue::new();
         plugin_handler.get_symbol_or_fail::<fn(Return<PluginType>)>(name, "get_type")(tx);
         let plugin_types = rx.receive_all();
-        println!("INIT {}:{:?}", name, plugin_types);
+        loaded_plugins.push(name.to_string());
         for plugin_type in plugin_types.into_iter() {
             match plugin_type {
                 PluginType::Actor => {
@@ -53,6 +63,9 @@ fn main() {
         }
     }
 
+    info!("Loaded plugins {}", loaded_plugins.join(", "));
+    drop(loaded_plugins);
+
     loop {
         let mut dead_plugins = Vec::new();
         for (id, rx) in inputs.iter().enumerate() {
@@ -62,10 +75,8 @@ fn main() {
                         Some(plugins) => {
                             for plugin in plugins.iter().chain(wildcard_actors.iter()) {
                                 if plugin != rx.0 {
-                                    println!("Calling '{}'", plugin);
+                                    debug!("Calling '{}'", plugin);
                                     plugin_handler.get_symbol_or_fail::<fn(Action)>(plugin, "execute")(action.clone());
-                                } else {
-                                    println!("Skipped own plugin to prevent endless loop");
                                 }
                             }
                         },
@@ -82,7 +93,7 @@ fn main() {
         }
         dead_plugins.reverse();
         for dead_plugin in dead_plugins.into_iter() {
-            println!("WARN: A input plugin just died");
+            warn!("{} just died (channel_dead)", inputs[dead_plugin].0);
             inputs.remove(dead_plugin);
         }
     }

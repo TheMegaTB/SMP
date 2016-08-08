@@ -6,7 +6,12 @@ authors = ["Til Blechschmidt <til@blechschmidt.de>"]
 [dependencies]
 libloading = "0.3.0"
 glob = "0.2.11"
+log = "0.3.6"
 
 [dependencies.shared_objects]
 path = "../shared_objects"
+version = "*"
+
+[dependencies.cargo-style-logger]
+path = "../cargo-style-logger"
 version = "*"
