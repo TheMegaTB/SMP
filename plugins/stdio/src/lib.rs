@@ -12,11 +12,11 @@ pub fn listen(res: Return<Action>) {
     std::thread::spawn(move || {
         std::thread::sleep(std::time::Duration::from_secs(2));
         res.send(Action {
-            change: State::Automatic(StateValue::On),
+            change: State::Automatic(StateValue::Value(255)),
             target: DID {
-                room: 0,
-                dtype: DeviceType::Light,
-                id: 0
+                room: 3,
+                dtype: DeviceType::Shutter,
+                id: 2
             }
         });
     });
