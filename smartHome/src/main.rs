@@ -47,7 +47,7 @@ fn main() {
                 PluginType::Input => {
                     let (tx, rx) = ReturnValue::new();
                     plugin_handler.get_symbol_or_fail::<fn(Return<Action>)>(name, "listen")(tx);
-                    inputs.push(rx);
+                    inputs.push((name, rx));
                 }
             }
         }
@@ -56,13 +56,17 @@ fn main() {
     loop {
         let mut dead_plugins = Vec::new();
         for (id, rx) in inputs.iter().enumerate() {
-            match rx.receive() {
+            match rx.1.receive() {
                 Ok(action) => {
                     match actors.get(&action.target) {
                         Some(plugins) => {
                             for plugin in plugins.iter().chain(wildcard_actors.iter()) {
-                                println!("Calling '{}'", plugin);
-                                plugin_handler.get_symbol_or_fail::<fn(Action)>(plugin, "execute")(action.clone());
+                                if plugin != rx.0 {
+                                    println!("Calling '{}'", plugin);
+                                    plugin_handler.get_symbol_or_fail::<fn(Action)>(plugin, "execute")(action.clone());
+                                } else {
+                                    println!("Skipped own plugin to prevent endless loop");
+                                }
                             }
                         },
                         None => {}
