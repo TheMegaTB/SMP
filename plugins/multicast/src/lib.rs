@@ -40,7 +40,6 @@ pub fn listen(res: Return<Action>) {
             if unsafe { src.port() != LOCAL_PORT } { //TODO: Get local ip and ignore packages from it (as it is possible that other devices have the same port)
                 buf.truncate(len);
                 let action: Action = deserialize(&buf).unwrap();
-                println!("{:?} {:?}", src, action);
                 res.send(action);
             } else {
                 unsafe { LOCAL_PORT = 0 }
@@ -56,7 +55,6 @@ pub fn get_responsibility(_: Return<DID>) {
 
 #[no_mangle]
 pub fn execute(action: Action) {
-    // println!("MULTICAST: Executing {:?}", action);
     let sock = create_multicast_socket(None);
     unsafe { LOCAL_PORT = sock.local_addr().unwrap().port() }
     let multicast_addr: Ipv4Addr = MULTICAST_ADDR.parse().unwrap();
