@@ -16,29 +16,25 @@ pub enum PluginType {
     Input
 }
 
+pub type ID = u8;
+
 /// Type of a specific Device
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub enum DeviceType {
     /// A generic lamp
     Light,
     /// A generic window shutter
-    Shutter
-}
-
-impl DeviceType {
-    pub fn to_id(&self) -> u32 {
-        match self {
-            &DeviceType::Light => 0,
-            &DeviceType::Shutter => 1
-        }
-    }
+    Shutter,
+    /// Unknown device
+    Unknown
 }
 
 impl ToString for DeviceType {
     fn to_string(&self) -> String {
         match self {
             &DeviceType::Light => "Light".to_string(),
-            &DeviceType::Shutter => "Shutter".to_string()
+            &DeviceType::Shutter => "Shutter".to_string(),
+            &DeviceType::Unknown => "Unknown".to_string()
         }
     }
 }
@@ -47,11 +43,11 @@ impl ToString for DeviceType {
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Serialize, Deserialize)]
 pub struct DID {
     /// Room in which the device rests
-    pub room: u32,
+    pub room: ID,
     /// Type of the device
     pub dtype: DeviceType,
     /// ID of the device
-    pub id: u32
+    pub id: ID
 }
 
 impl ToString for DID {
