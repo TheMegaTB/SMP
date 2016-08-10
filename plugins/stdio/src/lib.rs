@@ -14,9 +14,9 @@ pub fn listen(res: Return<Action>) {
         res.send(Action {
             change: State::Automatic(StateValue::Value(255)),
             target: DID {
-                room: 3,
-                dtype: DeviceType::Shutter,
-                id: 2
+                room: 0,
+                dtype: DeviceType::Light,
+                id: 0
             }
         });
     });

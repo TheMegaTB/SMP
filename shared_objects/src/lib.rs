@@ -75,6 +75,20 @@ pub enum State {
     Manual(StateValue)
 }
 
+impl State {
+    pub fn to_value(self) -> u8 {
+        let value = match self {
+            State::Automatic(x) => x,
+            State::Manual(x) => x
+        };
+        match value {
+            StateValue::On => 255,
+            StateValue::Value(x) => x,
+            StateValue::Off => 0
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Action {
     pub change: State,
