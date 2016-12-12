@@ -19,7 +19,7 @@
 %opening
 \title{}
 \author{}
-\title{smartHome Protocol}
+\title{smartHome}
 \author{Til Blechschmidt\\ Student, Otto-Hahn-Gymnasium Geesthacht, Germany}
 
 
@@ -37,18 +37,64 @@
 	
 	%\setcounter{secnumdepth}{4}
 	
-	\titleformat{\paragraph}
-	{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
-	\titlespacing*{\paragraph}
-	{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+%	\titleformat{\paragraph}
+%	{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+%	\titlespacing*{\paragraph}
+%	{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
+    \section{Philosophy}
+        This project aims to be a decentralized SmartHome protocol that is capable of being used for a wide variety of
+        devices without much hassle and targets simple setup and usage as one of the main goals.
 	\section{Channels}
+	    A channel describes a group or collection of Devices. A channel by itself is nothing more than a ID in the
+	    heap of some devices. It can be referenced to by a string defined by the user such as 'Living Room' or 'Kitchen'
+	    by utilizing the Channel DNS stack. A group of devices listen to requests which are aimed at a specific channel
+	    and reacts to possibly but not exclusively only those.
 	\section{Devices}
-	\section{ChannelDNS}
+	    \subsection{Passive devices}
+            A passive device consists of two parts. The software layer and the hardware layer both in conjunction
+            enabling the network to interact with devices in the real world like lamps or TVs.
+            \paragraph{Software layer} The software layer responds to requests coming in from the network. The responses or
+                actions might be limited to a specific channel but can use various wildcards as well. That's up to the
+                developer and use-case. Note that a software layer is NOT limited to representing one device. It is possible
+                for a software layer to run multiple instances of class that reacts to incoming messages. Therefore it is
+                possible for one software layer to control multiple hardware layers like lamps for example.
+
+            \paragraph{Hardware layer} The hardware layer represents the part of the program that takes commands from the
+                software layer and translates them to either interactable items like a screen or trigger some actions in
+                the real world like a switch to turn on a lamp.
+        \subsection{Active devices}
+            A active device is sending status updates and requests to other passive devices reacting to those. An
+            example for an active device would be a smartphone. It can enter a specific perimeter or receive a call and
+            sends these changes in state to the network. Note however that these changes are not saved by any
+            central authority. All devices that would react to the change in state do so upon reception of the datagram
+            and do not store the state by itself. But its possible for any 3rd party to add a device that stores these
+            states for later access like showing them to a user that was disconnected from the network when the change
+            in state took place.
+	\section{Channel DNS}
+	    Since humans usually can't follow along with huge amounts of numbers the channel IDs used in the Communication
+	    protocol are translated to strings by a Channel DNS system. In its most basic form this system passes around
+	    changes that were done to the registry including a timestamp. Every device in the network receives a
+	    copy of this registry and by adding up all changes it is able to resolve channel names to IDs.
+	    \paragraph{Fetching full registry} Since devices which just joined the network don't have the initial stack and
+	        would have to wait for a change to appear (which in turn would require the whole registry to be sent to
+	        every device) a device that joins a network asks for a up-to-date registry upon connection. This
+	        includes the problem that all devices would respond with the same data, creating unnecessary overhead. In
+	        order to prevent this problem the newly connected device asks waits for any abitrary datagram to be
+	        transmitted across the multicast channel and then asks the sender of that datagram for the registry.
+        \paragraph{Incremental updates}  Because all devices have synced their registries on their first connect it is
+            only required to send incremental updates. So if any device is requesting a change to a registry entry it
+            broadcasts this change together with a timestamp to all connected devices which in turn insert this change
+            into their registry.
+        \paragraph{Registry overflow} As all changes are written into the registry rather than the current state it will
+            overflow at some point. To counteract this problem all devices resolve their registries on receiving an
+            update and delete all unnecessary entries like multiple consecutive renames or in case of a deletion all
+            previous changes to that entry.
     \section{Communication protocols}
         \subsection{UDP}
+            \subsubsection{Channel DNS incremental synchronisation}
             \subsubsection{Updates}
-            \subsubsection{Read\\Write workflow}
+            \subsubsection{Read \& Write workflow}
         \subsection{TCP}
-            \subsubsection{Channel DNS}
+            \subsubsection{Channel DNS registry synchronisation}
 \end{document}
