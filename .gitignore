@@ -5,6 +5,9 @@ cmake-build-debug/
 .idea/
 
 # Latex compiled files
+*.dvi
+*.fdb_latexmk
+*.fls
 *.aux
 *.lof
 *.log
