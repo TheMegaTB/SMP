@@ -55,7 +55,7 @@
             A passive device consists of two parts. The software layer and the hardware layer both in conjunction
             enabling the network to interact with devices in the real world like lamps or TVs.
             \paragraph{Software layer} The software layer responds to requests coming in from the network. The responses or
-                actions might be limited to a specific channel but can use various wildcards as well. That's up to the
+                actions might be limited to a specific channel but can use various wild-cards as well. That's up to the
                 developer and use-case. Note that a software layer is NOT limited to representing one device. It is possible
                 for a software layer to run multiple instances of class that reacts to incoming messages. Therefore it is
                 possible for one software layer to control multiple hardware layers like lamps for example.
@@ -65,7 +65,7 @@
                 the real world like a switch to turn on a lamp.
         \subsection{Active devices}
             A active device is sending status updates and requests to other passive devices reacting to those. An
-            example for an active device would be a smartphone. It can enter a specific perimeter or receive a call and
+            example for an active device would be a smart-phone. It can enter a specific perimeter or receive a call and
             sends these changes in state to the network. Note however that these changes are not saved by any
             central authority. All devices that would react to the change in state do so upon reception of the datagram
             and do not store the state by itself. But its possible for any 3rd party to add a device that stores these
@@ -92,9 +92,22 @@
             previous changes to that entry.
     \section{Communication protocols}
         \subsection{UDP}
-            \subsubsection{Channel DNS incremental synchronisation}
+	        \subsubsection{General structure}
+		        All UDP communication is split into two parts. One being direct communication between two devices
+		        following a special protocol depending on the task and the other part being indirect communication via
+		        multicast sockets.
+		    \subsubsection{Multicast}
+			    The datagrams in the multicast channel are all JSON formatted. This JSON object may have the following
+			    keys:\\
+			    \begin{tabular}{l | l}
+			    	type & uint\_8\\
+			    	action & bool\\
+			    	payload & object
+			    \end{tabular}
+	        \subsubsection{Device scanning}
             \subsubsection{Updates}
             \subsubsection{Read \& Write workflow}
+            \subsubsection{Channel DNS incremental synchronisation}
         \subsection{TCP}
             \subsubsection{Channel DNS registry synchronisation}
 \end{document}
