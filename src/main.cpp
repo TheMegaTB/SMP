@@ -49,7 +49,7 @@ int main(void)
 //        perror ("gethostbyname");
 //        exit (EXIT_FAILURE);
 //    }
-    UDPSocket sock = UDPSocket(inet_addr("239.0.30.1"), 1234);
+    UDPSender sock = UDPSender(inet_addr("224.0.0.1"), 1234);
 
     sock.send();
 //    sock.recv();

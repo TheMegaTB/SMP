@@ -13,4 +13,6 @@ set(SOURCE_FILES src/main.cpp src/networking/networking.cpp src/networking/netwo
 #add_executable(smartHomeServer ${SERVER_SOURCE_FILES})
 #target_link_libraries(smartHomeServer socket++)
 add_executable(smartHome ${SOURCE_FILES})
+add_executable(smartHomeClient src/client.cpp)
+add_executable(smartHomeServer src/server.cpp)
 #target_link_libraries(smartHome socket++)
