@@ -16,5 +16,4 @@ public:
     void send();
 };
 
-
 #endif //SMARTHOME_NETWORKING_H

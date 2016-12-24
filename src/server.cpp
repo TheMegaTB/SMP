@@ -18,11 +18,11 @@ int main (void) {
     }
     memset (&address, 0, sizeof (address));
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = inet_addr ("224.0.0.1");
-    address.sin_port = htons (port);
+    address.sin_addr.s_addr = inet_addr("224.0.0.1");
+    address.sin_port = htons(port);
     printf ("Server ist bereit ...\n");
     /* Broadcasting beginnen */
-//    while (1) {
+    while (1) {
         if (sendto( socket_descriptor,
                     "broadcast test (hallo client)",
                     sizeof ("broadcast test (hallo client)"),
@@ -33,6 +33,6 @@ int main (void) {
             exit (EXIT_FAILURE);
         }
         sleep(1);
-//    }
+    }
     return EXIT_SUCCESS;
 }

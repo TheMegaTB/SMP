@@ -1,57 +1,31 @@
-# include <iostream>
+#include <iostream>
 #include <arpa/inet.h>
-#include <netdb.h>
-#include <stdlib.h>
-//# include <string>
+#include <thread>
 
-//# include <unistd.h>
-//# include <stdlib.h>
-//#include <lib/libsocket/headers/inetclientstream.hpp>
+#include "networking/udpsender.hpp"
+#include "networking/udpreceiver.hpp"
 
-/*
- * This program connects to host:port (usually localhost),
- * closes the socket, reopens it with the same parameters
- * (to show what you may do with sockets... ;), receives
- * a message from the server and sends a message back.
- */
-#include "networking/networking.hpp"
-
-int main(void)
-{
-//    using std::string;
-//
-//    using libsocket::inet_stream;
-//
-//    string host = "::1";
-//    string port = "1235";
-//    string answer;
-//
-//    answer.resize(32);
-//
-//    try {
-//        libsocket::inet_stream sock(host,port,LIBSOCKET_IPv6);
-//
-//        sock >> answer;
-//
-//        std::cout << answer;
-//
-//        sock << "Hello back!\n";
-//
-//         sock is closed here automatically!
-//    } catch (const libsocket::socket_exception& exc)
-//    {
-//        std::cerr << exc.mesg;
-//    }
-//
-//    struct sockaddr_in sin;
-//    struct hostent *server_host_name;
-//    if ((server_host_name = gethostbyname ("244.0.0.1")) == 0) {
-//        perror ("gethostbyname");
-//        exit (EXIT_FAILURE);
-//    }
+void server() {
     UDPSender sock = UDPSender(inet_addr("224.0.0.1"), 1234);
-
     sock.send();
+}
+
+void client() {
+    UDPReceiver sock = UDPReceiver(inet_addr("224.0.0.1"), 1234);
 //    sock.recv();
+}
+
+int main() {
+    std::thread srv(server);     // spawn new thread that calls foo()
+    std::thread clnt(client);    // spawn new thread that calls bar(0)
+
+    std::cout << "main, foo and bar now execute concurrently...\n";
+
+    // synchronize threads:
+//    srv.join();                  // pauses until first finishes
+    clnt.join();               // pauses until second finishes
+
+    std::cout << "foo and bar completed.\n";
+
     return 0;
 }

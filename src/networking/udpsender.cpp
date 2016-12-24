@@ -7,7 +7,8 @@
 #include <zconf.h>
 #include <arpa/inet.h>
 #include <string.h>
-#include "networking.hpp"
+
+#include "udpsender.hpp"
 
 UDPSender::UDPSender(in_addr_t multicast_group, uint16_t port) {
     socket_descriptor = socket (AF_INET, SOCK_DGRAM, 0);
