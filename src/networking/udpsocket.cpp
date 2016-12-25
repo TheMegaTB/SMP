@@ -1,15 +1,6 @@
 //
 // Created by themegatb on 12/24/16.
 //
-#include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
-#include <string>
-#include <unistd.h>
-#include <string.h>
-#include <sys/ioctl.h>
 
 #include "udpsocket.hpp"
 
