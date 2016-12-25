@@ -9,13 +9,13 @@ UDPSocket::UDPSocket(std::string multicast_group, uint16_t port) {
     memset(&sin, 0, sizeof(sin));
 
     sin.sin_family = AF_INET;
-    sin.sin_addr.s_addr = htonl(INADDR_ANY);
+    sin.sin_addr.s_addr = inet_addr(multicast_group.c_str());
     sin.sin_port = htons(port);
     if ((sock = socket(PF_INET, SOCK_DGRAM, 0)) == -1) {
         perror("sock()");
         exit(EXIT_FAILURE);
     }
-    /* Mehr Prozessen erlauben, denselben Port zu nutzen */
+    /* Permit usage of this port to other processes */
     if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &loop, sizeof(loop)) < 0) {
         perror("setsockopt:SO_REUSEADDR");
         exit(EXIT_FAILURE);
@@ -24,7 +24,7 @@ UDPSocket::UDPSocket(std::string multicast_group, uint16_t port) {
         perror("bind");
         exit(EXIT_FAILURE);
     }
-    /* Broadcast auf dieser Maschine zulassen */
+    /* Enable broadcasting on this machine */
     if (setsockopt(sock, IPPROTO_IP, IP_MULTICAST_ALL, &loop, sizeof(loop)) < 0) {
         perror("setsockopt:IP_MULTICAST_LOOP");
         exit(EXIT_FAILURE);
@@ -50,7 +50,7 @@ void UDPSocket::recv() {
         while (bytes == 0 && ioctl(sock, FIONREAD, &bytes) >= 0)
             sleep(1);
         char message[bytes];
-        if (recvfrom(sock, message, 256, 0, (struct sockaddr *) &sin, (socklen_t *) &sin_len) == -1) {
+        if (recvfrom(sock, message, bytes, 0, (struct sockaddr *) &sin, (socklen_t *) &sin_len) == -1) {
             perror("recvfrom");
         }
         printf("Response #%-2d: %s\n", iter, message);
@@ -58,7 +58,7 @@ void UDPSocket::recv() {
 }
 
 void UDPSocket::send() {
-    std::string message = "broadcast test (hallo client)";
+    std::string message = "I'm a different package!";
     const char *msg = message.c_str();
     while (1) {
         if (sendto(sock, msg, sizeof(message), 0, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
