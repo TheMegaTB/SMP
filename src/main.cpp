@@ -4,28 +4,27 @@
 #include "networking/udpsocket.hpp"
 
 void server(UDPSocket sock) {
-    sock.send();
+    while (1) {
+        sock.send();
+        sleep(1);
+    }
 }
 
 void client(UDPSocket sock) {
-    sock.recv();
+    for (int i = 10; i > 0; --i) {
+        std::cout << sock.recv() << std::endl;
+    }
 }
 
 int main() {
     UDPSocket sock = UDPSocket("224.0.0.1", 1234);
-    std::thread srv(server, sock);     // spawn new thread that calls foo()
-    std::thread clnt(client, sock);    // spawn new thread that calls bar(0)
+    std::thread srv(server, sock);
+    std::thread clnt(client, sock);
 
-    std::cout << "main, foo and bar now execute concurrently...\n";
+    clnt.join();
+    srv.detach();
 
-    // synchronize threads:
-//    srv.join();                  // pauses until first finishes
-    clnt.join();               // pauses until second finishes
-
-//    srv.terminate();
     sock.close();
-
-    std::cout << "foo and bar completed.\n";
 
     return 0;
 }
