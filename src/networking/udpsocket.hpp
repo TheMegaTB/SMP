@@ -22,7 +22,7 @@ public:
 
     void close();
 
-    ssize_t send();
+    ssize_t send(std::string message);
 };
 
 #endif //UDP_SOCKET_HPP

@@ -54,8 +54,7 @@ std::string UDPSocket::recv() {
     return message;
 }
 
-ssize_t UDPSocket::send() {
-    std::string message = "I'm a different package!";
+ssize_t UDPSocket::send(std::string message) {
     const char *msg = message.c_str();
     return sendto(sock, msg, sizeof(message), 0, (struct sockaddr *) &sin, sizeof(sin));
 }
