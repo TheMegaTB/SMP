@@ -8,7 +8,14 @@ using json = nlohmann::json;
 
 #include "networking/udpsocket.hpp"
 #include "SafeQueue.hpp"
+#include "EventQueue.hpp"
 
+class RandomObserver : public Observer<std::string> {
+public:
+    void process(std::string event) override {
+        std::cout << "RO | " << event << std::endl;
+    };
+};
 
 void server(UDPSocket sock) {
     while (1) {
@@ -23,27 +30,28 @@ void client(UDPSocket sock) {
     }
 }
 
-void threadTest(std::string name, SafeQueue<std::string> *q) {
-    while (1) {
-        std::cout << name << (*q).take() << std::endl;
-        sleep(1);
-    }
+void threadTest(SafeQueue<std::string> *q) {
+    EventQueue<std::string> e = EventQueue<std::string>(q);
+    RandomObserver *s = new RandomObserver;
+    e.addObserver(s);
+    while (1)
+        e.observeOnce();
 }
 
 int main() {
-
     SafeQueue<std::string> q;
-    std::string prefix = "Meow ";
+    std::string prefix = "Event ";
+
+    std::thread t1(threadTest, &q);
+    t1.detach();
+
+    std::cout << "HEY THERE" << std::endl;
     for (int i = 0; i < 10; ++i) {
         std::ostringstream oss;
         oss << prefix << i;
         q.add(oss.str());
+        sleep(1);
     }
-
-//    threadTest("Main thread", &q);
-
-    std::thread t1(threadTest, "T1", &q);
-    std::thread t2(threadTest, "T2", &q);
 
     json j = {
         {"action", "read"},
