@@ -1,6 +1,11 @@
 #include <iostream>
 #include <thread>
 
+#include "json.hpp"
+
+// for convenience
+using json = nlohmann::json;
+
 #include "networking/udpsocket.hpp"
 
 void server(UDPSocket sock) {
@@ -17,6 +22,16 @@ void client(UDPSocket sock) {
 }
 
 int main() {
+
+    json j = {
+        {"action", "read"},
+        {"channel", 1},
+        {"payload", {}}
+    };
+
+
+    std::cout << j.dump(4) << std::endl;
+
     UDPSocket sock = UDPSocket("224.0.0.1", 1234);
     std::thread srv(server, sock);
     std::thread clnt(client, sock);

@@ -45,6 +45,8 @@
     \section{Philosophy}
         This project aims to be a decentralized SmartHome protocol that is capable of being used for a wide variety of
         devices without much hassle and targets simple setup and usage as one of the main goals.
+        \subsection{States}
+        \subsection{Events}
 	\section{Channels}
 	    A channel describes a group or collection of Devices. A channel by itself is nothing more than a ID in the
 	    heap of some devices. It can be referenced to by a string defined by the user such as 'Living Room' or 'Kitchen'
@@ -100,10 +102,11 @@
 			    The datagrams in the multicast channel are all JSON formatted. This JSON object may have the following
 			    keys:\\
 			    \begin{tabular}{l | l}
-			    	type & uint\_8\\
-			    	action & bool\\
+			        channel & integer\\
+			    	action & string\\
 			    	payload & object
 			    \end{tabular}
+			    \paragraph{action} may take one of the following values: read, write, state
 	        \subsubsection{Device scanning}
             \subsubsection{Updates}
             \subsubsection{Read \& Write workflow}
