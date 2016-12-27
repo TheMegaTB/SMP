@@ -43,23 +43,25 @@
 %	{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
     \section{Philosophy}
-        This project aims to provide an approach for connecting IoT devices that differs from current implementations. It
-        attempts to do so in a decentralized and non-persistent yet robust fashion. One goal of this project is to
-        create a network which is not flawed if a single device dies and simply adapts new devices without much configuration effort
-        but still provides the possibilities to follow complex rules to trigger various actions based on changes in the network.
+        This project aims to provide an approach for connecting IoT devices that differs from current implementations.
+        It attempts to do so in a decentralized and non-persistent yet robust fashion. One goal of this project is to
+        create a network which is not flawed if a single device dies and simply adapts new devices without much
+        configuration effort but still provides the possibilities to follow complex rules to trigger various actions
+        based on changes in the network.
         \subsection{States}
-	        Despite the centralized persistent architecture of other smart device networks out there, this implementation is
-	        based on so called states. A device may enter or leave a state and broadcasts this change of state to the network.
-	        Another device may then react to this change of state on their behalf. One example of this architecture would be a smart
-	        light bulb. Take for example a car's Bluetooth that enters the area directly in front of the garage door. It broadcasts
-	        this state of being near the garage door node to the network. Now the garage door actuator receives this change of state
-	        and reacts to it by a set of rules that are defined in its internal storage/configuration and for example, opens the garage
-	        door for the car to enter it.\\
-	        This way of handling events is more robust compared to a centralized set of rules since it doesn't rely on a single device
-	        that calculates reactions to events based on rules which might fail at some point rendering the whole network useless. If a
-	        device fails in this architecture it would only render that specific set of rules useless which has an
-	        overall smaller impact since the real-world device the rules apply to has failed as well and the remaining
-	        network stays intact and operational.
+	        Despite the centralized persistent architecture of other smart device networks out there, this
+	        implementation is based on so called states. A device may enter or leave a state and broadcasts this change
+	        of state to the network. Another device may then react to this change of state on their behalf. One example
+	        of this architecture would be a smart light bulb. Take for example a car's Bluetooth that enters the area
+	        directly in front of the garage door. It broadcasts this state of being near the garage door node to the
+	        network. Now the garage door actuator receives this change of state and reacts to it by a set of rules that
+	        are defined in its internal storage/configuration and for example, opens the garage door for the car
+	        to enter it.\\
+	        This way of handling events is more robust compared to a centralized set of rules since it doesn't rely on a
+	        single device that calculates reactions to events based on rules which might fail at some point rendering
+	        the whole network useless. If a device fails in this architecture it would only render that specific set of
+	        rules useless which has an overall smaller impact since the real-world device the rules apply to has failed
+	        as well and the remaining network stays intact and operational.
 	\section{Channels}
 	    A channel describes a group or collection of Devices. A channel by itself is nothing more than an ID in the
 	    heap of some devices. It can be referenced to by a string defined by the user such as 'Living Room' or 'Kitchen'
@@ -69,15 +71,16 @@
 	    \subsection{Passive devices}
             A passive device consists of two parts. The software layer and the hardware layer both in conjunction
             enabling the network to interact with devices in the real world like lamps or TVs.
-            \paragraph{Software layer} The software layer responds to requests coming in from the network. The responses or
-                actions might be limited to a specific channel but can use various wildcards as well. That's up to the
-                developer and use-case. Note that a software layer is NOT limited to representing one device. It is possible
-                for a software layer to run multiple instances of a class that reacts to incoming messages. Therefore it is
-                possible for one software layer to control multiple hardware layers like lamps for example.
+            \paragraph{Software layer} The software layer responds to requests coming in from the network. The responses
+                or actions might be limited to a specific channel but can use various wildcards as well. That's up to
+                the developer and use-case. Note that a software layer is NOT limited to representing one device. It is
+                possible for a software layer to run multiple instances of a class that reacts to incoming messages.
+                Therefore it is possible for one software layer to control multiple hardware layers
+                like lamps for example.
 
-            \paragraph{Hardware layer} The hardware layer represents the part of the program that takes commands from the
-                software layer and translates them to either interactable items like a screen or trigger some actions in
-                the real world like a switch to turn on a lamp.
+            \paragraph{Hardware layer} The hardware layer represents the part of the program that takes commands from
+                the software layer and translates them to either interactable items like a screen or trigger some
+                actions in the real world like a switch to turn on a lamp.
         \subsection{Active devices}
             An active device is sending status updates and requests to other passive devices reacting to those. An
             example of an active device would be a smart-phone. It can enter a specific perimeter or receive a call and
@@ -109,8 +112,8 @@
         \subsection{UDP}
 	        \subsubsection{General structure}
 		        All UDP communication is split into two parts. One being direct communication between two devices
-		        following a special protocol depending on the task and the other part being indirect communication via
-		        multicast sockets.
+		        following a special protocol that is dependent on the task and the other part being indirect
+		        communication via multicast sockets.
 		    \subsubsection{Multicast}
 			    The datagrams in the multicast channel are all JSON formatted. This JSON object may have the following
 			    keys:\\
