@@ -23,9 +23,9 @@ void client(UDPSocket sock) {
     }
 }
 
-void threadTest(std::string name, SafeQueue<std::string> &q) {
+void threadTest(std::string name, SafeQueue<std::string> *q) {
     while (1) {
-        std::cout << name << q.take() << std::endl;
+        std::cout << name << (*q).take() << std::endl;
         sleep(1);
     }
 }
@@ -40,10 +40,10 @@ int main() {
         q.add(oss.str());
     }
 
-    threadTest("Main thread", q);
+//    threadTest("Main thread", &q);
 
-    std::thread t1(threadTest, "T1", q);
-    std::thread t2(threadTest, "T2", q);
+    std::thread t1(threadTest, "T1", &q);
+    std::thread t2(threadTest, "T2", &q);
 
     json j = {
         {"action", "read"},
