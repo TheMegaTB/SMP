@@ -42,7 +42,7 @@ UDPSocket::UDPSocket(std::string multicast_group, uint16_t port) {
 
 std::string UDPSocket::recv() {
     int sin_len = sizeof(sin);
-    int bytes = 0;
+    size_t bytes = 0;
     while (bytes == 0 && ioctl(sock, FIONREAD, &bytes) >= 0)
         sleep(1);
 
@@ -54,7 +54,7 @@ std::string UDPSocket::recv() {
     return message;
 }
 
-int UDPSocket::send() {
+ssize_t UDPSocket::send() {
     std::string message = "I'm a different package!";
     const char *msg = message.c_str();
     return sendto(sock, msg, sizeof(message), 0, (struct sockaddr *) &sin, sizeof(sin));

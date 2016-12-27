@@ -22,7 +22,7 @@ public:
 
     void close();
 
-    int send();
+    ssize_t send();
 };
 
 #endif //UDP_SOCKET_HPP
