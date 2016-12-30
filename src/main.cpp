@@ -9,6 +9,7 @@ using json = nlohmann::json;
 #include "networking/udpsocket.hpp"
 #include "SafeQueue.hpp"
 #include "EventQueue.hpp"
+#include "InterruptHandle.hpp"
 
 class RandomObserver : public Observer<std::string> {
 public:
@@ -17,8 +18,8 @@ public:
     };
 };
 
-void server(UDPSocket sock) {
-    while (1) {
+void server(UDPSocket sock, InterruptHandle *handle) {
+    while (!(*handle).isInterrupted()) {
         sock.send("I'm different!");
         sleep(1);
     }
@@ -30,44 +31,47 @@ void client(UDPSocket sock) {
     }
 }
 
-void threadTest(SafeQueue<std::string> *q) {
+void pluginHandler(SafeQueue<std::string> *q, InterruptHandle *handle) {
     EventQueue<std::string> e = EventQueue<std::string>(q);
     RandomObserver *s = new RandomObserver;
     e.addObserver(s);
-    while (1)
+    while (!(*handle).isInterrupted())
         e.observeOnce();
 }
 
-int main() {
-    SafeQueue<std::string> q;
-    std::string prefix = "Event ";
-
-    std::thread t1(threadTest, &q);
-    t1.detach();
-
-    std::cout << "HEY THERE" << std::endl;
-    for (int i = 0; i < 10; ++i) {
-        std::ostringstream oss;
-        oss << prefix << i;
-        q.add(oss.str());
-        sleep(1);
+void udpReceptionThread(UDPSocket sock, SafeQueue<std::string> *udpRecv, InterruptHandle *handle) {
+    while (!(*handle).isInterrupted()) {
+        udpRecv->add(sock.recv());
     }
+}
 
+void jsonTesting() {
     json j = {
-        {"action", "read"},
-        {"channel", 1},
-        {"payload", {}}
+            {"action",  "read"},
+            {"channel", 1},
+            {"payload", {}}
     };
 
 
     std::cout << j.dump(4) << std::endl;
+}
 
+int main() {
+    jsonTesting();
+
+    SafeQueue<std::string> q;
     UDPSocket sock = UDPSocket("224.0.0.1", 1234);
-    std::thread srv(server, sock);
-    std::thread clnt(client, sock);
+    InterruptHandle handle = InterruptHandle();
 
-    clnt.join();
-    srv.detach();
+    std::thread t1(udpReceptionThread, sock, &q, &handle);
+    std::thread t2(pluginHandler, &q, &handle);
+    std::thread srv(server, sock, &handle);
+
+    sleep(4);
+    handle.interrupt();
+    t1.join();
+    t2.join();
+    srv.join();
 
     sock.close();
 
