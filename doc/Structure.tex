@@ -49,24 +49,45 @@
         configuration effort but still provides the possibilities to follow complex rules to trigger various actions
         based on changes in the network.
         \subsection{States}
-	        Despite the centralized persistent architecture of other smart device networks out there, this
+	        Despite the centralized persistent nature of other smart device networks out there, this
 	        implementation is based on so called states. A device may enter or leave a state and broadcasts this change
-	        of state to the network. Another device may then react to this change of state on their behalf. One example
-	        of this architecture would be a smart light bulb. Take for example a car's Bluetooth that enters the area
-	        directly in front of the garage door. It broadcasts this state of being near the garage door node to the
+	        of state to the network. Another device may then react to this change of state on their behalf. Take for example a car's Bluetooth that enters the area
+	        directly in front of the garage door. It broadcasts this state of being near the garage door to the
 	        network. Now the garage door actuator receives this change of state and reacts to it by a set of rules that
 	        are defined in its internal storage/configuration and for example, opens the garage door for the car
 	        to enter it.\\
-	        This way of handling events is more robust compared to a centralized set of rules since it doesn't rely on a
-	        single device that calculates reactions to events based on rules which might fail at some point rendering
-	        the whole network useless. If a device fails in this architecture it would only render that specific set of
-	        rules useless which has an overall smaller impact since the real-world device the rules apply to has failed
-	        as well and the remaining network stays intact and operational.
+	        \paragraph{Resistance against failures}
+				This way of handling events is more robust compared to a centralized set of rules since it doesn't rely on a
+				single device that calculates reactions to events based on rules which might fail at some point rendering
+				the whole network useless. If a device fails in this architecture it would only render that specific set of
+				rules useless which has an overall smaller impact since chances are high that the real-world device the
+				rules apply to has failed as well and the remaining network stays intact and operational.
+			\paragraph{Status broadcasts}
+				Whilst regular centralized networks make use of a central registry this is not the case with this approach.
+				Instead every device stores its state internally. This opens up the possibility to differentiate between
+				write requests to a specific channel or device and the results it causes. Take a write request to a whole
+				channel as an example. There might be multiple devices listening to the channel and a single write request
+				may result in multiple changes in state. By each device receiving the write request and processing it
+				independently, each broadcasting the following change in state every other device in the whole network
+				instantly receives a whole set of the resulting states caused by this single write request.
+				This opens up the possibility for each device to process a write request differently in its own manner.
+			\paragraph{Read requests}
+				Take the case of a mobile device that may enter or leave the network at unknown times. Chances are that
+				the network changes in the period this device is absent. This by itself would cause a huge headache since
+				all changes would have to be synchronized upon reconnection. For most mobile devices it is the case that
+				they do not require all states of every single device in the network at a given point in time. Because of this
+				there will be no synchronization of states upon reconnect in the protocol itself. It might be implemented
+				by a device that stores all states and then enables a mobile device to fetch this registry but it is not
+				defined in the protocol itself. Instead the protocol defines read requests which can be sent to channels
+				or devices which in turn return their current state through a UDP datagram back to the device which
+				sent the read request. This enables mobile devices to fetch the states of specific devices at the time
+				they are required reducing the load and overhead.
 	\section{Channels}
 	    A channel describes a group or collection of Devices. A channel by itself is nothing more than an ID in the
 	    heap of some devices. It can be referenced to by a string defined by the user such as 'Living Room' or 'Kitchen'
 	    by utilizing the Channel DNS stack. A group of devices listens to requests which are aimed at a specific channel
 	    and reacts to possibly but not exclusively only those.
+	    \subsection{Get list of devices in channel}
 	\section{Devices}
 	    \subsection{Passive devices}
             A passive device consists of two parts. The software layer and the hardware layer both in conjunction
