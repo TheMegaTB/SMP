@@ -13,9 +13,20 @@ ExternalProject_Add(
         CMAKE_ARGS -DBuildTests=OFF -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
 )
 
-set(SOURCE_FILES src/main.cpp src/networking/udpsocket.hpp src/networking/udpsocket.cpp src/SafeQueue.hpp src/EventQueue.hpp src/InterruptHandle.hpp src/plugin_framework/Plugin.cpp src/plugin_framework/Plugin.hpp src/plugin_framework/Channel.hpp)
+ExternalProject_Add(
+        smartHomePlugin
+        SOURCE_DIR ../smartHomePlugin
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+)
+
+
+set(SOURCE_FILES src/main.cpp src/InterruptHandle.hpp)
 
 add_executable(smartHome ${SOURCE_FILES})
 target_link_libraries(smartHome PUBLIC ${CMAKE_THREAD_LIBS_INIT})
+
+include_directories(${EXTERNAL_INSTALL_LOCATION}/include/smartHomePlugin)
+add_dependencies(smartHome smartHomePlugin)
+
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include/nlohmann)
 add_dependencies(smartHome json)

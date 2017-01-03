@@ -7,6 +7,7 @@
 
 #include <queue>
 #include <mutex>
+#include <chrono>
 #include <condition_variable>
 
 template<class T>
@@ -23,10 +24,10 @@ public:
         c.notify_one();
     }
 
-    T take(void) { // TODO: Implement timeout
+    T take(std::chrono::duration<int, std::milli> timeout) { // TODO: Implement timeout
         std::unique_lock<std::mutex> lock(m);
         while (q.empty()) {
-            c.wait(lock);
+            if (c.wait_for(lock, timeout) == std::cv_status::timeout) return nullptr;
         }
         T val = q.front();
         q.pop();

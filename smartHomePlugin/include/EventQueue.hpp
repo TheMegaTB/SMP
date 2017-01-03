@@ -6,6 +6,7 @@
 #define SMARTHOME_EVENTQUEUE_HPP
 
 #include <vector>
+#include <chrono>
 #include <iostream>
 #include "SafeQueue.hpp"
 
@@ -28,10 +29,12 @@ public:
         this->observers.push_back(o);
     };
 
-    void observeOnce() {
-        T event = this->input_queue->take();
+    int observeOnce(std::chrono::duration<int, std::milli> timeout) {
+        T event = this->input_queue->take(timeout);
+        if (!event) return -1;
         for (Observer<T> *observer : this->observers)
             observer->process(event);
+        return 1;
     };
 };
 

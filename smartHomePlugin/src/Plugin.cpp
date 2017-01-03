@@ -2,7 +2,7 @@
 // Created by themegatb on 1/3/17.
 //
 
-#include "Plugin.hpp"
+#include "../include/Plugin.hpp"
 
 using namespace std;
 
@@ -23,4 +23,9 @@ void Plugin::process(json datagram) {
         //TODO Ignore (?)
         // Might be useful for persistence services
     }
+}
+
+Plugin::Plugin(readCallback r, writeCallback w) {
+    this->readCB = r;
+    this->writeCB = w;
 }
