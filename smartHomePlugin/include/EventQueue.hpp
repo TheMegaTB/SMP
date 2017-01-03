@@ -21,9 +21,7 @@ class EventQueue {
     SafeQueue<T> *input_queue;
     std::vector<Observer<T> *> observers;
 public:
-    EventQueue(SafeQueue<T> *queue) {
-        this->input_queue = queue;
-    };
+    EventQueue(SafeQueue<T> *queue) : input_queue(queue) {};
 
     void addObserver(Observer<T> *o) {
         this->observers.push_back(o);
