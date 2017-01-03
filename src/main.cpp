@@ -38,7 +38,7 @@ void server(UDPSocket sock, InterruptHandle *handle) {
     string str_request = request.dump();
     while (!(*handle).isInterrupted()) {
         sock.send(str_request);
-        sleep(10);
+        sleep(1);
     }
 }
 
