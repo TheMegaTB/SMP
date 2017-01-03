@@ -11,7 +11,7 @@
 #include "Plugin.hpp"
 #include "SafeQueue.hpp"
 #include "EventQueue.hpp"
-#include "udpsocket.hpp"
+#include "UDPSocket.hpp"
 #include "json.hpp"
 
 using json = nlohmann::json;
