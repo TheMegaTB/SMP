@@ -13,3 +13,4 @@ ExternalProject_Add(
 
 add_subdirectory(plugin)
 add_subdirectory(server)
+add_subdirectory(exampleClient)

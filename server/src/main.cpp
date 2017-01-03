@@ -1,91 +1,118 @@
 #include <iostream>
 #include <thread>
+#include <csignal>
+#include <dlfcn.h>
 
 #include "json.hpp"
 #include "Channel.hpp"
 #include "PluginHandler.hpp"
+#include "InterruptHandle.hpp"
+
+#define RECV_TIMEOUT 2000
 
 // for convenience
 using json = nlohmann::json;
-
-//#include "../smartHomePlugin/include/udpsocket.hpp"
-//#include "plugin_framework/SafeQueue.hpp"
-//#include "plugin_framework/EventQueue.hpp"
-//#include "plugin_framework/Channel.hpp"
-//#include "plugin_framework/Plugin.hpp"
+using namespace std;
 
 // PLUGIN CODE
 void wc(Channel c, json p) {
-    std::cout << "WRITE" << std::endl;
-//    std::cout << c.getAddressAsString() << std::endl;
-    std::cout << p.dump(4) << std::endl;
+    cout << "WRITE" << endl;
+    cout << c.getAddressAsString() << endl;
+    cout << p.dump(4) << endl;
 };
 
 json rc(Channel c, json p) {
-    std::cout << "READ" << std::endl;
-//    std::cout << c.getAddressAsString() << std::endl;
-    std::cout << p.dump(4) << std::endl;
+    cout << "READ" << endl;
+    cout << c.getAddressAsString() << endl;
+    cout << p.dump(4) << endl;
     json j;
     return j;
 };
 // PLUGIN CODE END
 
-//void server(UDPSocket sock, InterruptHandle *handle) {
-//    json request = {
-//            {"action",  "read"},
-//            {"channel", {1, 2, 1}},
-//            {"payload", {{"something", "there"}}}
-//    };
-//    string str_request = request.dump();
-//    while (!(*handle).isInterrupted()) {
-//        sock.send(str_request);
-//        sleep(1);
-//    }
-//}
-//
-//void pluginHandler(SafeQueue<json> *q, InterruptHandle *handle) {
-//    EventQueue<json> e = EventQueue<json>(q);
-//    Plugin p = Plugin(&rc, &wc);
-//    e.addObserver(&p);
-//    while (!(*handle).isInterrupted())
-//        e.observeOnce();
-//}
-//
-//void udpReceptionThread(UDPSocket sock, SafeQueue<json> *udpRecv, InterruptHandle *handle) {
-//    std::string data;
-//    while (!(*handle).isInterrupted()) {
-//        if (sock.recv(&data, 2000) > 0)
-//            udpRecv->add(json::parse(data)); // TODO Try/Catch for parsing
-//    }
-//}
+void receiveData(PluginHandler *p, InterruptHandle *handle) {
+    while (!(*handle).isInterrupted()) {
+        p->receiveData(RECV_TIMEOUT);
+    }
+}
+
+void processData(PluginHandler *p, InterruptHandle *handle) {
+    while (!(*handle).isInterrupted()) {
+        p->processData();
+    }
+}
+
+volatile sig_atomic_t interrupted = 0;
+
+void onInterrupt(int) {
+    interrupted = 1;
+}
+
+int loadPlugin() {
+    using std::cout;
+    using std::cerr;
+
+    cout << "C++ dlopen demo\n\n";
+
+    // open the library
+    cout << "Opening hello.so...\n";
+    void *handle = dlopen("/home/themegatb/Projects/C++/smartHome/plugin_gpio/build/libgpio.so", RTLD_LAZY);
+
+    if (!handle) {
+        cerr << "Cannot open library: " << dlerror() << '\n';
+        return 1;
+    }
+
+    // load the symbol
+    cout << "Loading symbol hello...\n";
+    typedef void (*hello_t)();
+
+    // reset errors
+    dlerror();
+    hello_t hello = (hello_t) dlsym(handle, "hello");
+    const char *dlsym_error = dlerror();
+    if (dlsym_error) {
+        cerr << "Cannot load symbol 'hello': " << dlsym_error <<
+             '\n';
+        dlclose(handle);
+        return 1;
+    }
+
+    // use it to do the calculation
+    cout << "Calling hello...\n";
+    hello();
+
+    // close the library
+    cout << "Closing library...\n";
+    dlclose(handle);
+
+    return 0;
+}
 
 int main() {
+
+    loadPlugin();
+
+    signal(SIGINT, onInterrupt);
 
     PluginHandler ph("224.0.0.1", 1234);
 
     Plugin p = Plugin(&rc, &wc);
     ph.addPlugin(&p);
 
-    while (1) {
-        ph.receiveData(2000);
-        ph.processData();
-    }
 
-//    SafeQueue<json> q;
-//    UDPSocket sock = UDPSocket("224.0.0.1", 1234);
-//    InterruptHandle handle = InterruptHandle();
+    InterruptHandle handle;
+    thread networking(receiveData, &ph, &handle);
+    thread processing(processData, &ph, &handle);
 
-//    std::thread t1(udpReceptionThread, sock, &q, &handle);
-//    std::thread t2(pluginHandler, &q, &handle);
-//    std::thread srv(server, sock, &handle);
+    cout << "Awaiting requests . . ." << endl;
+    while (interrupted == 0)
+        sleep(1);
 
-//    sleep(4);
-//    handle.interrupt();
-//    t1.join();
-//    t2.join();
-//    srv.join();
-
-//    sock.close();
+    cout << "\nInterrupted! Exiting..." << endl;
+    handle.interrupt();
+    networking.join();
+    processing.join();
 
     return 0;
 }
