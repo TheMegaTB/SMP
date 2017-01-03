@@ -10,6 +10,8 @@ using json = nlohmann::json;
 #include "SafeQueue.hpp"
 #include "EventQueue.hpp"
 #include "InterruptHandle.hpp"
+#include "plugin_framework/Channel.hpp"
+#include "plugin_framework/Plugin.hpp"
 
 class RandomObserver : public Observer<std::string> {
 public:
@@ -52,12 +54,36 @@ void jsonTesting() {
             {"payload", {}}
     };
 
+    j["list"] = {"Test1", "Test2", "Test3"};
+
+    std::vector<std::string> test = j["list"];
+    for (std::string s : test) {
+        std::cout << s << std::endl;
+    }
 
     std::cout << j.dump(4) << std::endl;
 }
 
+void wc(Channel c, json p) {};
+
+json rc(Channel c) {
+    json j;
+    return j;
+};
+
+void pluginTesting() {
+    Plugin p = Plugin(&rc, &wc);
+    json request = {
+            {"action",  "read"},
+            {"channel", {1,           2, 1}},
+            {"payload", {"something", "there"}}
+    };
+    p.processJSON(request);
+}
+
 int main() {
     jsonTesting();
+    pluginTesting();
 
     SafeQueue<std::string> q;
     UDPSocket sock = UDPSocket("224.0.0.1", 1234);
