@@ -62,7 +62,7 @@ json rc(Channel c, json p) {
 
 int main() {
 
-    PluginHandler ph = PluginHandler("224.0.0.1", 1234);
+    PluginHandler ph("224.0.0.1", 1234);
 
     Plugin p = Plugin(&rc, &wc);
     ph.addPlugin(&p);
