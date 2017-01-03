@@ -6,6 +6,7 @@
 #define SMARTHOME_CHANNEL_HPP
 
 #include <vector>
+#include <string>
 
 using namespace std;
 

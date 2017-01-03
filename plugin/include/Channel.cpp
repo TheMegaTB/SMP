@@ -16,7 +16,7 @@ string Channel::getAddressAsString() {
     return addr;
 }
 
-void setAddress(vector<int> address) {
+void Channel::setAddress(vector<int> address) {
     this->type = address[0];
     this->room = address[1];
     this->device = address[2];

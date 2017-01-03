@@ -4,7 +4,6 @@
 #include "json.hpp"
 #include "Channel.hpp"
 #include "PluginHandler.hpp"
-#include "Plugin.hpp"
 
 // for convenience
 using json = nlohmann::json;

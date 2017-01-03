@@ -13,22 +13,33 @@ ExternalProject_Add(
 )
 
 # Find source files
-file(GLOB SOURCES src/*.cpp src/*.hpp)
+file(GLOB SOURCES src/*.cpp src/*.hpp include/*.hpp include/*.cpp)
 
 # Include header files
 include_directories(include)
 
 # Create shared library
-add_library(${PROJECT_NAME} SHARED ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${SOURCES})
 add_dependencies(${PROJECT_NAME} json)
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include/nlohmann)
 
+#target_include_directories(${PROJECT_NAME} INTERFACE
+#        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+#        $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
+
+# export the library target
+#export(TARGETS ${PROJECT_NAME} FILE ${CMAKE_CURRENT_BINARY_DIR}/${JSON_PACKAGE_NAME}Targets.cmake)
+#export(PACKAGE ${PROJECT_NAME})
+
 # Install library
-install(TARGETS ${PROJECT_NAME} DESTINATION lib/${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME})
+#install(TARGETS ${PROJECT_NAME} DESTINATION lib/${PROJECT_NAME})
 
 # Install library headers
 file(GLOB HEADERS include/*.hpp)
 install(FILES ${HEADERS} DESTINATION include/${PROJECT_NAME})
+install(EXPORT ${PROJECT_NAME} FILE ${PROJECT_NAME}Targets.cmake DESTINATION cmake)
+
 
 #set(SOURCE_FILES src/EventQueue.hpp src/SafeQueue.hpp include/Channel.hpp src/Channel.cpp include/Plugin.hpp src/Plugin.cpp)
 

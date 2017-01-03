@@ -24,7 +24,7 @@ class PluginHandler {
 public:
     void addPlugin(Plugin *plugin);
 
-    int receiveData(int timeout_ms);
+    int receiveData(unsigned int timeout_ms);
 
     int processData();
 

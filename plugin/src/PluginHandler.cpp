@@ -4,7 +4,7 @@ void PluginHandler::addPlugin(Plugin *plugin) {
     this->plugins.addObserver(plugin);
 }
 
-int PluginHandler::receiveData(int timeout_ms) {
+int PluginHandler::receiveData(unsigned int timeout_ms) {
     std::string data;
     int res = sock.recv(&data, timeout_ms);
     if (res > 0)
