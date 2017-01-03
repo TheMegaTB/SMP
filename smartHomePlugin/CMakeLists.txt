@@ -28,8 +28,6 @@ install(TARGETS ${PROJECT_NAME} DESTINATION lib/${PROJECT_NAME})
 
 # Install library headers
 file(GLOB HEADERS include/*.hpp)
-message("HI THERE")
-message(${HEADERS})
 install(FILES ${HEADERS} DESTINATION include/${PROJECT_NAME})
 
 #set(SOURCE_FILES src/EventQueue.hpp src/SafeQueue.hpp include/Channel.hpp src/Channel.cpp include/Plugin.hpp src/Plugin.cpp)

@@ -20,8 +20,5 @@ int PluginHandler::processData() {
     return processed;
 }
 
-PluginHandler::PluginHandler(string multicastAddr, int port) {
-//    this->sock = UDPSocket(multicastAddr, port);
-//    this->datagrams = new SafeQueue<json>;
-//    this->plugins = EventQueue<json>(this->datagrams);
-}
+PluginHandler::PluginHandler(string multicastAddr, uint16_t port)
+        : sock(multicastAddr, port), datagrams(), plugins(&datagrams) {}

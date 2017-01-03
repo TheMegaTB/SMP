@@ -12,7 +12,9 @@
 #include "SafeQueue.hpp"
 #include "EventQueue.hpp"
 #include "udpsocket.hpp"
+#include "json.hpp"
 
+using json = nlohmann::json;
 using namespace std;
 
 class PluginHandler {
@@ -26,7 +28,7 @@ public:
 
     int processData();
 
-    PluginHandler(string multicastAddr, int port);
+    PluginHandler(string multicastAddr, uint16_t port);
 };
 
 

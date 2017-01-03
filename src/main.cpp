@@ -4,6 +4,7 @@
 #include "json.hpp"
 #include "Channel.hpp"
 #include "PluginHandler.hpp"
+#include "Plugin.hpp"
 
 // for convenience
 using json = nlohmann::json;
@@ -60,6 +61,16 @@ json rc(Channel c, json p) {
 //}
 
 int main() {
+
+    PluginHandler ph = PluginHandler("224.0.0.1", 1234);
+
+    Plugin p = Plugin(&rc, &wc);
+    ph.addPlugin(&p);
+
+    while (1) {
+        ph.receiveData(2000);
+        ph.processData();
+    }
 
 //    SafeQueue<json> q;
 //    UDPSocket sock = UDPSocket("224.0.0.1", 1234);
