@@ -23,7 +23,7 @@ public:
         c.notify_one();
     }
 
-    T take(void) {
+    T take(void) { // TODO: Implement timeout
         std::unique_lock<std::mutex> lock(m);
         while (q.empty()) {
             c.wait(lock);

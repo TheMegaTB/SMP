@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void Plugin::processJSON(json datagram) {
+void Plugin::process(json datagram) {
     string action = datagram["action"];
     vector<int> raw_channel = datagram["channel"];
     Channel channel = Channel(raw_channel);

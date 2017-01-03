@@ -13,57 +13,7 @@ using json = nlohmann::json;
 #include "plugin_framework/Channel.hpp"
 #include "plugin_framework/Plugin.hpp"
 
-class RandomObserver : public Observer<std::string> {
-public:
-    void process(std::string event) override {
-        std::cout << "RO | " << event << std::endl;
-    };
-};
-
-void server(UDPSocket sock, InterruptHandle *handle) {
-    while (!(*handle).isInterrupted()) {
-        sock.send("I'm different!");
-        sleep(1);
-    }
-}
-
-void client(UDPSocket sock) {
-    for (int i = 10; i > 0; --i) {
-        std::cout << sock.recv() << std::endl;
-    }
-}
-
-void pluginHandler(SafeQueue<std::string> *q, InterruptHandle *handle) {
-    EventQueue<std::string> e = EventQueue<std::string>(q);
-    RandomObserver *s = new RandomObserver;
-    e.addObserver(s);
-    while (!(*handle).isInterrupted())
-        e.observeOnce();
-}
-
-void udpReceptionThread(UDPSocket sock, SafeQueue<std::string> *udpRecv, InterruptHandle *handle) {
-    while (!(*handle).isInterrupted()) {
-        udpRecv->add(sock.recv());
-    }
-}
-
-void jsonTesting() {
-    json j = {
-            {"action",  "read"},
-            {"channel", 1},
-            {"payload", {}}
-    };
-
-    j["list"] = {"Test1", "Test2", "Test3"};
-
-    std::vector<std::string> test = j["list"];
-    for (std::string s : test) {
-        std::cout << s << std::endl;
-    }
-
-    std::cout << j.dump(4) << std::endl;
-}
-
+// PLUGIN CODE
 void wc(Channel c, json p) {
     std::cout << "WRITE" << std::endl;
     std::cout << c.getAddressAsString() << std::endl;
@@ -77,31 +27,39 @@ json rc(Channel c, json p) {
     json j;
     return j;
 };
+// PLUGIN CODE END
 
-void pluginTesting() {
-    Plugin p = Plugin(&rc, &wc);
+void server(UDPSocket sock, InterruptHandle *handle) {
     json request = {
             {"action",  "read"},
-            {"channel", {1,           2, 1}},
+            {"channel", {1, 2, 1}},
             {"payload", {{"something", "there"}}}
     };
-//    auto request = R"(
-//          {
-//            "action": "read",
-//            "channel": [1,2,1],
-//            "payload": {
-//                "something": "there"
-//            }
-//          }
-//        )"_json;
-    p.processJSON(request);
+    string str_request = request.dump();
+    while (!(*handle).isInterrupted()) {
+        sock.send(str_request);
+        sleep(10);
+    }
+}
+
+void pluginHandler(SafeQueue<json> *q, InterruptHandle *handle) {
+    EventQueue<json> e = EventQueue<json>(q);
+    Plugin p = Plugin(&rc, &wc);
+    e.addObserver(&p);
+    while (!(*handle).isInterrupted())
+        e.observeOnce();
+}
+
+void udpReceptionThread(UDPSocket sock, SafeQueue<json> *udpRecv, InterruptHandle *handle) {
+    std::string data;
+    while (!(*handle).isInterrupted()) {
+        if (sock.recv(&data, 2000) > 0)
+            udpRecv->add(json::parse(data)); // TODO Try/Catch for parsing
+    }
 }
 
 int main() {
-//    jsonTesting();
-    pluginTesting();
-
-    SafeQueue<std::string> q;
+    SafeQueue<json> q;
     UDPSocket sock = UDPSocket("224.0.0.1", 1234);
     InterruptHandle handle = InterruptHandle();
 

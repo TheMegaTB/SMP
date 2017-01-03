@@ -8,6 +8,7 @@
 #include <string>
 #include "Channel.hpp"
 #include "json.hpp"
+#include "../EventQueue.hpp"
 
 using json = nlohmann::json;
 using namespace std;
@@ -17,9 +18,9 @@ typedef json (*readCallback)(Channel, json payload);
 typedef void (*writeCallback)(Channel, json payload);
 //TODO: Implement filtering of requests to reduce load
 // Hardware layer interface
-class Plugin {
+class Plugin : public Observer<json> {
 public:
-    void processJSON(json datagram);
+    void process(json datagram) override;
 
     Plugin(readCallback r, writeCallback w) {
         this->readCB = r;

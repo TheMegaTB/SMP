@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <string>
+#include <iostream>
 #include <unistd.h>
 #include <string.h>
 #include <sys/ioctl.h>
@@ -18,7 +19,7 @@ class UDPSocket {
 public:
     UDPSocket(std::string multicast_group, uint16_t port);
 
-    std::string recv();
+    int recv(std::string *msg, unsigned int timeout_ms);
 
     void close();
 

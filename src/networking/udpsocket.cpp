@@ -1,5 +1,7 @@
 #include "udpsocket.hpp"
 
+#define RECV_POOL_DELAY 200000
+
 UDPSocket::UDPSocket(std::string multicast_group, uint16_t port) {
     int loop = 1;
     memset(&sin, 0, sizeof(sin));
@@ -40,23 +42,29 @@ UDPSocket::UDPSocket(std::string multicast_group, uint16_t port) {
     }
 }
 
-std::string UDPSocket::recv() {
+int UDPSocket::recv(std::string *msg, unsigned int timeout_ms) {
     int sin_len = sizeof(sin);
     size_t bytes = 0;
-    while (bytes == 0 && ioctl(sock, FIONREAD, &bytes) >= 0)
-        sleep(1);
+    int total_time = 0;
+    while (bytes == 0 && ioctl(sock, FIONREAD, &bytes) >= 0) {
+        usleep(RECV_POOL_DELAY); // 200ms
+        total_time += RECV_POOL_DELAY / 1000;
+        if (timeout_ms != 0 && total_time > timeout_ms) return -1;
+    }
 
     char message[bytes];
     if (recvfrom(sock, message, bytes, 0, (struct sockaddr *) &sin, (socklen_t *) &sin_len) == -1) {
         perror("recvfrom");
     }
 
-    return message;
+    *msg = std::string(message);
+    (*msg).resize(bytes); // For some reason the string is longer than the char array so truncate it
+    return 1;
 }
 
 ssize_t UDPSocket::send(std::string message) {
     const char *msg = message.c_str();
-    return sendto(sock, msg, sizeof(message), 0, (struct sockaddr *) &sin, sizeof(sin));
+    return sendto(sock, msg, message.length(), 0, (struct sockaddr *) &sin, sizeof(sin));
 }
 
 void UDPSocket::close() {
