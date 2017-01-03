@@ -19,6 +19,13 @@ public:
         return address;
     }
 
+    string getAddressAsString() {
+        string addr = to_string(this->type);
+        addr += "-" + to_string(this->room);
+        addr += "-" + to_string(this->device);
+        return addr;
+    }
+
     void setAddress(vector<int> address) {
         this->type = address[0];
         this->room = address[1];

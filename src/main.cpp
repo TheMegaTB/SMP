@@ -64,9 +64,16 @@ void jsonTesting() {
     std::cout << j.dump(4) << std::endl;
 }
 
-void wc(Channel c, json p) {};
+void wc(Channel c, json p) {
+    std::cout << "WRITE" << std::endl;
+    std::cout << c.getAddressAsString() << std::endl;
+    std::cout << p.dump(4) << std::endl;
+};
 
-json rc(Channel c) {
+json rc(Channel c, json p) {
+    std::cout << "READ" << std::endl;
+    std::cout << c.getAddressAsString() << std::endl;
+    std::cout << p.dump(4) << std::endl;
     json j;
     return j;
 };
@@ -76,13 +83,22 @@ void pluginTesting() {
     json request = {
             {"action",  "read"},
             {"channel", {1,           2, 1}},
-            {"payload", {"something", "there"}}
+            {"payload", {{"something", "there"}}}
     };
+//    auto request = R"(
+//          {
+//            "action": "read",
+//            "channel": [1,2,1],
+//            "payload": {
+//                "something": "there"
+//            }
+//          }
+//        )"_json;
     p.processJSON(request);
 }
 
 int main() {
-    jsonTesting();
+//    jsonTesting();
     pluginTesting();
 
     SafeQueue<std::string> q;
