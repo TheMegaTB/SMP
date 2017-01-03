@@ -24,14 +24,14 @@ public:
         c.notify_one();
     }
 
-    T take(std::chrono::duration<int, std::milli> timeout) { // TODO: Implement timeout
+    T take(T *val, std::chrono::duration<int, std::milli> timeout) { // TODO: Implement timeout
         std::unique_lock<std::mutex> lock(m);
         while (q.empty()) {
-            if (c.wait_for(lock, timeout) == std::cv_status::timeout) return nullptr;
+            if (c.wait_for(lock, timeout) == std::cv_status::timeout) return -1;
         }
-        T val = q.front();
+        *val = q.front();
         q.pop();
-        return val;
+        return 1;
     }
 
 private:
@@ -40,5 +40,4 @@ private:
     std::condition_variable c;
 };
 
-//template class SafeQueue<std::string>;
 #endif //SMARTHOME_SafeQueue_HPP

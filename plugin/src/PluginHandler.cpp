@@ -9,8 +9,7 @@ int PluginHandler::receiveData(unsigned int timeout_ms) {
     int res = sock.recv(&data, timeout_ms);
     if (res > 0)
         this->datagrams.add(json::parse(data));
-    else
-        return res;
+    return res;
 }
 
 int PluginHandler::processData() {
