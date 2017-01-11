@@ -1,7 +1,9 @@
 find_package(Threads)
 
+# Set the sources
 set(SOURCE_FILES src/main.cpp src/InterruptHandle.hpp)
 
+# Add the executable
 add_executable(smartHome ${SOURCE_FILES})
 
 # Link to thread and dyn-linker library

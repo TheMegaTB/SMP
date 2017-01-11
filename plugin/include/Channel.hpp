@@ -11,19 +11,20 @@
 using namespace std;
 
 class Channel {
-    int type;
-    int room;
-    int device;
+//    int type;
+//    int room;
+//    int device;
+    int address[3];
 public:
-    Channel(vector<int> channel);
+    Channel(vector<int>* channel);
 
     Channel(int type, int room, int device);
 
-    vector<int> getAddress();
+    int* getAddress();
 
     string getAddressAsString();
 
-    void setAddress(vector<int> address);
+    void setAddress(vector<int>* address);
 };
 
 

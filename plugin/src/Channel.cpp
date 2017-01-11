@@ -4,30 +4,29 @@
 
 #include "Channel.hpp"
 
-vector<int> Channel::getAddress() {
-    vector<int> address = {this->type, this->room, this->device};
-    return address;
+int* Channel::getAddress() {
+    return this->address;
 }
 
 string Channel::getAddressAsString() {
-    string addr = to_string(this->type);
-    addr += "-" + to_string(this->room);
-    addr += "-" + to_string(this->device);
+    string addr = to_string(this->address[0]);
+    addr += "-" + to_string(this->address[1]);
+    addr += "-" + to_string(this->address[2]);
     return addr;
 }
 
-void Channel::setAddress(vector<int> address) {
-    this->type = address[0];
-    this->room = address[1];
-    this->device = address[2];
+void Channel::setAddress(vector<int>* address) {
+    this->address[0] = (*address)[0];
+    this->address[1] = (*address)[1];
+    this->address[2] = (*address)[2];
 }
 
-Channel::Channel(vector<int> channel) {
+Channel::Channel(vector<int>* channel) {
     this->setAddress(channel);
 }
 
 Channel::Channel(int type, int room, int device) {
-    this->type = type;
-    this->room = room;
-    this->device = device;
+    this->address[0] = type;
+    this->address[1] = room;
+    this->address[2] = device;
 }
