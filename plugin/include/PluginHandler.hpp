@@ -8,16 +8,18 @@
 #include <vector>
 #include <chrono>
 #include <string>
+#include "json.hpp"
 #include "Plugin.hpp"
 #include "SafeQueue.hpp"
 #include "EventQueue.hpp"
 #include "UDPSocket.hpp"
 
 using namespace std;
+using json = nlohmann::json;
 
 class PluginHandler {
-    SafeQueue<string> datagrams;
-    EventQueue<string> plugins;
+    SafeQueue<json> datagrams;
+    EventQueue<json> plugins;
     UDPSocket sock;
 public:
     void addPlugin(Plugin *plugin);

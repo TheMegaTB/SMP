@@ -13,18 +13,19 @@
 using json = nlohmann::json;
 using namespace std;
 
-typedef string (*readCallback)(int* channel, string payload);
-typedef void (*writeCallback)(int* channel, string payload);
+typedef json (*readCallback)(Channel, json payload);
+
+typedef void (*writeCallback)(Channel, json payload);
 
 //TODO: Implement filtering of requests to reduce load
 // Hardware layer interface
-class Plugin : public Observer<string> {
+class Plugin : public Observer<json> {
     bool state;
     readCallback readCB; // TODO: Make this optional
     writeCallback writeCB;
 
 public:
-    void process(string datagram) override;
+    void process(json datagram) override;
 
     Plugin(readCallback r, writeCallback w);
 };

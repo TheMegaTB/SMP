@@ -24,7 +24,7 @@ public:
         c.notify_one();
     }
 
-    int take(T *val, std::chrono::duration<int, std::milli> timeout) { // TODO: Implement timeout
+    int take(T *val, std::chrono::duration<int, std::milli> timeout) {
         std::unique_lock<std::mutex> lock(m);
         while (q.empty()) {
             if (c.wait_for(lock, timeout) == std::cv_status::timeout) return -1;

@@ -34,7 +34,7 @@ int loadPlugin() {
     using std::cerr;
 
     // load the plugin library
-    void* plugin = dlopen("/home/themegatb/Projects/C++/sh/cmake-build-debug/plugin_gpio/libgpio.so", RTLD_LAZY);
+    void *plugin = dlopen("/home/themegatb/Projects/C++/smartHome/cmake-build-debug/plugin_gpio/libgpio.so", RTLD_LAZY);
     if (!plugin) {
         cerr << "Cannot load library: " << dlerror() << '\n';
         return 1;
@@ -80,13 +80,13 @@ int loadPlugin() {
 
     // unload the plugin library
     dlclose(plugin);
+
+    return 0;
 }
 
 int main() {
 
     signal(SIGINT, onInterrupt);
 
-    loadPlugin();
-
-    return 0;
+    return loadPlugin();
 }

@@ -6,19 +6,18 @@
 
 using namespace std;
 
-void Plugin::process(string datagram) {
-    json data = json::parse(datagram);
-    string action = data["action"];
-    vector<int> raw_channel = data["channel"];
+void Plugin::process(json datagram) {
+    string action = datagram["action"];
+    vector<int> raw_channel = datagram["channel"];
     Channel channel = Channel(&raw_channel);
-    json payload = data["payload"];
+    json payload = datagram["payload"];
 
     // TODO: Add possibility to automagically answer read requests in case no readCB got defined
 
     if (action == "read") {
-        this->readCB(channel.getAddress(), payload.dump());
+        this->readCB(channel, payload);
     } else if (action == "write") {
-        this->writeCB(channel.getAddress(), payload.dump());
+        this->writeCB(channel, payload);
     } else if (action == "state") {
         //TODO Ignore (?)
         // Might be useful for persistence services

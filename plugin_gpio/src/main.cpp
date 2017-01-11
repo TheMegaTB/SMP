@@ -1,20 +1,18 @@
 #include "Plugin.hpp"
 
-#include "json.hpp"
-#include <string>
-
 using json = nlohmann::json;
 
-void wc(int* c, string p) {
+void wc(Channel c, json p) {
     cout << "WRITE" << endl;
-    cout << c << endl;
-    cout << p << endl;
+    cout << c.getAddressAsString() << endl;
+    cout << p.dump(4) << endl;
 };
 
-std::string rc(int* c, string p) {
+json rc(Channel c, json p) {
     cout << "READ" << endl;
-    cout << c[0] << c[1] << c[2] << endl;
-    cout << p << endl;
+    cout << c.getAddressAsString() << endl;
+    cout << p.dump(4) << endl;
+    cout << p["something"] << endl;
     json j;
     return j.dump(4);
 };
