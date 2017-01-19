@@ -66,22 +66,8 @@ int getPlugins(string dir, vector<string> &files) {
 #include "version.h"
 int main() {
     info("smartHome v" + gGIT_VERSION_SHORT);
-    trace(gGIT_VERSION);
-    trace(gGIT_VERSION);
-    trace(gGIT_VERSION);
-    trace(gGIT_VERSION);
-    trace(gGIT_VERSION);
-    debug(gGIT_VERSION);
-    trace(gGIT_VERSION);
-    trace(gGIT_VERSION);
-    debug(gGIT_VERSION);
-    debug(gGIT_VERSION);
-    debug(gGIT_VERSION);
-    trace(gGIT_VERSION);
-    trace(gGIT_VERSION);
-    debug(gGIT_VERSION);
-    debug(gGIT_VERSION);
-    custom("Load", "GPIO Plugin v0.1");
+    custom("Load", "GPIO Plugin v0.0.1");
+    custom("Load", "KNX Plugin v0.1.0");
 
     signal(SIGINT, onInterrupt);
 
