@@ -8,11 +8,16 @@
 #include "Logger.h"
 
 // TODO Show only above a certain level
-void Logger::log(LogLevel level, string msg, string file, string customPrefix) {
+void Logger::log(LogLevel level, string msg, string file, int line, string func, string customPrefix) {
     cout << Logger::getLevelPrefix(level, customPrefix) << "  " << msg << Reset << endl;
     if (true) {
+        cout << file << endl;
         // Cut the path down to the first occurence of src/ and print it indented w/ 1 more spaces than the prev. msg
-        cout << "               " << DarkGrey << file.substr(file.find("src/"), file.length()) << Reset << endl;
+        cout << "               " << DarkGrey
+             << file.substr(file.find("src/"), file.length())
+             << ":" << line
+             << ":" << func
+             << Reset << endl;
     }
 }
 

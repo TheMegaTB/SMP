@@ -33,15 +33,17 @@ class Logger {
     static string getLevelPrefix(LogLevel level, string customPrefix);
 
 public:
-    static void log(LogLevel level, string msg, string file, string customPrefix = "");
+    static void log(LogLevel level, string msg, string file, int line, string func, string customPrefix = "");
 };
 
-#define error(msg) { Logger::log(LogLevel::Error, msg, __FILE__); }
-#define warn(msg) { Logger::log(LogLevel::Warn, msg, __FILE__); }
-#define info(msg) { Logger::log(LogLevel::Info, msg, __FILE__); }
-#define debug(msg) { Logger::log(LogLevel::Debug, msg, __FILE__); }
-#define trace(msg) { Logger::log(LogLevel::Trace, msg, __FILE__); }
-#define custom(prefix, msg) { Logger::log(LogLevel::Custom, msg, __FILE__, prefix); }
+#define __CONTEXT__ __FILE__, __LINE__, __func__
+
+#define error(msg) { Logger::log(LogLevel::Error, msg, __CONTEXT__); }
+#define warn(msg) { Logger::log(LogLevel::Warn, msg, __CONTEXT__); }
+#define info(msg) { Logger::log(LogLevel::Info, msg, __CONTEXT__); }
+#define debug(msg) { Logger::log(LogLevel::Debug, msg, __CONTEXT__); }
+#define trace(msg) { Logger::log(LogLevel::Trace, msg, __CONTEXT__); }
+#define custom(prefix, msg) { Logger::log(LogLevel::Custom, msg, __CONTEXT__, prefix); }
 
 
 #endif //SMARTHOME_LOGGER_H
