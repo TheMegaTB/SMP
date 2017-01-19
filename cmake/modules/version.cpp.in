@@ -1,0 +1,4 @@
+#include "@CMAKE_CURRENT_SOURCE_DIR@/src/version.h" //update as appropriate
+
+const std::string gGIT_VERSION = "@VERSION@";
+const std::string gGIT_VERSION_SHORT = "@VERSION_SHORT@";

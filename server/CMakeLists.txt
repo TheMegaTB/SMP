@@ -2,11 +2,13 @@ find_package(Threads)
 
 project(sh-server)
 
+include(GitVersion)
+
 # Set the sources
 set(SOURCE_FILES src/main.cpp src/InterruptHandle.hpp src/PluginLoader.cpp src/PluginLoader.hpp src/Logger.cpp src/Logger.h)
 
 # Add the executable
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${version_file})
 
 # Link to thread and dyn-linker library
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_THREAD_LIBS_INIT} dl)

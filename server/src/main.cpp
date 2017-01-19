@@ -63,13 +63,11 @@ int getPlugins(string dir, vector<string> &files) {
     return 0;
 }
 
+#include "version.h"
 int main() {
+    info("smartHome v" + gGIT_VERSION_SHORT);
+    trace(gGIT_VERSION);
     custom("Load", "GPIO Plugin v0.1");
-    error("What is going on here");
-    warn("Help me?");
-    info("I'm different");
-    debug("This is kinda funny");
-    trace("Ouh well...stuck in terminal again.");
 
     signal(SIGINT, onInterrupt);
 

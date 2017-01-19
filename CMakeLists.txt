@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 3.6)
+
+# Appends the cmake/modules path to MAKE_MODULE_PATH variable.
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+
+# Include necessary files
 include(ExternalProject)
 
 # Set generic variables
