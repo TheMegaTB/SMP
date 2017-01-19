@@ -10,7 +10,7 @@ int main() {
             {"channel", {1, 2, 1}},
             {"payload", {{"something", "there"}}}
     };
-    UDPSocket sock("224.0.0.1", 1234);
+    UDPSocket sock("224.0.0.1", 1337);
     while (1) {
         sock.send(j.dump());
         sleep(1);

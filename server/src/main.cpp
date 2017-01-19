@@ -2,10 +2,14 @@
 #include <thread>
 #include <csignal>
 #include <dlfcn.h>
+#include <stdlib.h>
+#include <dirent.h>
 
 #include "Plugin.hpp"
 #include "PluginHandler.hpp"
 #include "InterruptHandle.hpp"
+#include "PluginLoader.hpp"
+#include "Logger.h"
 
 #define RECV_TIMEOUT 2000
 
@@ -29,43 +33,66 @@ void onInterrupt(int) {
     interrupted = 1;
 }
 
-int loadPlugin() {
-    using std::cout;
-    using std::cerr;
+string getPluginDir() {
+    char *pluginDir;
+    pluginDir = getenv("PLUGIN_DIR");
 
-    // load the plugin library
-    void *plugin = dlopen("/home/themegatb/Projects/C++/smartHome/cmake-build-debug/plugin_gpio/libgpio.so", RTLD_LAZY);
-    if (!plugin) {
-        cerr << "Cannot load library: " << dlerror() << '\n';
+    if (pluginDir == NULL) {
+        cerr << "No plugin directory passed. Falling back to the current directory." << endl;
+        return ".";
+    } else
+        return pluginDir;
+}
+
+int getPlugins(string dir, vector<string> &files) {
+    DIR *dp;
+    struct dirent *dirp;
+    if ((dp = opendir(dir.c_str())) == NULL) {
+        cerr << "Error(" << errno << ") opening plugin directory " << dir << endl;
+        return errno;
+    }
+
+    string prefix = "libsh";
+    string name = "";
+    while ((dirp = readdir(dp)) != NULL) {
+        name = dirp->d_name;
+        if (dirp->d_type != DT_REG || name.substr(0, 5) != prefix) continue;
+        files.push_back(string(dirp->d_name));
+    }
+    closedir(dp);
+    return 0;
+}
+
+int main() {
+    custom("Load", "GPIO Plugin v0.1");
+    error("What is going on here");
+    warn("Help me?");
+    info("I'm different");
+    debug("This is kinda funny");
+    trace("Ouh well...stuck in terminal again.");
+
+    signal(SIGINT, onInterrupt);
+
+    vector<string> plugins;
+    string pluginDir = getPluginDir();
+    getPlugins(pluginDir, plugins);
+
+    if (plugins.size() == 0) {
+        cerr << "No plugins found!" << endl;
         return 1;
     }
 
-    // reset errors
-    dlerror();
+    PluginLoader pluginLoader("224.0.0.1", 1337);
+    pluginLoader.setPluginDir(pluginDir);
 
-    // load the symbols
-    load_plugin_t* load_plugin = (load_plugin_t*) dlsym(plugin, "load_plugin");
-    const char* dlsym_error = dlerror();
-    if (dlsym_error) {
-        cerr << "Cannot load symbol create: " << dlsym_error << '\n';
-        return 1;
+    for (string plugin : plugins) {
+        cout << "Loading plugin '" << plugin << "' . . ." << endl;
+        pluginLoader.loadPlugin(plugin);
     }
-
-    unload_plugin_t* unload_plugin = (unload_plugin_t *) dlsym(plugin, "unload_plugin");
-    dlsym_error = dlerror();
-    if (dlsym_error) {
-        cerr << "Cannot load symbol destroy: " << dlsym_error << '\n';
-        return 1;
-    }
-
-    Plugin* plug = load_plugin();
-
-    PluginHandler ph("224.0.0.1", 1234);
-    ph.addPlugin(plug);
 
     InterruptHandle handle;
-    thread networking(receiveData, &ph, &handle);
-    thread processing(processData, &ph, &handle);
+    thread networking(receiveData, &pluginLoader.pluginHandler, &handle);
+    thread processing(processData, &pluginLoader.pluginHandler, &handle);
 
     cout << "Awaiting requests . . ." << endl;
     while (interrupted == 0)
@@ -76,17 +103,5 @@ int loadPlugin() {
     networking.join();
     processing.join();
 
-    unload_plugin(plug);
-
-    // unload the plugin library
-    dlclose(plugin);
-
     return 0;
-}
-
-int main() {
-
-    signal(SIGINT, onInterrupt);
-
-    return loadPlugin();
 }

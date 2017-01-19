@@ -26,4 +26,5 @@ ExternalProject_Add(
 add_subdirectory(plugin)
 add_subdirectory(server)
 add_subdirectory(plugin_gpio)
+add_subdirectory(plugin_knx)
 add_subdirectory(exampleClient)

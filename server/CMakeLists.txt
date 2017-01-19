@@ -1,17 +1,19 @@
 find_package(Threads)
 
+project(sh-server)
+
 # Set the sources
-set(SOURCE_FILES src/main.cpp src/InterruptHandle.hpp)
+set(SOURCE_FILES src/main.cpp src/InterruptHandle.hpp src/PluginLoader.cpp src/PluginLoader.hpp src/Logger.cpp src/Logger.h)
 
 # Add the executable
-add_executable(smartHome ${SOURCE_FILES})
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 # Link to thread and dyn-linker library
-target_link_libraries(smartHome PUBLIC ${CMAKE_THREAD_LIBS_INIT} dl)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_THREAD_LIBS_INIT} dl)
 
 # Link to JSON library
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include/nlohmann)
-add_dependencies(smartHome json)
+add_dependencies(${PROJECT_NAME} json)
 
 # Link to the plugin library
-target_link_libraries(smartHome LINK_PUBLIC smartHomePlugin)
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC smartHomePlugin)
