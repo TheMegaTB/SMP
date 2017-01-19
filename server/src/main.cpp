@@ -67,6 +67,20 @@ int getPlugins(string dir, vector<string> &files) {
 int main() {
     info("smartHome v" + gGIT_VERSION_SHORT);
     trace(gGIT_VERSION);
+    trace(gGIT_VERSION);
+    trace(gGIT_VERSION);
+    trace(gGIT_VERSION);
+    trace(gGIT_VERSION);
+    debug(gGIT_VERSION);
+    trace(gGIT_VERSION);
+    trace(gGIT_VERSION);
+    debug(gGIT_VERSION);
+    debug(gGIT_VERSION);
+    debug(gGIT_VERSION);
+    trace(gGIT_VERSION);
+    trace(gGIT_VERSION);
+    debug(gGIT_VERSION);
+    debug(gGIT_VERSION);
     custom("Load", "GPIO Plugin v0.1");
 
     signal(SIGINT, onInterrupt);

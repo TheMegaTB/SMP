@@ -9,6 +9,8 @@
 
 #define Reset        "\033[0m"
 #define Bold         "\033[1m"
+#define Grey         "\033[38;5;241m"
+#define DarkGrey     "\033[38;5;239m"
 #define ColorError   "\033[38;5;160m"
 #define ColorWarn    "\033[38;5;214m"
 #define ColorInfo    "\033[38;5;10m"

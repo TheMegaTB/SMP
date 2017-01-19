@@ -8,39 +8,42 @@
 #include "Logger.h"
 
 void Logger::log(LogLevel level, string msg, string customPrefix) {
-    cout << Logger::getLevelPrefix(level, customPrefix) << "  " << msg << endl;
+    cout << Logger::getLevelPrefix(level, customPrefix) << "  " << msg << Reset << endl;
 }
 
 string Logger::getLevelPrefix(LogLevel level, string customPrefix) {
-    string color;
+    string prefixColor;
     string prefix;
+    string textColor;
     switch (level) {
         case Error:
-            color = ColorError;
+            prefixColor = ColorError;
             prefix = "       Error";
             break;
         case Warn:
-            color = ColorWarn;
+            prefixColor = ColorWarn;
             prefix = "     Warning";
             break;
         case Info:
-            color = ColorInfo;
+            prefixColor = ColorInfo;
             prefix = "        Info";
             break;
         case Debug:
-            color = ColorDebug;
+            prefixColor = ColorDebug;
             prefix = "       Debug";
+            textColor = Grey;
             break;
         case Trace:
-            color = ColorTrace;
+            prefixColor = ColorTrace;
             prefix = "       Trace";
+            textColor = DarkGrey;
             break;
         case Custom:
-            color = ColorCustom;
+            prefixColor = ColorCustom;
             stringstream tmp;
             tmp << setw(12) << customPrefix;
             prefix = tmp.str();
             break;
     }
-    return color + Bold + prefix + Reset;
+    return prefixColor + Bold + prefix + Reset + textColor;
 }
