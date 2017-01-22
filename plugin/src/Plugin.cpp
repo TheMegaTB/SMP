@@ -24,7 +24,13 @@ void Plugin::process(json datagram) {
     }
 }
 
-Plugin::Plugin(readCallback r, writeCallback w) {
+Plugin::Plugin(readCallback r, writeCallback w, string name, string version) {
     this->readCB = r;
     this->writeCB = w;
+    this->name = name;
+    this->version = version;
+}
+
+string Plugin::getDescriptor() {
+    return this->name + " Plugin v" + this->version;
 }

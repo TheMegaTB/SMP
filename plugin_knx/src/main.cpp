@@ -1,24 +1,20 @@
+#include <Logger.hpp>
 #include "Plugin.hpp"
 
 using json = nlohmann::json;
 
 void wc(Channel c, json p) {
-    cout << "WRITE" << endl;
-//    cout << c.getAddressAsString() << endl;
-//    cout << p.dump(4) << endl;
+    trace("WRITE");
 };
 
 json rc(Channel c, json p) {
-    cout << "READ" << endl;
-//    cout << c.getAddressAsString() << endl;
-//    cout << p.dump(4) << endl;
-//    cout << p["something"] << endl;
+    trace("READ");
     json j;
-    return j.dump(4);
+    return j.dump();
 };
 
 extern "C" Plugin* load_plugin() {
-    return new Plugin(rc, wc);
+    return new Plugin(rc, wc, "KNX", "0.0.1");
 }
 
 extern "C" void unload_plugin(Plugin* p) {

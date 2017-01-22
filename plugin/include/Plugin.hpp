@@ -24,10 +24,14 @@ class Plugin : public Observer<json> {
     readCallback readCB; // TODO: Make this optional
     writeCallback writeCB;
 
+    string name;
+    string version;
+
 public:
+    string getDescriptor();
     void process(json datagram) override;
 
-    Plugin(readCallback r, writeCallback w);
+    Plugin(readCallback r, writeCallback w, string name, string version);
 };
 
 typedef Plugin* load_plugin_t();

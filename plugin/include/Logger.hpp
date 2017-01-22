@@ -7,6 +7,8 @@
 
 #include <string>
 
+#define DEFAULT_LOGLEVEL LogLevel::Info
+
 #define Reset        "\033[0m"
 #define Bold         "\033[1m"
 #define Grey         "\033[38;5;241m"
@@ -19,12 +21,12 @@
 #define ColorCustom  "\033[38;5;14m"
 
 enum LogLevel {
-    Error,
-    Warn,
-    Info,
-    Debug,
-    Trace,
-    Custom
+    Error = 3,
+    Warn = 2,
+    Custom = 1,
+    Info = 0,
+    Debug = -1,
+    Trace = -2,
 };
 
 using namespace std;

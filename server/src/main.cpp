@@ -1,7 +1,6 @@
 #include <iostream>
 #include <thread>
 #include <csignal>
-#include <dlfcn.h>
 #include <stdlib.h>
 #include <dirent.h>
 
@@ -9,7 +8,7 @@
 #include "PluginHandler.hpp"
 #include "InterruptHandle.hpp"
 #include "PluginLoader.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 
 #define RECV_TIMEOUT 2000
 
@@ -66,8 +65,6 @@ int getPlugins(string dir, vector<string> &files) {
 #include "version.h"
 int main() {
     info("smartHome v" + gGIT_VERSION_SHORT);
-    custom("Load", "GPIO Plugin v0.0.1");
-    custom("Load", "KNX Plugin v0.1.0");
 
     signal(SIGINT, onInterrupt);
 
@@ -84,7 +81,6 @@ int main() {
     pluginLoader.setPluginDir(pluginDir);
 
     for (string plugin : plugins) {
-        cout << "Loading plugin '" << plugin << "' . . ." << endl;
         pluginLoader.loadPlugin(plugin);
     }
 
@@ -92,11 +88,12 @@ int main() {
     thread networking(receiveData, &pluginLoader.pluginHandler, &handle);
     thread processing(processData, &pluginLoader.pluginHandler, &handle);
 
-    cout << "Awaiting requests . . ." << endl;
+    info("Plugins locked and loaded. Awaiting requests ...");
     while (interrupted == 0)
         sleep(1);
 
-    cout << "\nInterrupted! Exiting..." << endl;
+//    cout << "\nInterrupted! Exiting..." << endl;
+    warn("Interrupted. Exiting ...");
     handle.interrupt();
     networking.join();
     processing.join();
