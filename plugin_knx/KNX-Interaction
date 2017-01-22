@@ -1,0 +1,10 @@
+KNXd instance:
+    knxd --error=1 --listen-local=/var/run/knxd --pid-file=/var/run/knxd.pid --layer2=usb:1:6:1:0:0 --listen-tcp=4433 -n bedroom-node -D -T -R -S
+
+Set a regular fixture to on/off:
+    knxtool groupswrite ip:localhost:4433 0/4/0 {1/0}
+
+Dim a fixture to a specific (hex) value (126 or 0x7F in this case):
+    knxtool groupwrite ip:localhost:4433 0/4/2 0x7F
+
+TODO: Get CMake to retrieve the library hooks from [https://github.com/knxd/knxd/tree/master/src/client/c] and use the example code from the above commands (@/src/examples in the same repo)
