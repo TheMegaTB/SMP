@@ -4,6 +4,8 @@ Decentralized smart home network for home automation based on Rust and UDP Multi
 Although this is written in rust with a focus on RaspberryPi's and HummingBoard's running ArchLinux
 it should work on any device rust can compile to.
 
+Note: Everything else is outdated and related to the rust-rewrite branch which is deprecated. I'll add a proper description sometime in the future. For now consult doc/Structure.pdf in case you want to learn more
+<del>
 ### Current state of development
 Currently this project is nowhere near finished. I decided to switch to rust as it is a compiled language which is
 more efficient especially regarding this project running on low powered devices. Current focus is on the
@@ -50,3 +52,4 @@ methods (most likely a webapp using meteor) so that the basic setup works and is
 ## Testing it out
 * Now just type `cargo run --release`
 * Open a second terminal and start the client example `cargo run --example client`
+</del>
