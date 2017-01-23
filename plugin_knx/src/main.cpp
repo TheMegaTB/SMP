@@ -5,24 +5,56 @@
 
 using json = nlohmann::json;
 
-int turnLightOn() {
-    debug("Turning light on");
+#define SOCKET_URL "ip:bedroom-node:4433"
+
+int dimLight(string address, int value) {
     int len;
     EIBConnection *con;
     eibaddr_t dest;
-    unsigned char buf[3] = {0, 0x80};
+    uchar buf[255] = {0, 0x80};
 
-    const char *url = "ip:bedroom-node:4433";
-    const char *groupAddr = "0/4/0";
-    const char *value = "0x01";
-
-    con = EIBSocketURL(url);
+    con = EIBSocketURL(SOCKET_URL);
     if (!con) {
         error("Couldn't open connection to knxd");
         return 1;
     }
 
-    dest = readgaddr(groupAddr);
+    char *val = {(char *) "0x0F"};
+
+    dest = readgaddr(address.c_str());
+    len = readBlock(buf + 2, sizeof(buf) - 2, 1, &val);
+    trace(to_string(len));
+
+    if (EIBOpenT_Group(con, dest, 1) == -1) {
+        error("Failed to connect to device");
+        return 1;
+    }
+
+    len = EIBSendAPDU(con, 2 + len, buf);
+    if (len == -1) {
+        error("Request to device failed");
+        return 1;
+    }
+
+    EIBClose(con);
+    return 0;
+}
+
+int switchLight(string address, bool val) {
+    int len;
+    EIBConnection *con;
+    eibaddr_t dest;
+    unsigned char buf[3] = {0, 0x80};
+
+    const char *value = val ? "0x01" : "0x00";
+
+    con = EIBSocketURL(SOCKET_URL);
+    if (!con) {
+        error("Couldn't open connection to knxd");
+        return 1;
+    }
+
+    dest = readgaddr(address.c_str());
     buf[1] |= readHex(value) & 0x3f;
 
     if (EIBOpenT_Group(con, dest, 1) == -1) {
@@ -36,19 +68,14 @@ int turnLightOn() {
         return 1;
     }
 
-    trace("Request sent");
-
     EIBClose(con);
     return 0;
 }
 
-int main() {
-    turnLightOn();
-}
-
 void wc(Channel c, json p) {
     trace("WRITE");
-    turnLightOn();
+//    switchLight("0/4/0", false);
+    dimLight("0/4/2", 255);
 };
 
 json rc(Channel c, json p) {
