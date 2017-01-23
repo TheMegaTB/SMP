@@ -22,8 +22,10 @@ endif()
 set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/lib)
 ExternalProject_Add(
         json
-        GIT_REPOSITORY git@github.com:nlohmann/json.git
+        GIT_TAG 81065748e315026017c633fca1bfc57cba5b246a
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
         CMAKE_ARGS -DBuildTests=OFF -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+        UPDATE_DISCONNECTED 1
         ${OFFLINE_PARAM}
 )
 

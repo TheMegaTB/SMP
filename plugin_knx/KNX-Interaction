@@ -8,3 +8,11 @@ Dim a fixture to a specific (hex) value (126 or 0x7F in this case):
     knxtool groupwrite ip:localhost:4433 0/4/2 0x7F
 
 TODO: Get CMake to retrieve the library hooks from [https://github.com/knxd/knxd/tree/master/src/client/c] and use the example code from the above commands (@/src/examples in the same repo)
+
+Command to clone and build knxd:
+
+git clone https://github.com/knxd/knxd && \
+cd knxd && \
+./bootstrap.sh && \
+./configure --disable-systemd && \
+make
