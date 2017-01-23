@@ -9,7 +9,6 @@ ExternalProject_Add(
         UPDATE_DISCONNECTED 1
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh && <SOURCE_DIR>/configure --disable-systemd --with-pic --prefix=${EXTERNAL_INSTALL_LOCATION} --sysconfdir=<TMP_DIR> --libdir=${EXTERNAL_INSTALL_LOCATION} --libexecdir=<TMP_DIR>
-        BUILD_COMMAND make CFLAGS="-fPIC"
 )
 
 # Set the sources
