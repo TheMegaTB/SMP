@@ -25,7 +25,14 @@ int readConfigFile() {
     }
 
     json j;
-    t >> j;
+
+    try {
+        t >> j;
+    } catch (const std::invalid_argument err) {
+        error("Failed to parse KNX config file");
+        return 1;
+    }
+
 
     // TODO Use config
 
