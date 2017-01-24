@@ -55,7 +55,6 @@ int getPlugins(string dir, vector<string> &files) {
     string name = "";
     while ((dirp = readdir(dp)) != NULL) {
         name = dirp->d_name;
-        trace(name);
         if (dirp->d_type != DT_REG || name.substr(0, 7) != prefix) continue;
         files.push_back(string(dirp->d_name));
     }
