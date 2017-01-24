@@ -12,8 +12,6 @@ string(SUBSTRING ${HASH} 0 7 SHORT_HASH)
 
 set(VERSION ${VERSION}-${HASH})
 
-message(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Parse the version information into pieces.
 string(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" VERSION_MAJOR "${VERSION}")
 string(REGEX REPLACE "^v[0-9]+\\.([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")

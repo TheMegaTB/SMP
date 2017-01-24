@@ -5,7 +5,7 @@ project(sh-server)
 include(GitVersion)
 
 # Set the sources
-set(SOURCE_FILES src/main.cpp src/InterruptHandle.hpp src/PluginLoader.cpp src/PluginLoader.hpp ../plugin/src/Logger.cpp ../plugin/include/Logger.hpp)
+set(SOURCE_FILES src/main.cpp src/InterruptHandle.hpp src/PluginLoader.cpp src/PluginLoader.hpp ../plugin-library/src/Logger.cpp ../plugin-library/include/Logger.hpp)
 
 # Add the executable
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${version_file})

@@ -22,7 +22,6 @@ endif()
 set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/lib)
 ExternalProject_Add(
         json
-        GIT_TAG 81065748e315026017c633fca1bfc57cba5b246a
         GIT_REPOSITORY https://github.com/nlohmann/json.git
         CMAKE_ARGS -DBuildTests=OFF -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
         UPDATE_DISCONNECTED 1
@@ -30,8 +29,8 @@ ExternalProject_Add(
 )
 
 # Add subdirectories with targets
-add_subdirectory(plugin)
+add_subdirectory(plugin-library)
 add_subdirectory(server)
-add_subdirectory(plugin_gpio)
-add_subdirectory(plugin_knx)
-add_subdirectory(exampleClient)
+add_subdirectory(plugins/gpio)
+add_subdirectory(plugins/knx)
+add_subdirectory(client)
