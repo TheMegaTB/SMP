@@ -57,20 +57,20 @@ int sendDatagram(eibaddr_t dest, unsigned char *data, int len) {
     return 0;
 }
 
-int dimLight(string address, unsigned char value) {
-    eibaddr_t dest;
-    readGroupAddr(address.c_str(), &dest);
+int dimLight(eibaddr_t address, unsigned char value) {
+//    eibaddr_t dest;
+//    readGroupAddr(address.c_str(), &dest);
 
     unsigned char buf[255] = {0, 0x80, value};
 
-    return sendDatagram(dest, buf, 3);
+    return sendDatagram(address, buf, 3);
 }
 
-int switchLight(string address, bool val) {
-    eibaddr_t dest;
-    readGroupAddr(address.c_str(), &dest);
+int switchLight(eibaddr_t address, bool val) {
+//    eibaddr_t dest;
+//    readGroupAddr(address.c_str(), &dest);
     unsigned char buf[3] = {0, 0x80};
     buf[1] |= val;
 
-    return sendDatagram(dest, buf, 2);
+    return sendDatagram(address, buf, 2);
 }

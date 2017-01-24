@@ -18,9 +18,9 @@ int readGroupAddr(const char *addr, eibaddr_t *groupAddr);
 
 int sendDatagram(eibaddr_t dest, unsigned char *data, int len);
 
-int dimLight(string address, unsigned char value);
+int dimLight(eibaddr_t address, unsigned char value);
 
-int switchLight(string address, bool val);
+int switchLight(eibaddr_t address, bool val);
 
 
 #endif //SMARTHOME_KNX_HPP
