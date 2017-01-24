@@ -8,7 +8,7 @@
 
 using json = nlohmann::json;
 
-int readConfigFile() {
+int readConfig() {
     char *CONFIG_DIR = getenv("CONFIG_DIR");
     string confDir;
     if (CONFIG_DIR == NULL) {
@@ -33,8 +33,10 @@ int readConfigFile() {
         return 1;
     }
 
-
-    // TODO Use config
+    connectionURL = j["connection"];
+    for (auto device : j["devices"]) {
+        trace(device.dump());
+    }
 
     debug(j.dump());
 
@@ -46,12 +48,14 @@ void callback(string action, Channel c, json p) {
     trace(c.getAddressAsString());
     trace(p.dump());
 
+
+
 //    switchLight("0/4/0", false);
     dimLight("0/4/2", 20);
 };
 
 int init() {
-    return readConfigFile();
+    return readConfig();
 }
 
 extern "C" Plugin* load_plugin() {

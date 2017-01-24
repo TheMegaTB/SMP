@@ -8,7 +8,9 @@
 #include <eibclient.h>
 #include <Logger.hpp>
 
-#define SOCKET_URL "ip:bedroom-node:4433"
+#define DEFAULT_CONN_URL "ip:localhost"
+
+extern string connectionURL;
 
 EIBConnection *connectEIB();
 

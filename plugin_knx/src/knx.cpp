@@ -4,8 +4,10 @@
 
 #include "knx.hpp"
 
+string connectionURL = DEFAULT_CONN_URL;
+
 EIBConnection *connectEIB() {
-    EIBConnection *con = EIBSocketURL(SOCKET_URL);
+    EIBConnection *con = EIBSocketURL(connectionURL.c_str());
     if (!con) {
         error("Couldn't open connection to knxd");
         return nullptr;
