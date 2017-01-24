@@ -12,7 +12,7 @@ ExternalProject_Add(
 )
 
 # Set the sources
-set(SOURCE_FILES src/main.cpp)
+set(SOURCE_FILES src/main.cpp src/knx.cpp src/knx.hpp)
 
 # Add the shared library target
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})

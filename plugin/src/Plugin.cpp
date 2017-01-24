@@ -12,23 +12,11 @@ void Plugin::process(json datagram) {
     Channel channel = Channel(&raw_channel);
     json payload = datagram["payload"];
 
-    // TODO: Add possibility to automagically answer read requests in case no readCB got defined
-
     this->callback(action, channel, payload);
-
-//    if (action == "read") {
-//        this->readCB(channel, payload);
-//    } else if (action == "write") {
-//        this->writeCB(channel, payload);
-//    } else if (action == "state") {
-//        TODO Ignore (?)
-//         Might be useful for persistence services
-//    }
 }
 
-Plugin::Plugin(pluginCallback cb, string name, string version) {
-//    this->readCB = r;
-//    this->writeCB = w;
+Plugin::Plugin(pluginCallback cb, pluginInit init, string name, string version) {
+    this->initFunc = init;
     this->callback = cb;
     this->name = name;
     this->version = version;
@@ -36,4 +24,14 @@ Plugin::Plugin(pluginCallback cb, string name, string version) {
 
 string Plugin::getDescriptor() {
     return this->name + " Plugin v" + this->version;
+}
+
+int Plugin::init() {
+    if (this->initialized) {
+        warn("Plugin " + this->name + " is already initialized");
+        return 1;
+    }
+
+    this->initialized = true;
+    return this->initFunc();
 }

@@ -7,10 +7,14 @@ void callback(string action, Channel c, json p) {
     trace("WRITE");
     trace(c.getAddressAsString());
     trace(p.dump());
-};
+}
+
+int init() {
+    return 0;
+}
 
 extern "C" Plugin* load_plugin() {
-    return new Plugin(callback, "GPIO", "0.0.1");
+    return new Plugin(callback, init, "GPIO", "0.0.1");
 }
 
 extern "C" void unload_plugin(Plugin* p) {

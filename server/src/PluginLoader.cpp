@@ -3,7 +3,6 @@
 //
 
 #include "PluginLoader.hpp"
-#include "Logger.hpp"
 
 PluginLoader::~PluginLoader() {
     // Unload all plugins and close their low level library handle
@@ -44,6 +43,11 @@ int PluginLoader::loadPlugin(string name) {
     Plugin *plugin = load_plugin();
 
     custom("Load", plugin->getDescriptor());
+
+    if ((*plugin).init() > 0) {
+        error("Failed to initialize " + (*plugin).name + " plugin.");
+        return 1;
+    }
 
     pluginHook ph = make_tuple(plugin, unload_plugin, pluginLib);
 

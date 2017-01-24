@@ -8,7 +8,6 @@
 #include "PluginHandler.hpp"
 #include "InterruptHandle.hpp"
 #include "PluginLoader.hpp"
-#include "Logger.hpp"
 
 #define RECV_TIMEOUT 2000
 
@@ -37,7 +36,7 @@ string getPluginDir() {
     pluginDir = getenv("PLUGIN_DIR");
 
     if (pluginDir == NULL) {
-        cerr << "No plugin directory passed. Falling back to the current directory." << endl;
+        warn("No plugin directory passed. Falling back to the current directory.");
         return ".";
     } else
         return pluginDir;
@@ -47,7 +46,8 @@ int getPlugins(string dir, vector<string> &files) {
     DIR *dp;
     struct dirent *dirp;
     if ((dp = opendir(dir.c_str())) == NULL) {
-        cerr << "Error(" << errno << ") opening plugin directory " << dir << endl;
+        error("Error opening plugin directory");
+        error(dir);
         return errno;
     }
 
@@ -73,7 +73,7 @@ int main() {
     getPlugins(pluginDir, plugins);
 
     if (plugins.size() == 0) {
-        cerr << "No plugins found!" << endl;
+        error("No plugins found!");
         return 1;
     }
 
