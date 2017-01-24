@@ -51,11 +51,12 @@ int getPlugins(string dir, vector<string> &files) {
         return errno;
     }
 
-    string prefix = "libsh";
+    string prefix = "libsmp-";
     string name = "";
     while ((dirp = readdir(dp)) != NULL) {
         name = dirp->d_name;
-        if (dirp->d_type != DT_REG || name.substr(0, 5) != prefix) continue;
+        trace(name);
+        if (dirp->d_type != DT_REG || name.substr(0, 7) != prefix) continue;
         files.push_back(string(dirp->d_name));
     }
     closedir(dp);
@@ -64,7 +65,7 @@ int getPlugins(string dir, vector<string> &files) {
 
 #include "version.h"
 int main() {
-    info("smartHome v" + gGIT_VERSION_SHORT);
+    info("SMP v" + gGIT_VERSION_SHORT);
 
     signal(SIGINT, onInterrupt);
 

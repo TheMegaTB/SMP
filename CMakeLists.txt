@@ -7,7 +7,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 include(ExternalProject)
 
 # Set generic variables
-project(smartHome)
+project(sMP)
 set(CMAKE_CXX_STANDARD 11)
 
 # Enable the use of the global offset table
@@ -33,4 +33,5 @@ add_subdirectory(plugin-library)
 add_subdirectory(server)
 add_subdirectory(plugins/gpio)
 add_subdirectory(plugins/knx)
-add_subdirectory(client)
+add_subdirectory(plugins/REST)
+add_subdirectory(clients/c++)

@@ -2,8 +2,8 @@
 // Created by themegatb on 1/3/17.
 //
 
-#ifndef SMARTHOME_PLUGIN_HPP
-#define SMARTHOME_PLUGIN_HPP
+#ifndef SMP_PLUGIN_HPP
+#define SMP_PLUGIN_HPP
 
 #include <string>
 #include <Logger.hpp>
@@ -45,4 +45,4 @@ typedef Plugin* load_plugin_t();
 typedef void unload_plugin_t(Plugin*);
 
 
-#endif //SMARTHOME_PLUGIN_HPP
+#endif //SMP_PLUGIN_HPP

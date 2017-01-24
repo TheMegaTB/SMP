@@ -1,4 +1,4 @@
-project(smartHomePlugin)
+project(smp-plugin)
 
 # Set the sources
 file(GLOB SOURCES src/*.cpp src/*.hpp include/*.hpp include/*.cpp)

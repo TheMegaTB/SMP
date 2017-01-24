@@ -53,7 +53,7 @@ public:
     }
 };
 
-std::map<Channel, Device> devices;
+std::map<string, Device *> devices;
 
 int readConfig() {
     char *CONFIG_DIR = getenv("CONFIG_DIR");
@@ -82,7 +82,7 @@ int readConfig() {
 
     connectionURL = j["connection"];
     for (auto device : j["devices"]) {
-        Device dev;
+        Device *dev;
 
         if (device["type"] == "fixture") {
             dev = new Fixture(device["attributes"]);
@@ -91,7 +91,7 @@ int readConfig() {
         }
 
         vector<int> channel = device["channel"];
-        devices[Channel(channel[0], channel[1], channel[2])] = dev;
+        devices[Channel(channel[0], channel[1], channel[2]).getAddressAsString()] = dev;
     }
 
     return 0;
@@ -101,6 +101,10 @@ void callback(string action, Channel c, json p) {
     trace(action);
     trace(c.getAddressAsString());
     trace(p.dump());
+
+    if (action == "write" && devices.find(c.getAddressAsString()) != devices.end()) {
+        devices[c.getAddressAsString()]->set(p);
+    }
 
 //    if (p.is_boolean()) {
 //        switchLight("0/4/0", p);

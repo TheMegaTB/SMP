@@ -2,8 +2,8 @@
 // Created by themegatb on 1/3/17.
 //
 
-#ifndef SMARTHOME_PLUGINHANDLER_HPP
-#define SMARTHOME_PLUGINHANDLER_HPP
+#ifndef SMP_PLUGINHANDLER_HPP
+#define SMP_PLUGINHANDLER_HPP
 
 #include <vector>
 #include <chrono>
@@ -32,4 +32,4 @@ public:
 };
 
 
-#endif //SMARTHOME_PLUGINHANDLER_HPP
+#endif //SMP_PLUGINHANDLER_HPP

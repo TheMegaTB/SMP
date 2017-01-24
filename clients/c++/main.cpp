@@ -12,8 +12,8 @@ int main() {
     };
     json write = {
             {"action",  "write"},
-            {"channel", {1, 2, 1}},
-            {"payload", {{"something", "there"}}}
+            {"channel", {0, 0, 1}},
+            {"payload", 20}
     };
     UDPSocket sock("224.0.0.1", 1337);
     sock.send(write.dump());

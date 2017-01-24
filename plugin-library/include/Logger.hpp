@@ -2,8 +2,8 @@
 // Created by themegatb on 1/19/17.
 //
 
-#ifndef SMARTHOME_LOGGER_H
-#define SMARTHOME_LOGGER_H
+#ifndef SMP_LOGGER_H
+#define SMP_LOGGER_H
 
 #include <string>
 
@@ -48,4 +48,4 @@ public:
 #define custom(prefix, msg) { Logger::log(LogLevel::Custom, msg, __CONTEXT__, prefix); }
 
 
-#endif //SMARTHOME_LOGGER_H
+#endif //SMP_LOGGER_H

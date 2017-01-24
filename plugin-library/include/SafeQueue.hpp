@@ -2,8 +2,8 @@
 // Created by themegatb on 12/27/16.
 //
 
-#ifndef SMARTHOME_SafeQueue_HPP
-#define SMARTHOME_SafeQueue_HPP
+#ifndef SMP_SafeQueue_HPP
+#define SMP_SafeQueue_HPP
 
 #include <queue>
 #include <mutex>
@@ -40,4 +40,4 @@ private:
     std::condition_variable c;
 };
 
-#endif //SMARTHOME_SafeQueue_HPP
+#endif //SMP_SafeQueue_HPP

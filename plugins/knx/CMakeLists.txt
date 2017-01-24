@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(sh-knx)
+project(smp-knx)
 
 # Download and build knxd libraries
 ExternalProject_Add(
@@ -25,5 +25,5 @@ add_dependencies(${PROJECT_NAME} json)
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
 add_dependencies(${PROJECT_NAME} knxd)
 
-# Link against the eibdclient and sh-plugin library
-target_link_libraries(${PROJECT_NAME} ${EXTERNAL_INSTALL_LOCATION}/libeibclient.a smartHomePlugin)
+# Link against the eibdclient and smp-plugin library
+target_link_libraries(${PROJECT_NAME} ${EXTERNAL_INSTALL_LOCATION}/libeibclient.a smp-plugin)

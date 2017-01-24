@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(smp-gpio)
+project(smp-REST)
 
 # Set the sources
 set(SOURCE_FILES src/main.cpp)

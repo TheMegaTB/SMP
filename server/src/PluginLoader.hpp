@@ -2,8 +2,8 @@
 // Created by themegatb on 1/19/17.
 //
 
-#ifndef SMARTHOME_PLUGINLOADER_H
-#define SMARTHOME_PLUGINLOADER_H
+#ifndef SMP_PLUGINLOADER_H
+#define SMP_PLUGINLOADER_H
 
 #include <dlfcn.h>
 
@@ -31,4 +31,4 @@ public:
 };
 
 
-#endif //SMARTHOME_PLUGINLOADER_H
+#endif //SMP_PLUGINLOADER_H

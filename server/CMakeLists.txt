@@ -1,6 +1,6 @@
 find_package(Threads)
 
-project(sh-server)
+project(smp-server)
 
 include(GitVersion)
 
@@ -18,4 +18,4 @@ include_directories(${EXTERNAL_INSTALL_LOCATION}/include/nlohmann)
 add_dependencies(${PROJECT_NAME} json)
 
 # Link to the plugin library
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC smartHomePlugin)
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC smp-plugin)

@@ -2,8 +2,8 @@
 // Created by themegatb on 1/24/17.
 //
 
-#ifndef SMARTHOME_KNX_HPP
-#define SMARTHOME_KNX_HPP
+#ifndef SMP_KNX_HPP
+#define SMP_KNX_HPP
 
 #include <eibclient.h>
 #include <Logger.hpp>
@@ -23,4 +23,4 @@ int dimLight(eibaddr_t address, unsigned char value);
 int switchLight(eibaddr_t address, bool val);
 
 
-#endif //SMARTHOME_KNX_HPP
+#endif //SMP_KNX_HPP

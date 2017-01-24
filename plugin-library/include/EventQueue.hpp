@@ -2,8 +2,8 @@
 // Created by themegatb on 12/27/16.
 //
 
-#ifndef SMARTHOME_EVENTQUEUE_HPP
-#define SMARTHOME_EVENTQUEUE_HPP
+#ifndef SMP_EVENTQUEUE_HPP
+#define SMP_EVENTQUEUE_HPP
 
 #include <vector>
 #include <chrono>
@@ -36,4 +36,4 @@ public:
     };
 };
 
-#endif //SMARTHOME_EVENTQUEUE_HPP
+#endif //SMP_EVENTQUEUE_HPP

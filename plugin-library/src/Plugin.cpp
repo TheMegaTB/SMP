@@ -20,6 +20,7 @@ Plugin::Plugin(pluginCallback cb, pluginInit init, string name, string version) 
     this->callback = cb;
     this->name = name;
     this->version = version;
+    this->initialized = false;
 }
 
 string Plugin::getDescriptor() {

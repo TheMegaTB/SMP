@@ -2,8 +2,8 @@
 // Created by themegatb on 1/3/17.
 //
 
-#ifndef SMARTHOME_CHANNEL_HPP
-#define SMARTHOME_CHANNEL_HPP
+#ifndef SMP_CHANNEL_HPP
+#define SMP_CHANNEL_HPP
 
 #include <vector>
 #include <string>
@@ -28,4 +28,4 @@ public:
 };
 
 
-#endif //SMARTHOME_CHANNEL_HPP
+#endif //SMP_CHANNEL_HPP
