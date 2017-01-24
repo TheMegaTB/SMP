@@ -38,8 +38,6 @@ int readConfig() {
         trace(device.dump());
     }
 
-    debug(j.dump());
-
     return 0;
 }
 
@@ -47,8 +45,6 @@ void callback(string action, Channel c, json p) {
     trace(action);
     trace(c.getAddressAsString());
     trace(p.dump());
-
-
 
 //    switchLight("0/4/0", false);
     dimLight("0/4/2", 20);

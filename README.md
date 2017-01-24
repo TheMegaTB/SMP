@@ -1,10 +1,20 @@
-# smartHome
-Decentralized smart home network for home automation based on Rust and UDP Multicast
+# SMP | State monitoring protocol
+This is a protocol to monitor and control an arbitrary amount of IoT devices.
+The specific implementation of this protocol (as defined in the doc/Structure.pdf file) is a plugin based server but
+it is possible to use only the plugin class standalone or even create a custom implementation since the protocol is
+based on JSON and UDP multicast.
 
-Although this is written in rust with a focus on RaspberryPi's and HummingBoard's running ArchLinux
-it should work on any device rust can compile to.
+Environment variables:
 
-Note: Everything else is outdated and related to the rust-rewrite branch which is deprecated. I'll add a proper description sometime in the future. For now consult doc/Structure.pdf in case you want to learn more
+LOG = TRACE | DEBUG | [INFO] | WARN | ERROR
+
+PATHS = true | false (whether or not to show paths and lines in the log)
+
+PLUGIN_DIR = Absolute or relative path to plugin directory containing .so files
+
+CONFIG_DIR = Directory containing the json configuration files
+
+Note: Everything else below is outdated and related to the rust-rewrite branch which is deprecated. I'll add a proper description sometime in the future. For now consult doc/Structure.pdf in case you want to learn more
 <del>
 ### Current state of development
 Currently this project is nowhere near finished. I decided to switch to rust as it is a compiled language which is
