@@ -18,7 +18,7 @@ int main() {
     UDPSocket sock("224.0.0.1", 1337);
     sock.send(write.dump());
 //    while (1) {
-        sock.send(read.dump());
+//        sock.send(read.dump());
 //        sleep(1);
 //    }
 }

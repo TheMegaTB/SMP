@@ -14,19 +14,22 @@ void Plugin::process(json datagram) {
 
     // TODO: Add possibility to automagically answer read requests in case no readCB got defined
 
-    if (action == "read") {
-        this->readCB(channel, payload);
-    } else if (action == "write") {
-        this->writeCB(channel, payload);
-    } else if (action == "state") {
-        //TODO Ignore (?)
-        // Might be useful for persistence services
-    }
+    this->callback(action, channel, payload);
+
+//    if (action == "read") {
+//        this->readCB(channel, payload);
+//    } else if (action == "write") {
+//        this->writeCB(channel, payload);
+//    } else if (action == "state") {
+//        TODO Ignore (?)
+//         Might be useful for persistence services
+//    }
 }
 
-Plugin::Plugin(readCallback r, writeCallback w, string name, string version) {
-    this->readCB = r;
-    this->writeCB = w;
+Plugin::Plugin(pluginCallback cb, string name, string version) {
+//    this->readCB = r;
+//    this->writeCB = w;
+    this->callback = cb;
     this->name = name;
     this->version = version;
 }
