@@ -16,11 +16,13 @@ class Channel {
 //    int device;
     int address[3];
 public:
+    Channel(string channel);
+
     Channel(vector<int>* channel);
 
     Channel(int type, int room, int device);
 
-    int* getAddress();
+    vector<int> getAddress();
 
     string getAddressAsString();
 

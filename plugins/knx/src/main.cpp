@@ -10,6 +10,7 @@ using json = nlohmann::json;
 
 class Device {
 public:
+    json attributes;
     virtual void set(json)= 0;
 };
 
@@ -17,6 +18,8 @@ class Fixture : public Device {
     eibaddr_t binaryAddr;
     eibaddr_t dimmableAddr;
     bool dimmable;
+
+    json attributes;
 
 public:
     void set(json value) override {
@@ -28,6 +31,7 @@ public:
     }
 
     Fixture(json attributes) {
+        this->attributes = attributes;
         string binaryAddr = attributes["binary"];
         readGroupAddr(binaryAddr.c_str(), &this->binaryAddr);
         if (attributes["dimmable"].is_string()) {
@@ -97,13 +101,32 @@ int readConfig() {
     return 0;
 }
 
-void callback(Plugin *context, string action, Channel c, json p) {
+void callback(Plugin *context, string action, Channel *c, json *p) {
     trace(action);
-    trace(c.getAddressAsString());
-    trace(p.dump());
+    if (c != nullptr) trace(c->getAddressAsString());
+    if (c != nullptr) trace(p->dump());
 
-    if (action == "write" && devices.find(c.getAddressAsString()) != devices.end()) {
-        devices[c.getAddressAsString()]->set(p);
+    if (action == "query") {
+//        typedef std::map<const string, Device *>::iterator it_type;
+//        for(auto iterator = devices.begin(); iterator != devices.end(); ++iterator) {
+//            // iterator->first = key
+//            // iterator->second = value
+//            Channel channel = Channel(iterator->first);
+//            trace(channel.getAddressAsString());
+//        }
+        for (pair<const string, Device *> &d : devices) {
+//            Channel channel = Channel(d.first);
+//            trace(channel.getAddressAsString());
+//            json dev = {
+//                    {"type",  "write"},
+//                    {"channel", Channel(d.first).getAddress()},
+//                    {"attributes", d.second->attributes}
+//            };
+        }
+    }
+
+    if (action == "write" && p != nullptr && c != nullptr && devices.find(c->getAddressAsString()) != devices.end()) {
+        devices[c->getAddressAsString()]->set(p);
     }
 
 //    if (p.is_boolean()) {

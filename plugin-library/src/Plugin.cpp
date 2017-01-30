@@ -9,24 +9,31 @@ using namespace std;
 void Plugin::process(json datagram) {
     if (datagram == NULL ||
         !datagram.is_object() ||
-        datagram.count("action") == 0 ||
-        datagram.count("payload") == 0 ||
-        datagram.count("channel") == 0) {
+        datagram.count("action") == 0) {
         error("Incoming request is missing action, payload or channel field.");
         return;
     }
-    if (!datagram["action"].is_string() ||
-        !datagram["payload"].is_object() ||
-        !datagram["channel"].is_array()) {
+    if (!datagram["action"].is_string()) {
         error("Incoming request is having a wrong type in action, payload or channel field.");
         return;
     }
     string action = datagram["action"];
-    vector<int> raw_channel = datagram["channel"];
-    Channel channel = Channel(&raw_channel);
-    json payload = datagram["payload"];
+
+    Channel *channel = NULL;
+    if (datagram.count("payload") && datagram["payload"].is_object()) {
+        trace("Creating channel");
+        vector<int> raw_channel = datagram["channel"];
+        Channel c(&raw_channel);
+        channel = &c;
+    }
+
+    json *payload = NULL;
+    if (datagram.count("payload") && datagram["payload"].is_object()) payload = &datagram["payload"];
 
     this->callback(this, action, channel, payload);
+
+    delete payload;
+    delete channel;
 }
 
 Plugin::Plugin(pluginCallback cb, pluginInit init, string name, string version) {

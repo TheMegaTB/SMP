@@ -17,7 +17,7 @@ using namespace std;
 
 class Plugin;
 
-typedef void (*pluginCallback)(Plugin *, string action, Channel, json payload);
+typedef void (*pluginCallback)(Plugin *, string action, Channel *, json *payload);
 
 typedef int (*pluginInit)(Plugin *);
 
