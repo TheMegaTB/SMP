@@ -27,11 +27,11 @@ public:
     int take(T *val, std::chrono::duration<int, std::milli> timeout) {
         std::unique_lock<std::mutex> lock(m);
         while (q.empty()) {
-            if (c.wait_for(lock, timeout) == std::cv_status::timeout) return -1;
+            if (c.wait_for(lock, timeout) == std::cv_status::timeout) return 1;
         }
         *val = q.front();
         q.pop();
-        return 1;
+        return 0;
     }
 
 private:

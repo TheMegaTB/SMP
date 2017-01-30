@@ -1,3 +1,4 @@
+#include <Logger.hpp>
 #include "UDPSocket.hpp"
 
 #define RECV_POOL_DELAY 200000
@@ -49,7 +50,7 @@ int UDPSocket::recv(std::string *msg, unsigned int timeout_ms) {
     while (bytes == 0 && ioctl(sock, FIONREAD, &bytes) >= 0) {
         usleep(RECV_POOL_DELAY); // 200ms
         total_time += RECV_POOL_DELAY / 1000;
-        if (timeout_ms != 0 && total_time > timeout_ms) return -1;
+        if (timeout_ms != 0 && total_time > timeout_ms) return 1;
     }
 
     char message[bytes];
@@ -59,7 +60,7 @@ int UDPSocket::recv(std::string *msg, unsigned int timeout_ms) {
 
     *msg = std::string(message);
     (*msg).resize(bytes); // For some reason the string is longer than the char array so truncate it
-    return 1;
+    return 0;
 }
 
 ssize_t UDPSocket::send(std::string message) {

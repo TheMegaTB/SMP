@@ -3,13 +3,13 @@
 
 using json = nlohmann::json;
 
-void callback(string action, Channel c, json p) {
+void callback(Plugin *context, string action, Channel c, json p) {
     trace("WRITE");
     trace(c.getAddressAsString());
     trace(p.dump());
 }
 
-int init() {
+int init(Plugin *context) {
     return 0;
 }
 

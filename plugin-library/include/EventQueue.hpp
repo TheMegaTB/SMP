@@ -29,10 +29,10 @@ public:
 
     int observeOnce(std::chrono::duration<int, std::milli> timeout) {
         T event;
-        if (this->input_queue->take(&event, timeout) < 0) return -1;
+        if (this->input_queue->take(&event, timeout) > 0) return 1;
         for (Observer<T> *observer : this->observers)
             observer->process(event);
-        return 1;
+        return 0;
     };
 };
 

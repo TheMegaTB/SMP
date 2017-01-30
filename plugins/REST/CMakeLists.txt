@@ -1,6 +1,24 @@
 cmake_minimum_required(VERSION 3.6)
 project(smp-REST)
 
+ExternalProject_Add(
+        uWS
+        GIT_TAG patch-2
+        GIT_REPOSITORY https://github.com/TheMegaTB/uWebSockets
+        CMAKE_ARGS -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION} -DBUILD_STATIC_LIBS=OFF -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF
+        UPDATE_DISCONNECTED 1
+)
+
+find_package(ZLIB REQUIRED)
+
+if (NOT LIBUV_INCLUDE_DIR)
+    find_path(LIBUV_INCLUDE_DIR uv.h)
+endif ()
+if (NOT LIBUV_LIBRARY)
+    find_library(LIBUV_LIBRARY NAMES uv uv1)
+endif ()
+
+
 # Set the sources
 set(SOURCE_FILES src/main.cpp)
 
@@ -11,5 +29,22 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include/nlohmann)
 add_dependencies(${PROJECT_NAME} json)
 
-# Link to the plugin library
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC smp-plugin)
+# Add the pistache REST server project as a dependency
+include_directories(${EXTERNAL_INSTALL_LOCATION}/include/uWS)
+target_include_directories(${PROJECT_NAME} PUBLIC ${EXTERNAL_INSTALL_LOCATION}/include/uWS)
+add_dependencies(${PROJECT_NAME} uWS)
+
+# Link against pistache, smp-plugin and thread libraries
+target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARY} ${EXTERNAL_INSTALL_LOCATION}/lib64/libuWS.so smp-plugin ${CMAKE_THREAD_LIBS_INIT})
+
+
+#TEST
+#add_executable(${PROJECT_NAME}_bin ${SOURCE_FILES})
+#add_dependencies(${PROJECT_NAME}_bin json)
+#add_dependencies(${PROJECT_NAME}_bin uWS)
+#
+#
+#include_directories(${EXTERNAL_INSTALL_LOCATION}/include/uWS)
+#target_include_directories(${PROJECT_NAME}_bin PUBLIC ${EXTERNAL_INSTALL_LOCATION}/include/uWS)
+#
+#target_link_libraries(${PROJECT_NAME}_bin LINK_PUBLIC ${EXTERNAL_INSTALL_LOCATION}/lib64/libuWS_static.a smp-plugin ${CMAKE_THREAD_LIBS_INIT})

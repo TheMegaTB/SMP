@@ -84,6 +84,12 @@ int main() {
         pluginLoader.loadPlugin(plugin);
     }
 
+    // Use this if you are debugging since it is way easier to debug without threads
+//    while (true) {
+//        pluginLoader.pluginHandler.receiveData(RECV_TIMEOUT);
+//        pluginLoader.pluginHandler.processData();
+//    }
+
     InterruptHandle handle;
     thread networking(receiveData, &pluginLoader.pluginHandler, &handle);
     thread processing(processData, &pluginLoader.pluginHandler, &handle);
@@ -92,7 +98,6 @@ int main() {
     while (interrupted == 0)
         sleep(1);
 
-//    cout << "\nInterrupted! Exiting..." << endl;
     warn("Interrupted. Exiting ...");
     handle.interrupt();
     networking.join();

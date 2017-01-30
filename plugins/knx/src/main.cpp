@@ -97,7 +97,7 @@ int readConfig() {
     return 0;
 }
 
-void callback(string action, Channel c, json p) {
+void callback(Plugin *context, string action, Channel c, json p) {
     trace(action);
     trace(c.getAddressAsString());
     trace(p.dump());
@@ -113,7 +113,7 @@ void callback(string action, Channel c, json p) {
 //    }
 };
 
-int init() {
+int init(Plugin *context) {
     return readConfig();
 }
 

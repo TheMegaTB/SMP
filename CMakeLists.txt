@@ -7,25 +7,20 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 include(ExternalProject)
 
 # Set generic variables
-project(sMP)
+project(SMP)
 set(CMAKE_CXX_STANDARD 11)
 
 # Enable the use of the global offset table
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Check if repository updates should be skipped
-if($ENV{OFFLINE})
-    set(OFFLINE_PARAM "UPDATE_COMMAND \"\"")
-endif()
-
 # Fetch the jsoncpp project
 set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/lib)
 ExternalProject_Add(
         json
+        GIT_TAG develop
         GIT_REPOSITORY https://github.com/nlohmann/json.git
         CMAKE_ARGS -DBuildTests=OFF -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
         UPDATE_DISCONNECTED 1
-        ${OFFLINE_PARAM}
 )
 
 # Add subdirectories with targets

@@ -44,14 +44,9 @@ int PluginLoader::loadPlugin(string name) {
 
     custom("Load", plugin->getDescriptor());
 
-    if ((*plugin).init() > 0) {
-        error("Failed to initialize " + (*plugin).name + " plugin.");
-        return 1;
-    }
-
     pluginHook ph = make_tuple(plugin, unload_plugin, pluginLib);
 
-    this->pluginHandler.addPlugin(plugin);
+    if (this->pluginHandler.addPlugin(plugin) > 0) return 1;
     this->plugins.push_back(ph);
 
     return 0;

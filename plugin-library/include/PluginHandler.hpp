@@ -22,7 +22,7 @@ class PluginHandler {
     EventQueue<json> plugins;
     UDPSocket sock;
 public:
-    void addPlugin(Plugin *plugin);
+    int addPlugin(Plugin *plugin);
 
     int receiveData(unsigned int timeout_ms);
 
