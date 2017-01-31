@@ -14,7 +14,7 @@ int init(Plugin *context) {
 }
 
 extern "C" Plugin* load_plugin() {
-    return new Plugin(callback, init, "GPIO", "0.0.2");
+    return new Plugin(callback, init, "GPIO", "0.0.2", false);
 }
 
 extern "C" void unload_plugin(Plugin* p) {

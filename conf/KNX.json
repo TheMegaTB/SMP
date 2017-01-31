@@ -19,7 +19,7 @@
       }
     },
     {
-      "channel": [0, 1, 1],
+      "channel": [1, 0, 1],
       "type": "shutter",
       "name": "Main Window",
       "attributes": {

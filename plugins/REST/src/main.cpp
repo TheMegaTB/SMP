@@ -56,7 +56,7 @@ int init(Plugin *context) {
 }
 
 extern "C" Plugin *load_plugin() {
-    return new Plugin(callback, init, "REST", "0.0.3");
+    return new Plugin(callback, init, "REST", "0.0.3", false);
 }
 
 extern "C" void unload_plugin(Plugin *p) {

@@ -1,8 +1,5 @@
 #include <string>
-#include <fstream>
 
-#include <Logger.hpp>
-#include <stdlib.h>
 #include "Plugin.hpp"
 #include "knx.hpp"
 
@@ -76,6 +73,14 @@ public:
 
     void set(json value) override {
         // TODO Implement some logic for stop, up, down, 3/4 up and 3/4 down
+        if (value.is_string()) {
+            if (value == "up")
+                switchLight(longAddr, 0);
+            else if (value == "down")
+                switchLight(longAddr, 1);
+            else if (value == "stop")
+                switchLight(shortAddr, 0);
+        }
     }
 
     json getAttributes() override {
@@ -85,51 +90,54 @@ public:
     Shutter(json name, json attributes) {
         this->attributes = attributes;
         this->name = name;
-//        readGroupAddr(attributes["short"].c_str(), &this->shortAddr);
-//        readGroupAddr(attributes["long"].c_str(), &this->longAddr);
+
+        string shortAddr = attributes["short"];
+        string longAddr = attributes["long"];
+        readGroupAddr(shortAddr.c_str(), &this->shortAddr);
+        readGroupAddr(longAddr.c_str(), &this->longAddr);
     }
 };
 
 std::map<string, Device *> devices;
 
 int readConfig() {
-    char *CONFIG_DIR = getenv("CONFIG_DIR");
-    string confDir;
-    if (CONFIG_DIR == NULL) {
-        confDir = ".";
-    } else {
-        confDir = CONFIG_DIR;
-    }
+//    char *CONFIG_DIR = getenv("CONFIG_DIR");
+//    string confDir;
+//    if (CONFIG_DIR == NULL) {
+//        confDir = ".";
+//    } else {
+//        confDir = CONFIG_DIR;
+//    }
+//
+//    std::ifstream t(confDir + "/KNX.json");
+//
+//    if (!t.good()) {
+//        err("KNX config file not found!");
+//        return 1;
+//    }
+//
+//    json j;
+//
+//    try {
+//        t >> j;
+//    } catch (const std::invalid_argument err) {
+//        err("Failed to parse KNX config file");
+//        return 1;
+//    }
 
-    std::ifstream t(confDir + "/knx.json");
-
-    if (!t.good()) {
-        err("KNX config file not found!");
-        return 1;
-    }
-
-    json j;
-
-    try {
-        t >> j;
-    } catch (const std::invalid_argument err) {
-        err("Failed to parse KNX config file");
-        return 1;
-    }
-
-    connectionURL = j["connection"];
-    for (auto device : j["devices"]) {
-        Device *dev;
-
-        if (device["type"] == "fixture") {
-            dev = new Fixture(device["name"], device["attributes"]);
-        } else if (device["type"] == "shutter") {
-            dev = new Shutter(device["name"], device["attributes"]);
-        }
-
-        vector<int> channel = device["channel"];
-        devices[Channel(channel[0], channel[1], channel[2]).getAddressAsString()] = dev;
-    }
+//    connectionURL = j["connection"];
+//    for (auto device : j["devices"]) {
+//        Device *dev;
+//
+//        if (device["type"] == "fixture") {
+//            dev = new Fixture(device["name"], device["attributes"]);
+//        } else if (device["type"] == "shutter") {
+//            dev = new Shutter(device["name"], device["attributes"]);
+//        }
+//
+//        vector<int> channel = device["channel"];
+//        devices[Channel(channel[0], channel[1], channel[2]).getAddressAsString()] = dev;
+//    }
 
     return 0;
 }
@@ -164,11 +172,25 @@ void callback(Plugin *context, string action, Channel *c, json raw) {
 };
 
 int init(Plugin *context) {
-    return readConfig();
+    connectionURL = context->config["connection"];
+    for (json device : context->config["devices"]) {
+        Device *dev;
+
+        if (device["type"] == "fixture") {
+            dev = new Fixture(device["name"], device["attributes"]);
+        } else if (device["type"] == "shutter") {
+            dev = new Shutter(device["name"], device["attributes"]);
+        }
+
+        vector<int> channel = device["channel"];
+        devices[Channel(channel[0], channel[1], channel[2]).getAddressAsString()] = dev;
+    }
+
+    return 0;
 }
 
 extern "C" Plugin* load_plugin() {
-    return new Plugin(callback, init, "KNX", "0.0.2");
+    return new Plugin(callback, init, "KNX", "0.0.2", true);
 }
 
 extern "C" void unload_plugin(Plugin* p) {

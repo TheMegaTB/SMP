@@ -6,6 +6,7 @@
 #define SMP_PLUGIN_HPP
 
 #include <string>
+#include <fstream>
 #include <Logger.hpp>
 #include "Channel.hpp"
 #include "json.hpp"
@@ -26,19 +27,19 @@ class Plugin : public Observer<json> {
     pluginCallback callback;
     pluginInit initFunc;
     bool initialized;
+    bool loadConfig;
     string version;
 
 public:
     string name;
+    json config;
     SafeQueue<string> outgoingDatagrams;
 
     string getDescriptor();
     void process(json datagram) override;
 
-//    void setSocket(UDPSocket *);
-
     int init();
-    Plugin(pluginCallback, pluginInit, string name, string version);
+    Plugin(pluginCallback, pluginInit, string name, string version, bool loadConfig);
 };
 
 typedef Plugin* load_plugin_t();
