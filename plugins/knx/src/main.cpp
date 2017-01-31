@@ -23,10 +23,13 @@ class Fixture : public Device {
 
 public:
     void set(json value) override {
+        trace("Setting light to " + value.dump());
         if (value.is_boolean()) {
             switchLight(this->binaryAddr, value);
+            trace("Set binary value");
         } else if (value.is_number_integer() && this->dimmable) {
             dimLight(this->dimmableAddr, value);
+            trace("Set number value");
         }
     }
 
@@ -71,7 +74,7 @@ int readConfig() {
     std::ifstream t(confDir + "/knx.json");
 
     if (!t.good()) {
-        error("KNX config file not found!");
+        err("KNX config file not found!");
         return 1;
     }
 
@@ -80,7 +83,7 @@ int readConfig() {
     try {
         t >> j;
     } catch (const std::invalid_argument err) {
-        error("Failed to parse KNX config file");
+        err("Failed to parse KNX config file");
         return 1;
     }
 
@@ -101,39 +104,21 @@ int readConfig() {
     return 0;
 }
 
-void callback(Plugin *context, string action, Channel *c, json *p) {
-    trace(action);
-    if (c != nullptr) trace(c->getAddressAsString());
-    if (c != nullptr) trace(p->dump());
-
+void callback(Plugin *context, string action, Channel *c, json raw) {
     if (action == "query") {
-//        typedef std::map<const string, Device *>::iterator it_type;
-//        for(auto iterator = devices.begin(); iterator != devices.end(); ++iterator) {
-//            // iterator->first = key
-//            // iterator->second = value
-//            Channel channel = Channel(iterator->first);
-//            trace(channel.getAddressAsString());
-//        }
         for (pair<const string, Device *> &d : devices) {
-//            Channel channel = Channel(d.first);
-//            trace(channel.getAddressAsString());
-//            json dev = {
-//                    {"type",  "write"},
-//                    {"channel", Channel(d.first).getAddress()},
-//                    {"attributes", d.second->attributes}
-//            };
+            string deviceChannel = d.first;
+            json dev = {
+                    {"action",     "announce"},
+                    {"type",       "fixture"}, // TODO Insert some meaningful value here
+                    {"channel",    Channel(deviceChannel).getAddress()},
+                    {"attributes", d.second->attributes}
+            };
+            context->outgoingDatagrams.add(dev.dump());
         }
+    } else if (action == "write" && c != nullptr && devices.find(c->getAddressAsString()) != devices.end()) {
+        devices[c->getAddressAsString()]->set(raw["payload"]);
     }
-
-    if (action == "write" && p != nullptr && c != nullptr && devices.find(c->getAddressAsString()) != devices.end()) {
-        devices[c->getAddressAsString()]->set(p);
-    }
-
-//    if (p.is_boolean()) {
-//        switchLight("0/4/0", p);
-//    } else if (p.is_number_integer()) {
-//        dimLight("0/4/2", p);
-//    }
 };
 
 int init(Plugin *context) {
@@ -141,7 +126,7 @@ int init(Plugin *context) {
 }
 
 extern "C" Plugin* load_plugin() {
-    return new Plugin(callback, init, "KNX", "0.0.1");
+    return new Plugin(callback, init, "KNX", "0.0.2");
 }
 
 extern "C" void unload_plugin(Plugin* p) {

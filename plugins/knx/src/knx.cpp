@@ -9,7 +9,7 @@ string connectionURL = DEFAULT_CONN_URL;
 EIBConnection *connectEIB() {
     EIBConnection *con = EIBSocketURL(connectionURL.c_str());
     if (!con) {
-        error("Couldn't open connection to knxd");
+        err("Couldn't open connection to knxd");
         return nullptr;
     }
 
@@ -31,7 +31,7 @@ int readGroupAddr(const char *addr, eibaddr_t *groupAddr) {
         *groupAddr = (eibaddr_t) a;
         return 0;
     }
-    error("Invalid group address format");
+    err("Invalid group address format");
     return 1;
 }
 
@@ -44,12 +44,12 @@ int sendDatagram(eibaddr_t dest, unsigned char *data, int len) {
 
 
     if (EIBOpenT_Group(con, dest, 1) == -1) {
-        error("Failed to connect to device");
+        err("Failed to connect to device");
         return 1;
     }
 
     if (EIBSendAPDU(con, len, data) == -1) {
-        error("Request to device failed");
+        err("Request to device failed");
         return 1;
     }
 
@@ -58,17 +58,12 @@ int sendDatagram(eibaddr_t dest, unsigned char *data, int len) {
 }
 
 int dimLight(eibaddr_t address, unsigned char value) {
-//    eibaddr_t dest;
-//    readGroupAddr(address.c_str(), &dest);
-
     unsigned char buf[255] = {0, 0x80, value};
 
     return sendDatagram(address, buf, 3);
 }
 
 int switchLight(eibaddr_t address, bool val) {
-//    eibaddr_t dest;
-//    readGroupAddr(address.c_str(), &dest);
     unsigned char buf[3] = {0, 0x80};
     buf[1] |= val;
 

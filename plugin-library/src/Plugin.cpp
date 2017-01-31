@@ -10,30 +10,23 @@ void Plugin::process(json datagram) {
     if (datagram == NULL ||
         !datagram.is_object() ||
         datagram.count("action") == 0) {
-        error("Incoming request is missing action, payload or channel field.");
+        err("Incoming request is missing action field.");
         return;
     }
     if (!datagram["action"].is_string()) {
-        error("Incoming request is having a wrong type in action, payload or channel field.");
+        err("Incoming request is having a wrong type in action field.");
         return;
     }
     string action = datagram["action"];
 
     Channel *channel = NULL;
-    if (datagram.count("payload") && datagram["payload"].is_object()) {
-        trace("Creating channel");
+    if (datagram.count("channel") && datagram["channel"].is_array()) {
         vector<int> raw_channel = datagram["channel"];
         Channel c(&raw_channel);
         channel = &c;
     }
 
-    json *payload = NULL;
-    if (datagram.count("payload") && datagram["payload"].is_object()) payload = &datagram["payload"];
-
-    this->callback(this, action, channel, payload);
-
-    delete payload;
-    delete channel;
+    this->callback(this, action, channel, datagram);
 }
 
 Plugin::Plugin(pluginCallback cb, pluginInit init, string name, string version) {
@@ -58,6 +51,6 @@ int Plugin::init() {
     return this->initFunc(this);
 }
 
-void Plugin::setSocket(UDPSocket *socket) {
-    this->sock = socket;
-}
+//void Plugin::setSocket(UDPSocket *socket) {
+//    this->sock = socket;
+//}

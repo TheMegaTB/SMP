@@ -1,29 +1,22 @@
 #ifndef UDP_SOCKET_HPP
 #define UDP_SOCKET_HPP
 
-#include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
 #include <string>
-#include <iostream>
-#include <unistd.h>
-#include <string.h>
-#include <sys/ioctl.h>
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
+
+using boost::asio::ip::udp;
 
 class UDPSocket {
-    int sock;
-    struct ip_mreq command;
-    struct sockaddr_in sin;
+    boost::asio::io_service service;
+    udp::socket socket;
+    udp::endpoint destination;
 public:
-    UDPSocket(std::string multicast_group, uint16_t port);
+    UDPSocket(std::string multicast_group, unsigned long port);
 
     int recv(std::string *msg, unsigned int timeout_ms);
 
-    void close();
-
-    ssize_t send(std::string message);
+    void send(std::string message);
 };
 
 #endif //UDP_SOCKET_HPP

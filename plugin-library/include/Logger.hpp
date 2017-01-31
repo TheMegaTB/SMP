@@ -40,7 +40,7 @@ public:
 
 #define __CONTEXT__ __FILE__, __LINE__, __func__
 
-#define error(msg) { Logger::log(LogLevel::Error, msg, __CONTEXT__); }
+#define err(msg) { Logger::log(LogLevel::Error, msg, __CONTEXT__); }
 #define warn(msg) { Logger::log(LogLevel::Warn, msg, __CONTEXT__); }
 #define info(msg) { Logger::log(LogLevel::Info, msg, __CONTEXT__); }
 #define debug(msg) { Logger::log(LogLevel::Debug, msg, __CONTEXT__); }

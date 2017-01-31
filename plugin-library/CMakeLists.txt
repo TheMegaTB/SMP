@@ -15,3 +15,13 @@ add_dependencies(${PROJECT_NAME} json)
 
 # Include the header files with the target
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Find and link to boost
+find_package(Boost)
+IF (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIR})
+endif ()
+set(Boost_USE_STATIC_LIBS ON) # enable dynamic linking
+set(Boost_USE_MULTITHREAD OFF)  # enable multithreading
+find_package(Boost COMPONENTS REQUIRED system)
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})

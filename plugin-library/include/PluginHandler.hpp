@@ -14,6 +14,8 @@
 #include "EventQueue.hpp"
 #include "UDPSocket.hpp"
 
+#define LOOPBACK
+
 using namespace std;
 using json = nlohmann::json;
 
@@ -27,6 +29,8 @@ public:
     int receiveData(unsigned int timeout_ms);
 
     int processData();
+
+    int sendData();
 
     PluginHandler(string multicastAddr, uint16_t port);
 };

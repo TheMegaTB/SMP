@@ -6,9 +6,11 @@
 
 vector<int> Channel::getAddress() {
     vector<int> addr;
-    addr[0] = this->address[0];
-    addr[2] = this->address[2];
-    addr[3] = this->address[3];
+    addr.push_back(this->address[0]);
+    addr.push_back(this->address[1]);
+    addr.push_back(this->address[2]);
+//    addr[2] = this->address[2];
+//    addr[3] = this->address[3];
     return addr;
 }
 
@@ -38,7 +40,8 @@ Channel::Channel(int type, int room, int device) {
 
 Channel::Channel(string c) {
     if (c.size() < 3) return;
-    this->address[0] = c[0];
-    this->address[1] = c[2];
-    this->address[2] = c[4];
+    int offset = '0';
+    this->address[0] = c[0] - offset;
+    this->address[1] = c[2] - offset;
+    this->address[2] = c[4] - offset;
 }

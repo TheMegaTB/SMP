@@ -13,6 +13,12 @@
 
 using namespace std;
 
+void sendData(PluginHandler *p, InterruptHandle *handle) {
+    while (!(*handle).isInterrupted()) {
+        p->sendData();
+    }
+}
+
 void receiveData(PluginHandler *p, InterruptHandle *handle) {
     while (!(*handle).isInterrupted()) {
         p->receiveData(RECV_TIMEOUT);
@@ -46,8 +52,8 @@ int getPlugins(string dir, vector<string> &files) {
     DIR *dp;
     struct dirent *dirp;
     if ((dp = opendir(dir.c_str())) == NULL) {
-        error("Error opening plugin directory");
-        error(dir);
+        err("Error opening plugin directory");
+        err(dir);
         return errno;
     }
 
@@ -73,7 +79,7 @@ int main() {
     getPlugins(pluginDir, plugins);
 
     if (plugins.size() == 0) {
-        error("No plugins found!");
+        err("No plugins found!");
         return 1;
     }
 
@@ -86,12 +92,14 @@ int main() {
 
     // Use this if you are debugging since it is way easier to debug without threads
 //    while (true) {
+//        pluginLoader.pluginHandler.sendData();
 //        pluginLoader.pluginHandler.receiveData(RECV_TIMEOUT);
 //        pluginLoader.pluginHandler.processData();
 //    }
 
     InterruptHandle handle;
-    thread networking(receiveData, &pluginLoader.pluginHandler, &handle);
+    thread networkingOut(sendData, &pluginLoader.pluginHandler, &handle);
+    thread networkingIn(receiveData, &pluginLoader.pluginHandler, &handle);
     thread processing(processData, &pluginLoader.pluginHandler, &handle);
 
     info("Plugins locked and loaded. Awaiting requests ...");
@@ -100,7 +108,8 @@ int main() {
 
     warn("Interrupted. Exiting ...");
     handle.interrupt();
-    networking.join();
+    networkingOut.join();
+    networkingIn.join();
     processing.join();
 
     return 0;

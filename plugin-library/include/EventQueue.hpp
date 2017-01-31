@@ -19,8 +19,8 @@ public:
 template<class T>
 class EventQueue {
     SafeQueue<T> *input_queue;
-    std::vector<Observer<T> *> observers;
 public:
+    std::vector<Observer<T> *> observers;
     EventQueue(SafeQueue<T> *queue) : input_queue(queue) {};
 
     void addObserver(Observer<T> *o) {

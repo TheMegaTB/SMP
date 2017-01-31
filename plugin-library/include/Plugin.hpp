@@ -17,7 +17,7 @@ using namespace std;
 
 class Plugin;
 
-typedef void (*pluginCallback)(Plugin *, string action, Channel *, json *payload);
+typedef void (*pluginCallback)(Plugin *, string action, Channel *, json rawData);
 
 typedef int (*pluginInit)(Plugin *);
 
@@ -30,12 +30,12 @@ class Plugin : public Observer<json> {
 
 public:
     string name;
-    UDPSocket *sock;
+    SafeQueue<string> outgoingDatagrams;
 
     string getDescriptor();
     void process(json datagram) override;
 
-    void setSocket(UDPSocket *);
+//    void setSocket(UDPSocket *);
 
     int init();
     Plugin(pluginCallback, pluginInit, string name, string version);
