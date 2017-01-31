@@ -1,38 +1,40 @@
 <!doctype html>
-<!--
- This page is shown when the extension button is clicked, because the
- "browser_action" field in manifest.json contains the "default_popup" key with
- value "popup.html".
- -->
 <html>
-<head>
-    <title>Getting Started Extension's Popup</title>
-    <style>
-        body {
-            font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-            font-size: 100%;
-        }
+    <head>
+        <title>SMP Monitor</title>
 
-        #status {
-            /* avoid an excessively wide status text */
-            white-space: pre;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            max-width: 400px;
-        }
-    </style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="./mdl/material.min.css">
+        <link rel="stylesheet" href="./popup.css">
 
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
-     -->
-    <script src="popup.js"></script>
-</head>
-<body>
-<div id="status"></div>
-<img id="image-result" hidden>
-</body>
+        <script src="./mdl/material.min.js"></script>
+        <script src="popup.js"></script>
+    </head>
+    <body>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <span class="mdl-layout-title">Room 1</span>
+                    <div class="mdl-layout-spacer"></div>
+                </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <span class="mdl-layout-title">Rooms</span>
+                <nav class="mdl-navigation">
+                    <a class="mdl-navigation__link" href="">Room 1</a>
+                    <a class="mdl-navigation__link" href="">Room 2</a>
+                    <a class="mdl-navigation__link" href="">Room 3</a>
+                    <a class="mdl-navigation__link" href="">Room 4</a>
+                </nav>
+            </div>
+            <main class="mdl-layout__content">
+                <div class="page-content">
+                    <ul class="mdl-list" id="fixtures">
+
+                    </ul>
+                </div>
+            </main>
+        </div>
+    </body>
 </html>
 
