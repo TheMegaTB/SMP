@@ -23,13 +23,10 @@ class Fixture : public Device {
 
 public:
     void set(json value) override {
-        trace("Setting light to " + value.dump());
         if (value.is_boolean()) {
             switchLight(this->binaryAddr, value);
-            trace("Set binary value");
         } else if (value.is_number_integer() && this->dimmable) {
             dimLight(this->dimmableAddr, value);
-            trace("Set number value");
         }
     }
 
