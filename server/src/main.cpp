@@ -1,7 +1,5 @@
 #include <iostream>
-#include <thread>
 #include <csignal>
-#include <stdlib.h>
 #include <dirent.h>
 
 #include "Plugin.hpp"
@@ -16,6 +14,7 @@ using namespace std;
 void sendData(PluginHandler *p, InterruptHandle *handle) {
     while (!(*handle).isInterrupted()) {
         p->sendData();
+        usleep(200000); // 200ms
     }
 }
 
@@ -90,27 +89,28 @@ int main() {
         pluginLoader.loadPlugin(plugin);
     }
 
-    // Use this if you are debugging since it is way easier to debug without threads
-//    while (true) {
-//        pluginLoader.pluginHandler.sendData();
-//        pluginLoader.pluginHandler.receiveData(RECV_TIMEOUT);
-//        pluginLoader.pluginHandler.processData();
-//    }
-
-    InterruptHandle handle;
-    thread networkingOut(sendData, &pluginLoader.pluginHandler, &handle);
-    thread networkingIn(receiveData, &pluginLoader.pluginHandler, &handle);
-    thread processing(processData, &pluginLoader.pluginHandler, &handle);
-
     info("Plugins locked and loaded. Awaiting requests ...");
-    while (interrupted == 0)
-        sleep(1);
 
-    warn("Interrupted. Exiting ...");
-    handle.interrupt();
-    networkingOut.join();
-    networkingIn.join();
-    processing.join();
+    // Use this if you are debugging since it is way easier to debug without threads
+    while (interrupted == 0) {
+        pluginLoader.pluginHandler.sendData();
+        pluginLoader.pluginHandler.receiveData(RECV_TIMEOUT);
+        pluginLoader.pluginHandler.processData();
+    }
+
+//    InterruptHandle handle;
+//    thread networkingOut(sendData, &pluginLoader.pluginHandler, &handle);
+//    thread networkingIn(receiveData, &pluginLoader.pluginHandler, &handle);
+//    thread processing(processData, &pluginLoader.pluginHandler, &handle);
+//
+//    while (interrupted == 0)
+//        sleep(1);
+//
+//    warn("Interrupted. Exiting ...");
+//    handle.interrupt();
+//    networkingOut.join();
+//    networkingIn.join();
+//    processing.join();
 
     return 0;
 }

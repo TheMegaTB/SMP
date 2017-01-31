@@ -10,8 +10,9 @@ using json = nlohmann::json;
 
 class Device {
 public:
-    json attributes;
     virtual void set(json)= 0;
+    virtual json getAttributes()= 0;
+    virtual const char* getDeviceType() { return "Device";}
 };
 
 class Fixture : public Device {
@@ -22,12 +23,20 @@ class Fixture : public Device {
     json attributes;
 
 public:
+    const char* getDeviceType() override {
+        return "Fixture";
+    }
+
     void set(json value) override {
         if (value.is_boolean()) {
             switchLight(this->binaryAddr, value);
         } else if (value.is_number_integer() && this->dimmable) {
             dimLight(this->dimmableAddr, value);
         }
+    }
+
+    json getAttributes() override {
+        return this->attributes;
     }
 
     Fixture(json attributes) {
@@ -46,12 +55,23 @@ class Shutter : public Device {
     eibaddr_t shortAddr;
     eibaddr_t longAddr;
 
+    json attributes;
+
 public:
+    const char* getDeviceType() override {
+        return "Shutter";
+    }
+
     void set(json value) override {
         // TODO Implement some logic for stop, up, down, 3/4 up and 3/4 down
     }
 
+    json getAttributes() override {
+        return this->attributes;
+    }
+
     Shutter(json attributes) {
+        this->attributes = attributes;
 //        readGroupAddr(attributes["short"].c_str(), &this->shortAddr);
 //        readGroupAddr(attributes["long"].c_str(), &this->longAddr);
     }
@@ -105,11 +125,17 @@ void callback(Plugin *context, string action, Channel *c, json raw) {
     if (action == "query") {
         for (pair<const string, Device *> &d : devices) {
             string deviceChannel = d.first;
+            vector<string> attributes;
+            json attr = d.second->getAttributes();
+            for (json::iterator it = attr.begin(); it != attr.end(); ++it) {
+//                std::cout << it.key() << " : " << it.value() << "\n";
+                attributes.push_back(it.key());
+            }
             json dev = {
                     {"action",     "announce"},
-                    {"type",       "fixture"}, // TODO Insert some meaningful value here
+                    {"type",       d.second->getDeviceType()}, // TODO Insert some meaningful value here
                     {"channel",    Channel(deviceChannel).getAddress()},
-                    {"attributes", d.second->attributes}
+                    {"attributes", attributes}
             };
             context->outgoingDatagrams.add(dev.dump());
         }

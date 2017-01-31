@@ -27,7 +27,6 @@ int PluginHandler::sendData() {
                 return 1;
             }
 #endif
-            return 0;
         }
     }
 
