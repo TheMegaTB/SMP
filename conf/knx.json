@@ -4,14 +4,24 @@
     {
       "channel": [0, 0, 1],
       "type": "fixture",
+      "name": "Ceiling light",
       "attributes": {
         "binary": "0/4/0",
         "dimmable": "0/4/2"
       }
     },
     {
+      "channel": [0, 0, 2],
+      "type": "fixture",
+      "name": "Uplight",
+      "attributes": {
+        "binary": "1/2/0"
+      }
+    },
+    {
       "channel": [0, 1, 1],
       "type": "shutter",
+      "name": "Main Window",
       "attributes": {
         "short": "3/1/0",
         "long": "3/1/1"
