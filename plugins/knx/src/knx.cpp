@@ -69,3 +69,27 @@ int switchLight(eibaddr_t address, bool val) {
 
     return sendDatagram(address, buf, 2);
 }
+
+int readDatagrams(eibaddr_t address) {
+    unsigned char buf[255];
+    int len;
+    EIBConnection *con = connectEIB();
+
+    if (EIBOpenVBusmonitorText(con) == -1) {
+        err("Open Busmonitor failed");
+        return 1;
+    }
+
+    while (1) {
+        len = EIBGetBusmonitorPacket(con, sizeof(buf), buf);
+        if (len == -1) {
+            err("Read failed");
+            return 1;
+        }
+        buf[len] = 0;
+//        printf ("%s\n", buf);
+//        fflush (stdout);
+    }
+
+    EIBClose(con);
+}

@@ -100,48 +100,6 @@ public:
 
 std::map<string, Device *> devices;
 
-int readConfig() {
-//    char *CONFIG_DIR = getenv("CONFIG_DIR");
-//    string confDir;
-//    if (CONFIG_DIR == NULL) {
-//        confDir = ".";
-//    } else {
-//        confDir = CONFIG_DIR;
-//    }
-//
-//    std::ifstream t(confDir + "/KNX.json");
-//
-//    if (!t.good()) {
-//        err("KNX config file not found!");
-//        return 1;
-//    }
-//
-//    json j;
-//
-//    try {
-//        t >> j;
-//    } catch (const std::invalid_argument err) {
-//        err("Failed to parse KNX config file");
-//        return 1;
-//    }
-
-//    connectionURL = j["connection"];
-//    for (auto device : j["devices"]) {
-//        Device *dev;
-//
-//        if (device["type"] == "fixture") {
-//            dev = new Fixture(device["name"], device["attributes"]);
-//        } else if (device["type"] == "shutter") {
-//            dev = new Shutter(device["name"], device["attributes"]);
-//        }
-//
-//        vector<int> channel = device["channel"];
-//        devices[Channel(channel[0], channel[1], channel[2]).getAddressAsString()] = dev;
-//    }
-
-    return 0;
-}
-
 void callback(Plugin *context, string action, Channel *c, json raw) {
     if (action == "query") {
         for (pair<const string, Device *> &d : devices) {
