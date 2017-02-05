@@ -1,7 +1,3 @@
-//
-// Created by themegatb on 12/30/16.
-//
-
 #ifndef SMP_INTERRUPTHANDLE_HPP
 #define SMP_INTERRUPTHANDLE_HPP
 

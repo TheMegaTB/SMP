@@ -47,12 +47,15 @@ string getPluginDir() {
         return pluginDir;
 }
 
-int getPlugins(string dir, vector<string> &files) {
+int getPlugins(string pluginDir, string dir, vector<string> &files) {
     DIR *dp;
     struct dirent *dirp;
-    if ((dp = opendir(dir.c_str())) == NULL) {
-        err("Error opening plugin directory");
-        err(dir);
+
+    string cwd = pluginDir + "/" + dir;
+
+    if ((dp = opendir(cwd.c_str())) == NULL) {
+        err("Error opening plugin (sub-)directory");
+        err(cwd);
         return errno;
     }
 
@@ -60,8 +63,18 @@ int getPlugins(string dir, vector<string> &files) {
     string name = "";
     while ((dirp = readdir(dp)) != NULL) {
         name = dirp->d_name;
+
+        // Recursively search through directories
+        if (dirp->d_type == DT_DIR && !(name == "." || name == "..")) {
+            getPlugins(pluginDir, dir + "/" + name, files);
+            continue;
+        }
+
+        // Skip all non-files and files that do not have the correct prefix
         if (dirp->d_type != DT_REG || name.substr(0, 7) != prefix) continue;
-        files.push_back(string(dirp->d_name));
+
+        // Push the remaining files into the list
+        files.push_back(dir + "/" + string(dirp->d_name));
     }
     closedir(dp);
     return 0;
@@ -75,7 +88,7 @@ int main() {
 
     vector<string> plugins;
     string pluginDir = getPluginDir();
-    getPlugins(pluginDir, plugins);
+    getPlugins(pluginDir, ".", plugins);
 
     if (plugins.size() == 0) {
         err("No plugins found!");
