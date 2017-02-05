@@ -37,7 +37,7 @@ void runWebsocketServer(Plugin *context) {
         ::clients.erase(ws.getAddress().address);
     });
 
-    h.listen(3003);
+    h.listen(context->config["port"]);
     h.run();
 }
 
@@ -56,7 +56,7 @@ int init(Plugin *context) {
 }
 
 extern "C" Plugin *load_plugin() {
-    return new Plugin(callback, init, "REST", "0.0.3", false);
+    return new Plugin(callback, init, "Websocket", "0.0.4", true);
 }
 
 extern "C" void unload_plugin(Plugin *p) {

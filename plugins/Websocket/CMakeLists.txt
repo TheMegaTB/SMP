@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(smp-REST)
+project(smp-WS)
 
 ExternalProject_Add(
         uWS
@@ -36,15 +36,3 @@ add_dependencies(${PROJECT_NAME} uWS)
 
 # Link against pistache, smp-plugin and thread libraries
 target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARY} ${EXTERNAL_INSTALL_LOCATION}/lib64/libuWS.so smp-plugin ${CMAKE_THREAD_LIBS_INIT})
-
-
-#TEST
-#add_executable(${PROJECT_NAME}_bin ${SOURCE_FILES})
-#add_dependencies(${PROJECT_NAME}_bin json)
-#add_dependencies(${PROJECT_NAME}_bin uWS)
-#
-#
-#include_directories(${EXTERNAL_INSTALL_LOCATION}/include/uWS)
-#target_include_directories(${PROJECT_NAME}_bin PUBLIC ${EXTERNAL_INSTALL_LOCATION}/include/uWS)
-#
-#target_link_libraries(${PROJECT_NAME}_bin LINK_PUBLIC ${EXTERNAL_INSTALL_LOCATION}/lib64/libuWS_static.a smp-plugin ${CMAKE_THREAD_LIBS_INIT})
