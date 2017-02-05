@@ -30,7 +30,8 @@ add_subdirectory(plugins/gpio)
 add_subdirectory(plugins/knx)
 add_subdirectory(plugins/Websocket)
 add_subdirectory(plugins/X11)
+add_subdirectory(plugins/scenes)
 add_subdirectory(clients/c++)
 
 # Add custom target to build all plugins
-add_custom_target(Plugins DEPENDS smp-gpio smp-knx smp-WS smp-X11)
+add_custom_target(Plugins DEPENDS smp-gpio smp-knx smp-WS smp-X11 smp-scenes)
