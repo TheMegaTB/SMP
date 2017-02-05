@@ -9,6 +9,11 @@
     color: #757575;
 }
 
+.selectable-item:hover {
+    background-color: rgba(158,158,158,.2);
+    cursor: pointer;
+}
+
 body {
     min-width: 500px;
     min-height: 500px;
