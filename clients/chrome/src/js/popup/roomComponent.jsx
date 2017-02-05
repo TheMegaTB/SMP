@@ -1,27 +1,6 @@
 import React from "react";
 import Fixture from "./fixtureComponent";
-
-
-// export const devices = [];
-
-// function send(ws, data) {
-//     ws.send(JSON.stringify(data));
-// }
-
-// function updateDevices() {
-//     devices.length = 0; // Clear all devices
-//     send({action: "query"});
-// }
-
-// ws.onmessage = function (event) {
-//     const data = JSON.parse(event.data);
-//
-//     if (data.action == "announce") {
-//         devices.push(data);
-//     }
-//
-//     // console.log("MSG:", JSON.parse(event.data));
-// };
+import {Socket} from "../websocket";
 
 export default class Room extends React.Component {
 
@@ -38,7 +17,7 @@ export default class Room extends React.Component {
             devices: []
         };
 
-        this.ws = new WebSocket("ws://127.0.0.1:3003/");
+        this.ws = Socket;
 
         const room = this;
 
@@ -51,12 +30,9 @@ export default class Room extends React.Component {
             const data = JSON.parse(event.data);
 
             if (data.action == "announce") {
-                console.log("Pushing device");
                 room.setState({
                     devices: room.state.devices.concat([data])
                 });
-                // room.state.devices.push(data);
-                console.log(room.state.devices);
             }
         };
     }
@@ -65,8 +41,6 @@ export default class Room extends React.Component {
         const fixtures = this.state.devices.map((device) =>
             <Fixture device={device} key={device.name}/>
         );
-
-        console.log("Fixtures:", fixtures);
 
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">

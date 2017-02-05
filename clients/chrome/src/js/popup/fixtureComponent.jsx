@@ -1,19 +1,29 @@
 import React from "react";
+import FixtureControl from "./fixtureControlComponent";
 
+// const ch = require('exports?componentHandler!material-design-lite/material.js');
 export default class Fixture extends React.Component {
+    // componentDidMount() {
+    //     // Make those MDL sliders work...
+    //     ch.upgradeDom();
+    // }
+
     render() {
-        console.log("Device", this.props.device);
+
+        let icon = "developer_board";
+
+        if (this.props.device.type == "Fixture") icon = "lightbulb_outline";
+        else if (this.props.device.type == "Shutter") icon = "call_to_action";
+
+
+
         return (
             <li className="mdl-list__item">
                 <span className="mdl-list__item-primary-content">
-                    <i className="icon material-icons"> wb_incandescend </i>
+                    <i className="icon grey material-icons">{icon}</i>
                     {this.props.device.name}
                 </span>
-                <span className="mdl-list__item-secondary-action">
-                    <p style={{width: "300px"}}>
-                        <input className="mdl-slider mdl-js-slider" type="range" min="0" max="100" tabIndex="0"/>
-                    </p>
-                </span>
+                <FixtureControl device={this.props.device}/>
             </li>
         );
     }

@@ -16,12 +16,12 @@ if (fileSystem.existsSync(secretsPath)) {
 
 module.exports = {
     entry: {
-        popup: path.join(__dirname, "src", "js", "popup.js"),
-        options: path.join(__dirname, "src", "js", "options.js"),
-        background: path.join(__dirname, "src", "js", "background.js"),
         vendors: [
             "webpack-material-design-icons"
-        ]
+        ],
+        popup: path.join(__dirname, "src", "js", "popup.js"),
+        options: path.join(__dirname, "src", "js", "options.js"),
+        background: path.join(__dirname, "src", "js", "background.js")
     },
     output: {
         path: path.join(__dirname, "build"),
@@ -30,8 +30,9 @@ module.exports = {
     module: {
         loaders: [
             {test: /\.(js|jsx)$/, loader: "babel"},
-            {test: /\.css$/, loaders: ["style", "css"]},
-            {test: /\.(jpe?g|png|gif|svg|eot|woff|ttf|svg|woff2)$/, loader: "file?name=[name].[ext]"}
+            {test: /\.js$/, loader: 'exports-loader'},
+            {test: /\.(jpe?g|png|gif|svg|eot|woff|ttf|svg|woff2)$/, loader: "file?name=[name].[ext]"},
+            {test: /\.css$/, loaders: ["style", "css"]}
         ]
     },
     resolve: {
