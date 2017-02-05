@@ -5,9 +5,20 @@
 
 using json = nlohmann::json;
 
-// Call this when "H" is pressed.
-void print_hello(xhkEvent e, void *r1, void *r2, void *r3) {
-    printf("Hello\n");
+std::map<KeySym, vector<int>> mappings;
+
+void handleKeypress(xhkEvent e, void *context, void *r2, void *r3) {
+    vector<int> target = mappings[e.keysym];
+    int payload = target[3];
+    target.erase(target.begin() + 3);
+
+    Plugin *c = (Plugin *) context;
+    json dev = {
+            {"action",  "write"},
+            {"channel", target},
+            {"payload", payload}
+    };
+    c->outgoingDatagrams.add(dev.dump());
 }
 
 #pragma clang diagnostic push
@@ -32,12 +43,26 @@ int init(Plugin *context) {
     hkconfig = xhkInit(NULL);
 
     if (context->config["keys"].is_object()) {
-        KeySym sym = XStringToKeysym("A");
+        json keys = context->config["keys"];
+        unsigned int modifier = Mod5Mask;   // Mod5Mask = Alt-gr (see https://github.com/TheMegaTB/.files/blob/master/home/themegatb/.Xmodmap#L24 )
 
-        // Mod5Mask = Alt-gr (see https://github.com/TheMegaTB/.files/blob/master/home/themegatb/.Xmodmap#L24 )
-        xhkBindKey(hkconfig, 0, sym, Mod5Mask, xhkKeyPress, &print_hello, 0, 0, 0);
+        for (json::iterator it = keys.begin(); it != keys.end(); ++it) {
+            json j = it.value();
+            if (!j.is_array()) {
+                err("Keyconfig is invalid (property of keycode is not an array)");
+                return 1;
+            }
+
+            std::vector<int> target = j;
+
+            KeySym sym = XStringToKeysym(string(it.key()).c_str());
+            mappings[sym] = target;
+
+            xhkBindKey(hkconfig, 0, sym, modifier, xhkKeyPress, &handleKeypress, context, 0, 0);
+        }
     } else {
         err("Keyconfig is invalid (not an object)");
+        return 1;
     }
 
     thread keys(keyThread, context, hkconfig);
