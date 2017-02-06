@@ -3,9 +3,13 @@ import "../css/material.min.css";
 import "../css/popup.css";
 import React from "react";
 import {render} from "react-dom";
-import Main from "./popup/components/main";
+import MainComponent from "./popup/components/main";
+import {Provider} from "react-redux";
+import {store} from "./popup/redux";
 
 render(
-    <Main/>,
+    <Provider store={store}>
+        <MainComponent/>
+    </Provider>,
     window.document.getElementById("app-container")
 );

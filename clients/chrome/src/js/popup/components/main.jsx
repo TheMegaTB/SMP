@@ -3,31 +3,33 @@ import Header from "./header";
 import Drawer from "./drawer";
 import Page from "./page";
 import Card from "./card";
-import List from "./list/list";
+import RoomList from "./roomList/roomList";
+import {connect} from "react-redux";
 
-export default class Main extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selected: undefined
-        };
-    }
-
+class Main extends React.Component {
     render() {
-        const floors = [
-            { name: "Ground floor", rooms: [
-                { name: "Living room", icon: "weekend" },
-                { name: "Corridor", icon: "blur_linear" }
-            ]},
-            { name: "Second floor", rooms: [
-                { name: "Bedroom", icon: "weekend" },
-                { name: "Corridor", icon: "blur_linear" }
-            ]}
-        ];
+        console.log("MAIN RERENDER");
+        const {store} = this.context;
+        const state = store.getState();
+        const floors = state.floors;
+        const target = state.target;
 
-        const cards = floors.map((floor) => (
-            <Card key={floor.name} title={floor.name} content={<List rooms={floor.rooms} />} />
-        ));
+        const cards = [];
+
+        switch (target.length) {
+            case 0:
+                for (let floor in floors) {
+                    if (!floors.hasOwnProperty(floor)) continue;
+                    floor = floors[floor];
+                    cards.push(
+                        <Card key={floor.name} title={floor.name} content={<RoomList rooms={floor.rooms} floorID={floor.id}/>}/>
+                    )
+                }
+                break;
+            case 1:
+                // Push device cards
+                break;
+        }
 
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
@@ -38,3 +40,16 @@ export default class Main extends React.Component {
         );
     }
 }
+
+Main.contextTypes = {
+    store: React.PropTypes.object
+};
+
+// function mapStateToProps(state) {
+//     console.log(state.target);
+//     return { target: state.target }
+// }
+//
+// const MainComponent = connect(mapStateToProps)(Main);
+// export default MainComponent;
+export default connect(state => state)(Main)
