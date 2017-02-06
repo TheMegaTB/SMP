@@ -5,8 +5,6 @@ using json = nlohmann::json;
 
 void callback(Plugin *context, string action, Channel *c, json p) {
     if (c != nullptr && context->config[c->getAddressAsString()].is_object()) {
-        debug("Received smth");
-        trace(p.dump());
         int value = p["payload"];
 
         json sequence;
