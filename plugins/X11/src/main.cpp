@@ -44,7 +44,7 @@ int init(Plugin *context) {
 
     if (context->config["keys"].is_object()) {
         json keys = context->config["keys"];
-        unsigned int modifier = Mod5Mask;   // Mod5Mask = Alt-gr (see https://github.com/TheMegaTB/.files/blob/master/home/themegatb/.Xmodmap#L24 )
+        unsigned int modifier = Mod1Mask;   // = Alt-gr (see https://github.com/TheMegaTB/.files/blob/master/home/themegatb/.Xmodmap#L24 )
 
         for (json::iterator it = keys.begin(); it != keys.end(); ++it) {
             json j = it.value();
