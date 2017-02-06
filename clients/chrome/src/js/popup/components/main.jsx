@@ -4,17 +4,31 @@ import Drawer from "./drawer";
 import Page from "./page";
 import Card from "./card";
 import RoomList from "./roomList/roomList";
+import DeviceList from "./deviceList/deviceList";
 import {connect} from "react-redux";
 
-class Main extends React.Component {
+const ch = require('exports?componentHandler!material-design-lite/material.js');
+export default class Main extends React.Component {
+    componentDidMount() {
+        // Make those MDL things work...
+        ch.upgradeDom();
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        // console.log(this.props.values.target != nextProps.values.target);
+        // console.log(this.props.values.target, nextProps.values.target);
+        // return this.props.values.target != nextProps.values.target;
+        return true;
+    }
+
     render() {
-        console.log("MAIN RERENDER");
-        const {store} = this.context;
-        const state = store.getState();
+        // console.log("MAIN RERENDER", this.props.target, this.props.state);
+        // const {store} = this.context;
+        const state = this.props.values;
         const floors = state.floors;
         const target = state.target;
 
-        const cards = [];
+        let cards = [];
 
         switch (target.length) {
             case 0:
@@ -26,8 +40,27 @@ class Main extends React.Component {
                     )
                 }
                 break;
-            case 1:
+            case 2:
                 // Push device cards
+                const devices = {};
+                outerLoop:
+                    for (let device in state.devices) {
+                        if (!state.devices.hasOwnProperty(device)) continue;
+                        device = state.devices[device];
+                        for (let entry in target) {
+                            if (!target.hasOwnProperty(entry)) continue;
+                            if(device.channel[entry] != target[entry]) continue outerLoop;
+                        }
+                        if (devices[device.type] === undefined) devices[device.type] = [device];
+                        else devices[device.type].push(device);
+                    }
+
+                for (let type in devices) {
+                    if (!devices.hasOwnProperty(type)) continue;
+                    cards.push(
+                        <Card key={type} title={type} content={<DeviceList devices={devices[type]} />}/>
+                    )
+                }
                 break;
         }
 
@@ -44,12 +77,3 @@ class Main extends React.Component {
 Main.contextTypes = {
     store: React.PropTypes.object
 };
-
-// function mapStateToProps(state) {
-//     console.log(state.target);
-//     return { target: state.target }
-// }
-//
-// const MainComponent = connect(mapStateToProps)(Main);
-// export default MainComponent;
-export default connect(state => state)(Main)
