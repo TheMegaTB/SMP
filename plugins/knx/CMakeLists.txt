@@ -4,7 +4,7 @@ project(smp-knx)
 # Download and build knxd libraries
 ExternalProject_Add(
         knxd
-        GIT_TAG
+        GIT_TAG 40742d6
         GIT_REPOSITORY https://github.com/knxd/knxd
         UPDATE_DISCONNECTED 1
         BUILD_IN_SOURCE 1
