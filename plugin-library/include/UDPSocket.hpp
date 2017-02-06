@@ -12,7 +12,7 @@ class UDPSocket {
     udp::socket socket;
     udp::endpoint destination;
 public:
-    UDPSocket(std::string multicast_group, unsigned long port);
+    UDPSocket(std::string multicast_group, unsigned short port);
 
     int recv(std::string *msg, unsigned int timeout_ms);
 

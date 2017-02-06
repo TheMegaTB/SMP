@@ -1,8 +1,6 @@
 #include "../include/PluginHandler.hpp"
 
 int PluginHandler::addPlugin(Plugin *plugin) {
-//    plugin->setSocket(&this->sock);
-
     if ((*plugin).init() > 0) {
         err("Failed to initialize " + (*plugin).name + " plugin.");
         return 1;

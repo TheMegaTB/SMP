@@ -14,7 +14,7 @@
 #include "EventQueue.hpp"
 #include "UDPSocket.hpp"
 
-#define LOOPBACK
+//#define LOOPBACK
 
 using namespace std;
 using json = nlohmann::json;
