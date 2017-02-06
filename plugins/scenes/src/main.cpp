@@ -4,7 +4,23 @@
 using json = nlohmann::json;
 
 void callback(Plugin *context, string action, Channel *c, json p) {
-    if (c != nullptr && context->config[c->getAddressAsString()].is_object()) {
+    if (action == "query") {
+        for (json::iterator it = context->config.begin(); it != context->config.end(); ++it) {
+
+            // Arrange the device description
+            json dev = {
+                    {"action",     "announce"},
+                    {"type",       "Scene"},
+                    {"name",       it.value()["name"]},
+                    {"channel",    Channel(it.key()).getAddress()},
+                    {"attributes", {"binary"}}
+            };
+
+            // Send it to the clients
+            context->outgoingDatagrams.add(dev.dump());
+        }
+    } else if (c != nullptr && context->config[c->getAddressAsString()].is_object()) {
+        if (!(p["payload"].is_number() || p["payload"].is_boolean())) return;
         int value = p["payload"];
 
         json sequence;

@@ -1,5 +1,6 @@
 {
   "1-1-4": {
+    "name": "Dim illumination",
     "on": [
       [1, 1, 1, 80],
       [1, 1, 2, true]
