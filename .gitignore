@@ -54,3 +54,4 @@ build/
 
 # NPM/Yarn dependencies
 node_modules/
+yarn.lock
