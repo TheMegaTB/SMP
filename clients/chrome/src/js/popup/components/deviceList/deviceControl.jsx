@@ -1,9 +1,9 @@
 import React from "react";
-import {Socket} from "../websocket";
-import {SLIDER_SMOOTHING_MS} from "../config";
+import {Socket} from "../../../websocket";
+import {SLIDER_SMOOTHING_MS} from "../../../config";
 
 const ch = require('exports?componentHandler!material-design-lite/material.js');
-export default class FixtureControl extends React.Component {
+export default class DeviceControl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {value: 0};
@@ -50,7 +50,6 @@ export default class FixtureControl extends React.Component {
     }
 
     handleShutter(action) {
-        console.log(this.props.device, action);
         Socket.send(JSON.stringify({
             action: "write",
             channel: this.props.device.channel,
@@ -65,19 +64,20 @@ export default class FixtureControl extends React.Component {
 
         let containerStyle = {width: "50%"};
 
-        if (this.props.device.type == "Fixture" && this.props.device.attributes.indexOf("dimmable") > -1) {
+        // TODO Go by attributes rather than types
+        if (this.props.device.attributes.indexOf("dimmable") > -1) {
             control = (
                 <p>
                     <input onChange={this.handleSlide} className="mdl-slider mdl-js-slider" type="range" min="0"
                            max="100" tabIndex="0"/>
                 </p>
             );
-        } else if (this.props.device.type == "Fixture" && this.props.device.attributes.indexOf("binary") > -1) {
+        } else if (this.props.device.attributes.indexOf("binary") > -1) {
             containerStyle = {};
             control = (
                 <div style={{margin: "0 20px"}}>
-                    <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor="switch-1">
-                        <input type="checkbox" id="switch-1" className="mdl-switch__input" checked={this.state.value}
+                    <label className="mdl-switch mdl-js-switch mdl-js-ripple-effect" htmlFor={this.props.device.name}>
+                        <input type="checkbox" id={this.props.device.name} className="mdl-switch__input" checked={this.state.value}
                                onChange={this.handleBinary}/>
                         <span className="mdl-switch__label"/>
                     </label>

@@ -6,6 +6,7 @@ using json = nlohmann::json;
 void callback(Plugin *context, string action, Channel *c, json p) {
     if (action == "query") {
         for (json::iterator it = context->config.begin(); it != context->config.end(); ++it) {
+            if (!it.value().is_object()) continue;
 
             // Arrange the device description
             json dev = {
