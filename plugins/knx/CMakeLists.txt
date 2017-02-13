@@ -21,9 +21,13 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include/nlohmann)
 add_dependencies(${PROJECT_NAME} json)
 
+# Add the CLog project as a dependency
+include_directories(${EXTERNAL_INSTALL_LOCATION}/include/CLog)
+add_dependencies(${PROJECT_NAME} CLog)
+
 # Add knxd (more specifically eibclient) as a dependency
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
 add_dependencies(${PROJECT_NAME} knxd)
 
 # Link against the eibdclient and smp-plugin library
-target_link_libraries(${PROJECT_NAME} ${EXTERNAL_INSTALL_LOCATION}/libeibclient.a smp-plugin)
+target_link_libraries(${PROJECT_NAME} ${EXTERNAL_INSTALL_LOCATION}/libeibclient.a ${EXTERNAL_INSTALL_LOCATION}/lib/CLog/libCLog.a smp-plugin)

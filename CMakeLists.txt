@@ -23,6 +23,12 @@ ExternalProject_Add(
         UPDATE_DISCONNECTED 1
 )
 
+# Fetch the CLog project
+ExternalProject_Add(CLog
+        GIT_REPOSITORY https://github.com/TheMegaTB/CLog
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
+)
+
 # Add subdirectories with targets
 add_subdirectory(plugin-library)
 add_subdirectory(server)
