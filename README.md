@@ -21,7 +21,7 @@ bulb could react to your position, cloud cover, window orientation, sunlight int
 turn on in that very moment you would get up and walk to your light switch or fiddle around in the app?
 
 That's what this is all about. This protocol itself is making almost no restrictions on what a device has to feature in 
-order to work with the other ones. The only requirement set is that the devices is capable of supporting RFC 1112 or in
+order to work with the other ones. The only requirement set is that the devices is capable of supporting [RFC 1112](https://www.ietf.org/rfc/rfc1112.txt) or in
 other terms UDP multicast and very basic JSON parsing (string search or regex would do in that case).
 
 ### What about security?
