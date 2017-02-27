@@ -6,6 +6,8 @@ cmake-build-debug/
 
 # Latex compiled files
 _minted-*
+*.bbl
+*.blg
 *.lol
 *.dvi
 *.fdb_latexmk
