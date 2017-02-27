@@ -1,0 +1,89 @@
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape] 
+
+\documentclass[11pt,a4paper, titlepage]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{authblk}
+\usepackage{blindtext}
+\usepackage{verbatimbox}
+\usepackage{hyperref}
+\usepackage[section]{minted}
+
+\newcommand*{\email}[1]{%
+	\normalsize\href{mailto:#1}{#1}\par
+}
+
+\setminted[JSON]{mathescape,linenos,numbersep=5pt,autogobble,frame=lines,framesep=2mm}
+
+\renewcommand\listoflistingscaption{List of source codes}
+
+\title{State Monitoring Protocol}
+\author{Til Blechschmidt\\ \email{til@blechschmidt.de}}
+\date{\today}
+
+\begin{document}
+	\maketitle
+	
+	\begin{abstract}
+		Since there is no universal, open and secure implementation of a protocol to control any arbitrary device from another this document aims to provide an outline of the SM-Protocol that aims to provide such a protocol.
+	\end{abstract}
+	
+	\newpage
+	
+	\tableofcontents	
+	\listoflistings
+	
+	\newpage
+	
+	\part{Structure}
+		\section{Network layer}
+			\subsection[RFC 1112]{Host Extensions for IP Multicasting}
+				\label{subsec:multicast}
+				At the heart of this protocol is \href{https://www.ietf.org/rfc/rfc1112.txt}{RFC 1112} or the Host Extensions for IP Multicasting. It enables communication between multiple devices without any additional overhead by utilizing features that are baked into the TCP/IP stack instead of every device keeping track of every connected devices. This is of great importance since most devices utilizing this protocol do not have the processing power to handle multiple TCP connections.
+			\subsection[JSON]{JavaScript Object Notation}
+				On top of the network layer this protocol utilizes the JavaScript Object Notation since it offers high flexibility and readability. This enables easy debugging due to it's great human-friendly structure as well as easy extendability so that the protocol does not restrict devices. An example of such a message looks like this:
+				\begin{listing}
+					\begin{minted}{JSON}
+						{
+							"action": "write",
+							"channel": [0, 0, 1],
+							"payload": 255
+						}
+					\end{minted}
+					\caption{Simplest JSON example}
+					\label{SimplestJSON}
+				\end{listing}
+				\\
+				Note though that the action property can take any arbitrary value but these ones are reserved and should be used when possible to ensure interoperability between devices.
+				\begin{center}
+					\def\arraystretch{2}
+					\begin{tabular}{ l | l }	
+						read & Requesting the current value from a device \\
+						\hline
+						write & Sending a value to a device to write \\
+						\hline
+						state & Notify other devices about a change in state
+					\end{tabular}
+				\end{center}
+				For more details have a look at Part \ref{part:protocol} of the document.
+		
+		\section{Devices}
+			Due to the previously in section \ref{subsec:multicast} mentioned network layer all devices that make use of this protocol are required to have support for the TCP/IP stack and the multicast specifications. In addition to that the devices need to support basic JSON parsing and composition. If the device is only using actions that require distribution or reception of JSON data the opposing requirement can be omitted.
+	
+	\part{Protocol}
+		\label{part:protocol}
+%		\begin{listing}
+%			\begin{minted}{C++}
+%			string title = "This is a Unicode in the sky"
+%			/*
+%			Defined as $\pi=\lim_{n\to\infty}\frac{P_n}{d}$ where $P$ is the perimeter
+%			of an $n$-sided regular polygon circumscribing a
+%			circle of diameter $d$.
+%			*/
+%			const double pi = 3.1415926535
+%			\end{minted}
+%			\caption{Irgendein Kram}
+%		\end{listing}
+		
+		
+\end{document}
