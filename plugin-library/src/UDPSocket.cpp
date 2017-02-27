@@ -2,7 +2,7 @@
 #include <Logger.hpp>
 #include "UDPSocket.hpp"
 
-#define RECV_POOLING_INTERVAL 500000
+#define RECV_POOLING_INTERVAL 150000 // 150ms
 
 UDPSocket::UDPSocket(std::string multicastGroup, unsigned short port) : service(), socket(service) {
     boost::asio::ip::address address = boost::asio::ip::address::from_string(multicastGroup);

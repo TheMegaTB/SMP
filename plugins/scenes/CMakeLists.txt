@@ -11,5 +11,9 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include/nlohmann)
 add_dependencies(${PROJECT_NAME} json)
 
+# Add the CLog project as a dependency
+include_directories(${EXTERNAL_INSTALL_LOCATION}/include/CLog)
+add_dependencies(${PROJECT_NAME} CLog)
+
 # Link to the plugin library
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC smp-plugin)
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC smp-plugin ${EXTERNAL_INSTALL_LOCATION}/lib/CLog/libCLog.a)

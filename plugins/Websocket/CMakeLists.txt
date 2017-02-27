@@ -29,10 +29,14 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include/nlohmann)
 add_dependencies(${PROJECT_NAME} json)
 
+# Add the CLog project as a dependency
+include_directories(${EXTERNAL_INSTALL_LOCATION}/include/CLog)
+add_dependencies(${PROJECT_NAME} CLog)
+
 # Add the pistache REST server project as a dependency
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include/uWS)
 target_include_directories(${PROJECT_NAME} PUBLIC ${EXTERNAL_INSTALL_LOCATION}/include/uWS)
 add_dependencies(${PROJECT_NAME} uWS)
 
 # Link against pistache, smp-plugin and thread libraries
-target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARY} ${EXTERNAL_INSTALL_LOCATION}/lib64/libuWS.so smp-plugin ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(${PROJECT_NAME} ${ZLIB_LIBRARY} ${EXTERNAL_INSTALL_LOCATION}/lib64/libuWS.so smp-plugin ${CMAKE_THREAD_LIBS_INIT} ${EXTERNAL_INSTALL_LOCATION}/lib/CLog/libCLog.a)
