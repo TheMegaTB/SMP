@@ -7,6 +7,7 @@
 
 #include <eibclient.h>
 #include <Logger.hpp>
+#include <Plugin.hpp>
 
 #define DEFAULT_CONN_URL "ip:localhost"
 
@@ -21,6 +22,8 @@ int sendDatagram(eibaddr_t dest, unsigned char *data, int len);
 int dimLight(eibaddr_t address, unsigned char value);
 
 int switchLight(eibaddr_t address, bool val);
+
+void readPackages(eibaddr_t dest, Plugin *context);
 
 
 #endif //SMP_KNX_HPP

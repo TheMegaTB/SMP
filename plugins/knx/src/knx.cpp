@@ -93,3 +93,44 @@ int readDatagrams(eibaddr_t address) {
 
     EIBClose(con);
 }
+
+void readPackages(eibaddr_t dest, Plugin *context) {
+    EIBConnection *con = connectEIB();
+    unsigned char buf[255];
+    int len;
+    eibaddr_t src;
+
+    if (EIBOpenT_Group(con, dest, 0) == -1) err("Connect failed");
+
+    while (!context->interruptHandle.isInterrupted()) {
+        len = EIBGetAPDU_Src(con, sizeof(buf), buf, &src);
+        if (len == -1) err("Read failed");
+        if (len < 2) err("Invalid Packet");
+        if (buf[0] & 0x3 || (buf[1] & 0xC0) == 0xC0) {
+            err("Unknown APDU.");
+//            printf ("Unknown APDU from ");
+//            printIndividual(src);
+//            printf (": ");
+//            printHex (len, buf);
+//            printf ("\n");
+        } else {
+            switch (buf[1] & 0xC0) {
+                case 0x00: trace("Read");
+                    break;
+                case 0x40: trace("Response");
+                    break;
+                case 0x80: trace("Write");
+                    break;
+            }
+            trace("  from");
+            trace("  " + to_string(src));
+            if (buf[1] & 0xC0) {
+                if (len == 2) {
+                    trace(to_string(buf[1] & 0x3F));
+                } else {
+                    for (int i = 0; i < len - 2; i++) trace(to_string((buf + 2)[i]));
+                }
+            }
+        }
+    }
+}

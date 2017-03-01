@@ -1,4 +1,5 @@
 #include <string>
+#include <thread>
 
 #include "Plugin.hpp"
 #include "knx.hpp"
@@ -60,7 +61,7 @@ class Shutter : public Device {
     eibaddr_t longAddr;
 
     json attributes;
-    json name;
+    string name;
 
 public:
     const char* getDeviceType() override {
@@ -99,6 +100,7 @@ public:
 };
 
 std::map<string, Device *> devices;
+std::vector<eibaddr_t> populatedAddresses;
 
 void callback(Plugin *context, string action, Channel *c, json raw) {
     if (action == "query") {
@@ -130,8 +132,17 @@ void callback(Plugin *context, string action, Channel *c, json raw) {
 };
 
 int init(Plugin *context) {
+    // Populate devices
     connectionURL = context->config["connection"];
     for (json device : context->config["devices"]) {
+        for (string attribute : device["attributes"]) {
+            eibaddr_t address;
+            readGroupAddr(attribute.c_str(), &address);
+            populatedAddresses.push_back(address);
+
+            context->createThread(readPackages, address);
+        }
+
         Device *dev;
 
         if (device["type"] == "fixture") {
