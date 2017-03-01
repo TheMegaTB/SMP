@@ -54,7 +54,8 @@
 					\label{SimplestJSON}
 				\end{listing}
 				\\
-				Note though that the action property can take any arbitrary value but these ones are reserved and should be used when possible to ensure interoperability between devices.
+				Note though that the action property can take any arbitrary value but the following ones are reserved and should be used whenever possible to ensure interoperability between devices.
+				\label{actionTypes}
 				\begin{center}
 					\def\arraystretch{2}
 					\begin{tabular}{ l | l }	
@@ -62,7 +63,9 @@
 						\hline
 						write & Sending a value to a device to write \\
 						\hline
-						state & Notify other devices about a change in state
+						state & Notify other devices about a change in state \\
+						\hline
+						query & Request detailed information about devices
 					\end{tabular}
 				\end{center}
 				For more details have a look at Part \ref{part:protocol} of the document.
@@ -85,18 +88,7 @@
 		\section{Concept}
 			As visible in Listing \ref{SimplestJSON} it is preferred to make use of the basic structure consisting of the action, channel and payload fields in order to maximize interoperability between devices. However this is not enforced and if it is required that devices make use of the network layer using their own data structure for more complex tasks they may do so. To give an example of such a situation take a look at Section \ref{sec:encryption}.
 			\subsection{Types}
-				Since JSON is not enforcing types any key can take a value of an arbitrary type. Because of that the previously mentioned keys can have any value. Action and channel are preferred to have the types of a String and an array of three numbers respectively to reduce issues with different implementations. The type of the payload is not fixed though so that it can match the device type easily. A dimmable lamp for example might take an integer as well as a boolean (\ref{DimmableLamp}) whereas a gas boiler might take a more complex object (\ref{Boiler}).
-				\begin{listing}
-					\begin{minted}{JSON}
-						{
-							"action": "write",
-							"channel": [2, 5, 1],
-							"payload": 249 OR true
-						}
-					\end{minted}
-					\caption{Request to dimmable lamp}
-					\label{DimmableLamp}
-				\end{listing}
+				Since JSON is not enforcing types any key can take a value of an arbitrary type. Because of that the previously mentioned keys can have any value. Action and channel are preferred to have the types of a String and an array of three numbers respectively to reduce issues with different implementations. The type of the payload is not fixed though so that it can match the device type easily. A dimmable lamp for example might take an integer as well as a boolean (\ref{SimplestJSON}) whereas a gas boiler might take a more complex object (\ref{Boiler}). Keep in mind though that this flexibility comes at a cost. Since you are permitted to omit any field, every implementation has to check whether or not a message contains the necessary fields it requires and if their types are valid.
 				\begin{listing}
 					\begin{minted}{JSON}
 					{
@@ -110,9 +102,37 @@
 					\end{minted}
 					\caption{Request to a gas boiler}
 					\label{Boiler}
-				\end{listing} 
+				\end{listing}
+			
+		\section[Actions]{Different action types}
+			As previously shown in Section \ref{actionTypes}, there are three action types. Each of these types are meant for different tasks.
+			\begin{itemize}
+				\item[Write]
+					This kind of request is used to notify devices that they should update their current state and replace it with a new one. However it is not defined how the devices are using the data provided in the payload section of the request. They might just use the provided value as their new value or run some highly complex calculations with them. Additionally it is not enforced that a write request has to be followed by a state update. In some scenarios it might be the case that there is a write request that does not have a change in state as it's result.
+				\\
+				\item[Read]
+					A read request is supposed to trigger a rebroadcast of the current state of a device. It only contains the action and channel property.
+				\\
+				\item[State]
+					State updates are triggered by either a change in state that might be caused by an external action (like a temperature change) or a write request. Additionally an update can also be triggered by a read request. A state update may contain a payload as well as a channel property. An example of such a state update which would be send out after a request like the one in Listing \ref{SimplestJSON} can be found below.
+					\begin{listing}
+						\begin{minted}{JSON}
+							{
+								"action": "state",
+								"channel": [0, 0, 1],
+								"payload": 255
+							}
+						\end{minted}
+						\caption{State update}
+						\label{stateUpdate}
+					\end{listing}
+				\\
+				\item[Query]
+					Queries can be sent out by devices to get an overview of all available channels in the network as well as their types and attributes.
+					% TODO Add an example
+			\end{itemize}
 		
-		\section[Automation]{Differencing between human caused actions and automated ones}
+		\section[Automation]{Differentiating human caused actions and automated ones}
 			Since there are many different types of interactions between devices in the network it is of great importance to keep track which ones originate from human activity and which don't. This only applies to write requests though since state changes are always an automated result, caused by a write request that may or may not have a human individual as its source. In all previous examples you didn't see such a notation. That's because it defaults to a non-automated write request that was caused by a human. So if you omit the "automation" field in your write request it is blindly assumed, that there was a human that caused this by pressing a light switch as an example. A practical example of such a notation, flagging your request as automated, can be found at Listing \ref{automated}.
 			
 			\begin{listing}
@@ -128,6 +148,7 @@
 				\label{automated}
 			\end{listing}
 		
+	\part{Proprietary implementations}
 		% TODO: Encryption layer / Plugin
 		\section{Encryption}
 			\label{sec:encryption}
