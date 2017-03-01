@@ -50,8 +50,7 @@ void callback(Plugin *context, string action, Channel *c, json raw) {
 }
 
 int init(Plugin *context) {
-    thread networking(runWebsocketServer, context);
-    networking.detach(); // Let the thread continue to run in the background
+    context->createThread(runWebsocketServer);
     return 0;
 }
 

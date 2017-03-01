@@ -5,7 +5,7 @@ project(smp-server)
 include(GitVersion)
 
 # Set the sources
-set(SOURCE_FILES src/main.cpp src/InterruptHandle.hpp src/PluginLoader.cpp src/PluginLoader.hpp)
+set(SOURCE_FILES src/main.cpp ../plugin-library/include/InterruptHandle.hpp src/PluginLoader.cpp src/PluginLoader.hpp)
 
 # Add the executable
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${version_file})

@@ -24,7 +24,7 @@ void handleKeypress(xhkEvent e, void *context, void *r2, void *r3) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 
-void keyThread(Plugin *context, xhkConfig *hkconfig) {
+void keyThread(xhkConfig *hkconfig, Plugin *context) {
     while (1) {
         xhkPollKeys(hkconfig, 1);
     }
@@ -65,8 +65,7 @@ int init(Plugin *context) {
         return 1;
     }
 
-    thread keys(keyThread, context, hkconfig);
-    keys.detach(); // Let the thread continue to run in the background
+    context->createThread(keyThread, hkconfig);
     return 0;
 }
 
