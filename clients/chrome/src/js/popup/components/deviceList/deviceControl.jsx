@@ -69,7 +69,7 @@ export default class DeviceControl extends React.Component {
             control = (
                 <p>
                     <input onChange={this.handleSlide} className="mdl-slider mdl-js-slider" type="range" min="0"
-                           max="100" tabIndex="0"/>
+                           max="255" tabIndex="0"/>
                 </p>
             );
         } else if (this.props.device.attributes.indexOf("binary") > -1) {
