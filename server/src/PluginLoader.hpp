@@ -25,6 +25,10 @@ public:
 
     int loadPlugin(string name);
 
+    void interruptAll();
+
+    void waitForAll();
+
     PluginLoader(string multicastAddr, uint16_t port);
 
     ~PluginLoader();

@@ -5,7 +5,6 @@
 
 #include "Plugin.hpp"
 #include "PluginHandler.hpp"
-#include "InterruptHandle.hpp"
 #include "PluginLoader.hpp"
 
 #define RECV_TIMEOUT 2000000
@@ -106,9 +105,12 @@ int main() {
     info("Plugins locked and loaded. Awaiting requests ...");
 
     InterruptHandle handle;
-    thread networkingOut(sendData, &pluginLoader.pluginHandler, &handle);
-    thread networkingIn(receiveData, &pluginLoader.pluginHandler, &handle);
-    thread processing(processData, &pluginLoader.pluginHandler, &handle);
+    // Outbound networking
+    handle.handles.emplace_back(sendData, &pluginLoader.pluginHandler, &handle);
+    // Inbound networking
+    handle.handles.emplace_back(receiveData, &pluginLoader.pluginHandler, &handle);
+    // Data processing
+    handle.handles.emplace_back(processData, &pluginLoader.pluginHandler, &handle);
 
     // Use this if you are debugging since it is way easier to debug without threads
 //    while (interrupted == 0) {
@@ -123,9 +125,10 @@ int main() {
 
     warn("Interrupted. Exiting ...");
     handle.interrupt();
-    networkingOut.join();
-    networkingIn.join();
-    processing.join();
+    pluginLoader.interruptAll();
+    debug("Interrupted all threads. Waiting for them to exit...");
+    handle.waitForFinish();
+    pluginLoader.waitForAll(); // TODO: .join() instead of .detach() !important
 
     return 0;
 }

@@ -23,7 +23,8 @@ public:
 
     void waitForFinish() {
         for (std::thread &handle : this->handles)
-            if (handle.joinable()) handle.join();
+            handle.detach();
+//            if (handle.joinable()) handle.join();
     }
 };
 

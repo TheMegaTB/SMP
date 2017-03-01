@@ -25,7 +25,7 @@ void handleKeypress(xhkEvent e, void *context, void *r2, void *r3) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 
 void keyThread(xhkConfig *hkconfig, Plugin *context) {
-    while (1) {
+    while (!context->interruptHandle.isInterrupted()) {
         xhkPollKeys(hkconfig, 1);
     }
 

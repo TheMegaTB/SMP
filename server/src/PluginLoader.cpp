@@ -55,3 +55,17 @@ int PluginLoader::loadPlugin(string name) {
 void PluginLoader::setPluginDir(string path) {
     this->pluginDir = path;
 };
+
+void PluginLoader::interruptAll() {
+    for (pluginHook plugin : this->plugins) {
+        get<0>(plugin)->interruptHandle.interrupt();
+    }
+}
+
+void PluginLoader::waitForAll() {
+    for (pluginHook plugin : this->plugins) {
+        Plugin *p = get<0>(plugin);
+        custom("Unload", p->getDescriptor());
+        p->interruptHandle.waitForFinish();
+    }
+}
