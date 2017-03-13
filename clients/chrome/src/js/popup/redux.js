@@ -22,6 +22,9 @@ function counter(state = defaultStore, action) {
         case 'NAVIGATE':
             state.target = action.target === "home" ? [] : action.target;
             break;
+        case 'STATE_UPDATE':
+            state.devices[channelToID(action.channel)].value = action.payload;
+            break;
         case 'ADD_DEVICE':
             state.devices[channelToID(action.device.channel)] = action.device;
             break;
@@ -67,7 +70,9 @@ ws.onopen = function (event) {
 
 ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
-    if (data.action == "announce") store.dispatch({type: 'ADD_DEVICE', device: data});
+    if (data.action === "announce") {
+        store.dispatch({type: 'ADD_DEVICE', device: data});
+        ws.send(JSON.stringify({action: "read", channel: data.channel}));
+    }
+    if (data.action === "state") store.dispatch({type: 'STATE_UPDATE', channel: data.channel, payload: data.payload});
 };
-
-// store.dispatch({type: 'FLUSH'});

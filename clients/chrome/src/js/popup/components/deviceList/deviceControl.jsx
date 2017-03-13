@@ -57,6 +57,12 @@ export default class DeviceControl extends React.Component {
         }));
     }
 
+    componentWillMount() {
+        this.setState({
+            value: this.props.device.value
+        });
+    }
+
     render() {
         let control = (
             <div>No controls available</div>
@@ -69,7 +75,7 @@ export default class DeviceControl extends React.Component {
             control = (
                 <p>
                     <input onChange={this.handleSlide} className="mdl-slider mdl-js-slider" type="range" min="0"
-                           max="255" tabIndex="0"/>
+                           max="255" tabIndex="0" defaultValue={this.state.value}/>
                 </p>
             );
         } else if (this.props.device.attributes.indexOf("binary") > -1) {
@@ -83,7 +89,7 @@ export default class DeviceControl extends React.Component {
                     </label>
                 </div>
             )
-        } else if (this.props.device.type == "Shutter") {
+        } else if (this.props.device.type === "Shutter") {
             control = (
                 <div style={{display: "flex", justifyContent: "space-between", margin: "0 20px"}}>
                     <button className="mdl-button mdl-js-button mdl-button--icon"

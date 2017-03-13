@@ -1,1 +1,1 @@
-export const Socket = new WebSocket("ws://127.0.0.1:3003/");
+export const Socket = new WebSocket("ws://127.0.0.1:3003/"); // TODO Make config page and use value from localStorage
