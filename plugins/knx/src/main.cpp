@@ -4,6 +4,8 @@
 #include "Plugin.hpp"
 #include "knx.hpp"
 
+#define SHIFT_STEP 10
+
 using json = nlohmann::json;
 
 class Device {
@@ -19,6 +21,7 @@ public:
 class Fixture : public Device {
     eibaddr_t binaryAddr;
     eibaddr_t dimmableAddr;
+    eibaddr_t shiftableAddr;
     bool dimmable;
 
     int currentValue = 0;
@@ -29,6 +32,7 @@ class Fixture : public Device {
     string name;
 
 public:
+
     const char* getDeviceType() override {
         return "Fixture";
     }
@@ -115,6 +119,34 @@ public:
         }
     }
 
+    void shiftListener() {
+        EIBConnection *con = connectEIB();
+        unsigned char buf[255];
+        int len;
+        eibaddr_t src;
+
+        if (EIBOpenT_Group(con, this->shiftableAddr, 0) == -1) err("Connect failed");
+
+        while (!context->interruptHandle.isInterrupted()) {
+            len = EIBGetAPDU_Src(con, sizeof(buf), buf, &src);
+            if (len == -1) err("Read failed");
+            if (len < 2) err("Invalid Packet");
+            if (buf[0] & 0x3 || (buf[1] & 0xC0) == 0xC0) {
+                err("Unknown APDU.");
+            } else if ((buf[1] & 0xC0) == 0x80) { // If type is "write"
+                if (len == 2) {
+                    int action = buf[1] & 0x3F;
+                    int val = this->currentValue;
+                    if (action == 12 && this->currentValue <= (255 - SHIFT_STEP))
+                        this->currentValue += SHIFT_STEP;
+                    else if (action == 4 && this->currentValue > SHIFT_STEP)
+                        this->currentValue -= SHIFT_STEP;
+                    sendUpdate();
+                }
+            }
+        }
+    }
+
     Fixture(json name, json attributes, Channel c, Plugin *cont) : channel(c), context(cont) {
         this->attributes = attributes;
         this->name = name;
@@ -128,6 +160,12 @@ public:
             string dimmableAddr = attributes["dimmable"];
             readGroupAddr(dimmableAddr.c_str(), &this->dimmableAddr);
             context->createThread(std::bind(&Fixture::valueListener, this));
+        }
+
+        if (attributes["shiftable"].is_string()) {
+            string shiftableAddr = attributes["shiftable"];
+            readGroupAddr(shiftableAddr.c_str(), &this->shiftableAddr);
+            context->createThread(std::bind(&Fixture::shiftListener, this));
         }
     }
 };
@@ -144,6 +182,7 @@ class Shutter : public Device {
     Plugin *context;
 
 public:
+
     const char* getDeviceType() override {
         return "Shutter";
     }
@@ -200,6 +239,8 @@ std::map<string, Device *> devices;
 std::vector<eibaddr_t> populatedAddresses;
 
 void callback(Plugin *context, string action, Channel *c, json raw) {
+    bool deviceExists = (c != nullptr && devices.find(c->getAddressAsString()) != devices.end());
+
     if (action == "query") {
         for (pair<const string, Device *> &d : devices) {
             string deviceChannel = d.first;
@@ -223,8 +264,10 @@ void callback(Plugin *context, string action, Channel *c, json raw) {
             // Send it to the clients
             context->outgoingDatagrams.add(dev.dump());
         }
-    } else if (action == "write" && c != nullptr && devices.find(c->getAddressAsString()) != devices.end()) {
+    } else if (action == "write" && deviceExists) {
         devices[c->getAddressAsString()]->set(raw["payload"]);
+    } else if (action == "read" && deviceExists) {
+        devices[c->getAddressAsString()]->sendUpdate();
     }
 };
 
