@@ -10,7 +10,7 @@ const sliderStyle = {marginTop: 0, marginBottom: 0};
 export default class Device extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {value: 0};
+        this.state = {};
 
         this.handleSlider = this.handleSlider.bind(this);
         this.handleToggle = this.handleToggle.bind(this);
@@ -62,7 +62,6 @@ export default class Device extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.state.value !== nextProps.device.value) {
-            console.log("Update (" + this.props.device.name + ") -> " + nextProps.device.value, "from", this.state.value);
             this.setState({
                 value: nextProps.device.value
             });
@@ -100,7 +99,10 @@ export default class Device extends React.Component {
             //     device.sendUpdate();
             // };
         } else if (attributes.indexOf("binary") > -1) {
-            properties.rightToggle = <Toggle onToggle={this.handleToggle} toggled={this.state.value}/>;
+            properties.rightToggle = <Toggle
+                onToggle={this.handleToggle}
+                toggled={typeof this.state.value === 'boolean' ? this.state.value : Boolean(this.state.value)}
+            />;
         } else {
             // TODO: Do smth meaningful here
         }
