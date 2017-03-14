@@ -1,5 +1,5 @@
 import {createStore} from "redux";
-import {Socket} from "../websocket";
+import {Socket} from "./websocket";
 
 const defaultStore = {
     floors: {},
@@ -44,17 +44,21 @@ store.subscribe(() =>
     console.log(store.getState())
 );
 
-store.dispatch({type: 'ADD_FLOOR', floor: {
-    name: "Ground floor", id: 0, rooms: [
-        { id: 0, name: "Living room", icon: "weekend" }
-    ]
-}});
-store.dispatch({type: 'ADD_FLOOR', floor: {
-    name: "First floor", id: 1, rooms: [
-        { id: 0, name: "Corridor", icon: "blur_linear" },
-        { id: 1, name: "Bedroom", icon: "hotel" }
-    ]
-}});
+store.dispatch({
+    type: 'ADD_FLOOR', floor: {
+        name: "Ground floor", id: 0, rooms: [
+            {id: 0, name: "Living room", icon: "weekend"}
+        ]
+    }
+});
+store.dispatch({
+    type: 'ADD_FLOOR', floor: {
+        name: "First floor", id: 1, rooms: [
+            {id: 0, name: "Corridor", icon: "blur_linear"},
+            {id: 1, name: "Bedroom", icon: "hotel"}
+        ]
+    }
+});
 
 const ws = Socket;
 

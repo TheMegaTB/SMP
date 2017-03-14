@@ -63,6 +63,10 @@ export default class DeviceControl extends React.Component {
         });
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.device.value === nextProps.device.value;
+    }
+
     render() {
         let control = (
             <div>No controls available</div>
@@ -114,4 +118,8 @@ export default class DeviceControl extends React.Component {
             </span>
         );
     }
+};
+
+DeviceControl.contextTypes = {
+    store: React.PropTypes.object
 };

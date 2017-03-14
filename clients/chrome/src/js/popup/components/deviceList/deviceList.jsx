@@ -6,7 +6,7 @@ export default class DeviceList extends React.Component {
         return (
             <div className="mdl-list" style={{padding: "0 16px"}}>
                 {this.props.devices.map((device) => (
-                        <DeviceListItem key={device.name} device={device} />
+                    <DeviceListItem key={device} device={device}/>
                 ))}
             </div>
         );

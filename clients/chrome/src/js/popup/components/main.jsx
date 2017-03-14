@@ -6,27 +6,37 @@ import Card from "./card";
 import RoomList from "./roomList/roomList";
 import DeviceList from "./deviceList/deviceList";
 import {connect} from "react-redux";
+import {channelToID} from "../redux";
+
+let deviceCount = 0;
+let currentPage = undefined;
 
 const ch = require('exports?componentHandler!material-design-lite/material.js');
 export default class Main extends React.Component {
-    componentDidMount() {
-        // Make those MDL things work...
-        ch.upgradeDom();
-    }
+    // componentDidMount() {
+    //     // Make those MDL things work...
+    //     ch.upgradeDom();
+    // }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        // console.log("HI");
+        // console.log("NEXT CONTEXT:", nextContext);
         // console.log(this.props.values.target != nextProps.values.target);
         // console.log(this.props.values.target, nextProps.values.target);
         // return this.props.values.target != nextProps.values.target;
-        return true;
+        console.log(currentPage, nextContext.store.getState().target);
+        return (deviceCount !== Object.keys(nextContext.store.getState().devices).length)
+            || currentPage !== nextContext.store.getState().target;
     }
 
     render() {
-        // console.log("MAIN RERENDER", this.props.target, this.props.state);
-        // const {store} = this.context;
-        const state = this.props.values;
+        console.log("MAIN RERENDER", this.props.target, this.props.state);
+        const state = this.context.store.getState();
         const floors = state.floors;
         const target = state.target;
+
+        deviceCount = Object.keys(state.devices).length;
+        currentPage = state.target;
 
         let cards = [];
 
@@ -49,10 +59,10 @@ export default class Main extends React.Component {
                         device = state.devices[device];
                         for (let entry in target) {
                             if (!target.hasOwnProperty(entry)) continue;
-                            if(device.channel[entry] != target[entry]) continue outerLoop;
+                            if (device.channel[entry] !== target[entry]) continue outerLoop;
                         }
-                        if (devices[device.type] === undefined) devices[device.type] = [device];
-                        else devices[device.type].push(device);
+                        if (devices[device.type] === undefined) devices[device.type] = [channelToID(device.channel)];
+                        else devices[device.type].push(channelToID(device.channel));
                     }
 
                 for (let type in devices) {

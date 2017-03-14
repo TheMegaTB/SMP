@@ -11,7 +11,7 @@ import {store} from "./popup/redux";
 const renderApp = _ => {
     render(
         <Provider store={store}>
-            <Main values={store.getState()}/>
+            <Main/>
         </Provider>,
         document.getElementById('app-container')
     )
