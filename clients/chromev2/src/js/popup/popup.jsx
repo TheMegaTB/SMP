@@ -24,11 +24,11 @@ const App = () => (
                 iconClassNameRight="muidocs-icon-navigation-expand-more"
             />
             <Room devices={store.getState().devices}/>
-            <Snackbar
-                open={true}
-                message="Refreshing devices ..."
-                autoHideDuration={2000}
-            />
+            {/*<Snackbar*/}
+            {/*open={true}*/}
+            {/*message="Refreshing devices ..."*/}
+            {/*autoHideDuration={2000}*/}
+            {/*/>*/}
         </div>
     </MuiThemeProvider>
 );
