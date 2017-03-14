@@ -11,6 +11,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import AppBar from "material-ui/AppBar";
 import Room from "./components/Room";
+import {Snackbar} from "material-ui";
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -23,6 +24,11 @@ const App = () => (
                 iconClassNameRight="muidocs-icon-navigation-expand-more"
             />
             <Room devices={store.getState().devices}/>
+            <Snackbar
+                open={true}
+                message="Refreshing devices ..."
+                autoHideDuration={2000}
+            />
         </div>
     </MuiThemeProvider>
 );
