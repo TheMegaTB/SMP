@@ -4,6 +4,7 @@
   "description": "Chrome client for the SMP websocket plugin's API",
   "scripts": {
     "build": "node utils/build.js",
+    "buildAndroid": "node utils/buildCordova.js",
     "start": "node utils/webserver.js"
   },
   "dependencies": {
@@ -32,9 +33,11 @@
   "devDependencies": {
     "file-loader": "^0.10.0",
     "redux-devtools": "^3.3.2",
+    "script-loader": "^0.7.0",
     "vulcanize-loader": "^2.0.1",
     "wc-loader": "^1.1.3",
     "web-components-loader": "^0.1.2",
+    "webpack-cordova-plugin": "^0.1.6",
     "webpack-material-design-icons": "0.0.2"
   }
 }

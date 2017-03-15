@@ -59,3 +59,7 @@ build/
 # NPM/Yarn dependencies
 node_modules/
 yarn.lock
+
+config.xml
+platforms/
+www/
