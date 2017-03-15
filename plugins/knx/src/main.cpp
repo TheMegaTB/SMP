@@ -205,6 +205,8 @@ public:
             this->currentValue = value;
 
             this->sendUpdate();
+        } else if (value.is_boolean()) {
+            switchLight(longAddr, value);
         }
     }
 
@@ -219,7 +221,9 @@ public:
     }
 
     json getAttributes() override {
-        return this->attributes;
+        json tmp = this->attributes;
+        tmp["binary"] = "";
+        return tmp;
     }
 
     Shutter(json name, json attributes, Channel c, Plugin *cont) : channel(c), context(cont) {
