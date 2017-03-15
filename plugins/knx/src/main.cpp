@@ -240,7 +240,6 @@ public:
 };
 
 std::map<string, Device *> devices;
-std::vector<eibaddr_t> populatedAddresses;
 
 void callback(Plugin *context, string action, Channel *c, json raw) {
     bool deviceExists = (c != nullptr && devices.find(c->getAddressAsString()) != devices.end());
