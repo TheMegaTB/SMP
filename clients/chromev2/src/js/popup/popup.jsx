@@ -12,16 +12,34 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import Room from "./components/Room";
 import {Snackbar} from "material-ui";
+import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
+import IconButton from "material-ui/IconButton";
+import IconMenu from "material-ui/IconMenu";
+import MenuItem from "material-ui/MenuItem";
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
+
+const BarMenu = (props) => (
+    <IconMenu
+        iconButtonElement={
+            <IconButton><MoreVertIcon /></IconButton>
+        }
+        targetOrigin={{horizontal: 'right', vertical: 'top'}}
+        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+    >
+        <MenuItem primaryText="Refresh"/>
+        <MenuItem primaryText="Help"/>
+        <MenuItem primaryText="Sign out"/>
+    </IconMenu>
+);
 
 const App = () => (
     <MuiThemeProvider>
         <div>
             <AppBar
                 title="Bedroom"
-                iconClassNameRight="muidocs-icon-navigation-expand-more"
+                iconElementRight={<BarMenu/>}
             />
             <Room devices={store.getState().devices}/>
             {/*<Snackbar*/}
