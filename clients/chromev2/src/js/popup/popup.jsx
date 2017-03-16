@@ -9,6 +9,8 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Room from "./components/Room";
 import Frame from "./components/Frame";
 import {Snackbar} from "material-ui";
+import {Scrollbars} from "react-custom-scrollbars";
+
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -33,7 +35,11 @@ class App extends React.Component {
                 <div>
                     <Frame/>
                     {/*TODO: Filter by current room*/}
-                    <Room devices={devices}/>
+                    <Scrollbars
+                        key="MainContainer"
+                        style={{minHeight: "calc(500px - 64px)", maxHeight: "calc(1000px - 64px)"}}>
+                        <Room devices={devices}/>
+                    </Scrollbars>
                     {/*<Snackbar*/}
                     {/*open={true}*/}
                     {/*message="Refreshing devices ..."*/}

@@ -76,7 +76,7 @@ export default class Frame extends React.Component {
                 if (!rooms.hasOwnProperty(room)) continue;
                 const roomName = getRoomName(floor, rooms[room]);
                 drawerItems.push(<MenuItem onTouchTap={this.handleClose.bind(this, floor, rooms[room])}
-                                           key={rooms[room]}>{roomName}</MenuItem>);
+                                           key={floor + rooms[room]}>{roomName}</MenuItem>);
             }
         }
 

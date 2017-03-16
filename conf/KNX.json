@@ -2,6 +2,156 @@
   "connection": "ip:bedroom-node:4433",
   "devices": [
     {
+      "channel": [0, 1, 1],
+      "type": "fixture",
+      "name": "Table light",
+      "attributes": {
+        "binary": "0/1/0"
+      }
+    },
+    {
+      "channel": [0, 1, 2],
+      "type": "fixture",
+      "name": "Spots",
+      "attributes": {
+        "binary": "0/1/1"
+      }
+    },
+    {
+      "channel": [0, 1, 3],
+      "type": "fixture",
+      "name": "Floor lamp",
+      "attributes": {
+        "binary": "1/1/0"
+      }
+    },
+    {
+      "channel": [0, 1, 4],
+      "type": "fixture",
+      "name": "Wall lamps",
+      "attributes": {
+        "binary": "1/1/1",
+        "dimmable": "1/1/2",
+        "shiftable": "1/1/3"
+      }
+    },
+    {
+      "channel": [0, 1, 5],
+      "type": "shutter",
+      "name": "Street window",
+      "attributes": {
+        "short": "3/0/0",
+        "long": "3/0/1"
+      }
+    },
+
+
+
+    {
+      "channel": [0, 2, 1],
+      "type": "shutter",
+      "name": "Bathroom window",
+      "attributes": {
+        "short": "3/7/0",
+        "long": "3/7/1"
+      }
+    },
+
+
+
+    {
+      "channel": [0, 3, 1],
+      "type": "fixture",
+      "name": "Wall lamps",
+      "attributes": {
+        "binary": "0/0/1",
+        "dimmable": "0/0/8"
+      }
+    },
+    {
+      "channel": [0, 3, 2],
+      "type": "fixture",
+      "name": "Furnace",
+      "attributes": {
+        "binary": "0/0/2",
+        "dimmable": "0/0/7"
+      }
+    },
+    {
+      "channel": [0, 3, 3],
+      "type": "fixture",
+      "name": "Table",
+      "attributes": {
+        "binary": "0/0/3",
+        "dimmable": "0/0/6"
+      }
+    },
+    {
+      "channel": [0, 3, 4],
+      "type": "fixture",
+      "name": "Passageway",
+      "attributes": {
+        "binary": "0/0/4",
+        "dimmable": "0/0/5"
+      }
+    },
+    {
+      "channel": [0, 3, 5],
+      "type": "fixture",
+      "name": "Sideboard",
+      "attributes": {
+        "binary": "1/0/0"
+      }
+    },
+
+
+
+    {
+      "channel": [0, 4, 1],
+      "type": "fixture",
+      "name": "Entrance",
+      "attributes": {
+        "binary": "0/5/0"
+      }
+    },
+    {
+      "channel": [0, 4, 2],
+      "type": "fixture",
+      "name": "Ceiling",
+      "attributes": {
+        "binary": "0/5/1"
+      }
+    },
+    {
+      "channel": [0, 4, 3],
+      "type": "fixture",
+      "name": "Cupboard",
+      "attributes": {
+        "binary": "0/5/2"
+      }
+    },
+    {
+      "channel": [0, 4, 4],
+      "type": "fixture",
+      "name": "Dining table",
+      "attributes": {
+        "binary": "0/5/3",
+        "dimmable": "0/5/4"
+      }
+    },
+    {
+      "channel": [0, 4, 5],
+      "type": "shutter",
+      "name": "Garden window",
+      "attributes": {
+        "short": "3/6/2",
+        "long": "3/6/3"
+      }
+    },
+
+
+
+    {
       "channel": [1, 1, 1],
       "type": "fixture",
       "name": "Spotlights",
@@ -28,24 +178,22 @@
         "long": "3/1/1"
       }
     },
+
+
+
     {
-      "channel": [
-        1,
-        2,
-        1
-      ],
+      "channel": [1, 2, 1],
       "type": "fixture",
       "name": "Staircase",
       "attributes": {
         "binary": "0/3/0"
       }
     },
+
+
+
     {
-      "channel": [
-        1,
-        3,
-        1
-      ],
+      "channel": [1, 3, 1],
       "type": "shutter",
       "name": "Boudoir window",
       "attributes": {
@@ -53,12 +201,11 @@
         "long": "3/3/1"
       }
     },
+
+
+
     {
-      "channel": [
-        1,
-        4,
-        1
-      ],
+      "channel": [1, 4, 1],
       "type": "shutter",
       "name": "Bedroom2 window",
       "attributes": {

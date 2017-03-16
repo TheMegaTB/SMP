@@ -9,6 +9,12 @@ export const FLOOR_NAMES = {
 };
 
 export const ROOM_NAMES = {
+    "0": {
+        "1": "Living room",
+        "2": "Bathroom",
+        "3": "Dining room",
+        "4": "Kitchen"
+    },
     "1": {
         "1": "Bedroom",
         "2": "Stairwell",
