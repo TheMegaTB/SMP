@@ -4,7 +4,7 @@ import {Socket} from "./websocket";
 const defaultStore = {
     floors: {},
     devices: {},
-    target: []
+    filter: [/.*/, /.*/, /.*/]
 };
 
 export function channelToID(channel) {
@@ -17,10 +17,14 @@ export function channelToID(channel) {
     return id;
 }
 
+export function IDtoChannel(id) {
+    return [id[0], id[1], id[2]];
+}
+
 function counter(state = defaultStore, action) {
     switch (action.type) {
-        case 'NAVIGATE':
-            state.target = action.target === "home" ? [] : action.target;
+        case 'FILTER':
+            state.filter = action.filter;
             break;
         case 'STATE_UPDATE':
             state.devices[channelToID(action.channel)].value = action.payload;

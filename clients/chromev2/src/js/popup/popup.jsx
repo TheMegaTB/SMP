@@ -1,55 +1,49 @@
 import "webpack-material-design-icons/material-design-icons.css";
 import "../../css/popup.css";
 import "../../css/fonts/web fonts/roboto_regular_macroman/stylesheet.css";
-
 import React from "react";
 import {render} from "react-dom";
 import {Provider} from "react-redux";
 import {store} from "./redux";
-
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-
-import AppBar from "material-ui/AppBar";
 import Room from "./components/Room";
+import Frame from "./components/Frame";
 import {Snackbar} from "material-ui";
-import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
-import IconButton from "material-ui/IconButton";
-import IconMenu from "material-ui/IconMenu";
-import MenuItem from "material-ui/MenuItem";
 
 var injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
-const BarMenu = (props) => (
-    <IconMenu
-        iconButtonElement={
-            <IconButton><MoreVertIcon /></IconButton>
-        }
-        targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-    >
-        <MenuItem primaryText="Refresh"/>
-        <MenuItem primaryText="Help"/>
-        <MenuItem primaryText="Sign out"/>
-    </IconMenu>
-);
+function filterByRegex(devices, regex) {
+    const res = {};
+    for (let device in devices) {
+        if (!devices.hasOwnProperty(device)) continue;
+        const channel = devices[device].channel;
+        if (channel[0].toString().match(regex[0]) && channel[1].toString().match(regex[1]) && channel[2].toString().match(regex[2]))
+            res[device] = devices[device];
+    }
+    return res;
+}
 
-const App = () => (
-    <MuiThemeProvider>
-        <div>
-            <AppBar
-                title="Bedroom"
-                iconElementRight={<BarMenu/>}
-            />
-            <Room devices={store.getState().devices}/>
-            {/*<Snackbar*/}
-            {/*open={true}*/}
-            {/*message="Refreshing devices ..."*/}
-            {/*autoHideDuration={2000}*/}
-            {/*/>*/}
-        </div>
-    </MuiThemeProvider>
-);
+class App extends React.Component {
+    render() {
+        const state = store.getState();
+        const devices = filterByRegex(state.devices, state.filter);
+        return (
+            <MuiThemeProvider>
+                <div>
+                    <Frame/>
+                    {/*TODO: Filter by current room*/}
+                    <Room devices={devices}/>
+                    {/*<Snackbar*/}
+                    {/*open={true}*/}
+                    {/*message="Refreshing devices ..."*/}
+                    {/*autoHideDuration={2000}*/}
+                    {/*/>*/}
+                </div>
+            </MuiThemeProvider>
+        );
+    }
+}
 
 const renderApp = _ => {
     render(

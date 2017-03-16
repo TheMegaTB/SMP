@@ -4,7 +4,7 @@
     {
       "channel": [1, 1, 1],
       "type": "fixture",
-      "name": "Ceiling light",
+      "name": "Spotlights",
       "attributes": {
         "binary": "0/4/0",
         "shiftable": "0/4/1",
@@ -14,7 +14,7 @@
     {
       "channel": [1, 1, 2],
       "type": "fixture",
-      "name": "Uplight",
+      "name": "Reading chair",
       "attributes": {
         "binary": "1/2/0"
       }
@@ -22,10 +22,48 @@
     {
       "channel": [1, 1, 3],
       "type": "shutter",
-      "name": "Main Window",
+      "name": "Bedroom window",
       "attributes": {
         "short": "3/1/0",
         "long": "3/1/1"
+      }
+    },
+    {
+      "channel": [
+        1,
+        2,
+        1
+      ],
+      "type": "fixture",
+      "name": "Staircase",
+      "attributes": {
+        "binary": "0/3/0"
+      }
+    },
+    {
+      "channel": [
+        1,
+        3,
+        1
+      ],
+      "type": "shutter",
+      "name": "Boudoir window",
+      "attributes": {
+        "short": "3/3/0",
+        "long": "3/3/1"
+      }
+    },
+    {
+      "channel": [
+        1,
+        4,
+        1
+      ],
+      "type": "shutter",
+      "name": "Bedroom2 window",
+      "attributes": {
+        "short": "3/2/0",
+        "long": "3/2/1"
       }
     }
   ]
